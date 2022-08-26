@@ -1,6 +1,6 @@
 #!/bin/bash
 
-printf ""$green$Bold" $HLineLight$HLineLight"Running"$HLineLight$HLineLight$ClearForm\n"
+printf "\n"$green$Bold" $HLineLight$HLineLight"Running"$HLineLight$HLineLight$ClearForm\n"
 
 # Name of direcotry where modules are stored (in current local dir)
 moduleDir="modules"
