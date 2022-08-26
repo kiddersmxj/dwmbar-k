@@ -1,5 +1,7 @@
 #!/bin/bash
 
+printf ""$green$Bold" $HLineLight$HLineLight"Running"$HLineLight$HLineLight$ClearForm\n"
+
 # Name of direcotry where modules are stored (in current local dir)
 moduleDir="modules"
 
@@ -29,11 +31,7 @@ s=0
 . "$moduleDir/dwm_networkmanager.sh"
 . "$moduleDir/dwm_playerctl.sh"
 . "$moduleDir/dwm_weather.sh"
-
-# Functions to run only at specified interval as they are more system intensive
-long_functions() {
-	internet="$(dwm_networkmanager)"
-}
+. "$moduleDir/dwm_paralell.sh"
 
 while true; do
 	# How many seconds-1 between each longFunctions run
@@ -44,11 +42,11 @@ while true; do
 
 	mainbar=""
 	mainbar="$mainbar$internet"
-	mainbar="$mainbar $(dwm_date) "
+	mainbar="$mainbar^C2^ $(dwm_date) "
 	
 	subbar=" "
-	subbar="$subbar$(dwm_weather) |"
-	subbar="$subbar l=$l : s=$s | "
+	subbar="$subbar$weather |"
+	subbar="$subbar^C14^ l=$l : s=$s | "
 
 	# Counter for long_functions
 	((l=l+1))
