@@ -26,6 +26,7 @@ get_playing() {
 	if [ $no_of_playing = 1 ]; then	
 		# Set player to the only player in the array (the first one)
 		player=${playing[0]}
+		echo $player > /home/kidders/.player
 		# Get position through the track
 		position="$(playerctl position | sed 's/..\{6\}$//')"
 		# Convert the position from seconds to min
