@@ -45,7 +45,7 @@ while true; do
 	mainbar="$mainbar^C2^ $(dwm_date) "
 	
 	subbar=" "
-	subbar="$subbar$weather |"
+	subbar="$subbar$(printf "$weather") |"
 	subbar="$subbar^C14^ l=$l : s=$s | "
 
 	# Counter for long_functions
