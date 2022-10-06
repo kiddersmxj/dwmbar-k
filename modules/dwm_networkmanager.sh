@@ -12,13 +12,13 @@ dwm_networkmanager () {
         CONNAME=$(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -c 5-)
     fi
 
-    PRIVATE=$(nmcli -a | grep -m 1 'inet4 192' | awk '{print $2}')
+    PRIVATE=$(nmcli -a | grep -m 1 'inet4 ' | awk '{print $2}')
     PUBLIC=$(curl -s https://ipinfo.io/ip)
 
     if [ "$unicode" = "1" ]; then
-        printf "$pre 🌐 ${CONNAME} ${PRIVATE} ${PUBLIC}$app"
+        internet="$(printf "$pre 🌐 ${CONNAME} ${PRIVATE} ${PUBLIC}$app")"
     else
-        printf "$pre NET ${CONNAME} ${PRIVATE} ${PUBLIC}$app"
+        internet="$(printf "$pre NET ${CONNAME} ${PRIVATE} ${PUBLIC}$app")"
     fi
 }
 
