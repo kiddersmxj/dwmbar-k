@@ -37,7 +37,8 @@ while true; do
 	# How many seconds-1 between each longFunctions run
 	if [ $(( $l % $longFunctionsInterval )) = 0 ]; then
 		l=0
-		long_functions
+        long_functions
+        setxkbmap gb
 	fi
 
 	mainbar=""
