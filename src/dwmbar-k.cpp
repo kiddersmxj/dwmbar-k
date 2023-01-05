@@ -3,6 +3,7 @@
 
 void RunSector(std::string Sector) {
     std::cout << Sector << std::endl;
+    ExecCmd("$HOME/devel/dwmbar-k/./launch.sh " + Sector, 0, 0);
 }
 
 int main() {
