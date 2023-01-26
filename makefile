@@ -32,9 +32,9 @@ bin/$(TARGET_EXEC): $(OBJS)
 	@echo "Linking..."
 	@echo " $(CC) $^ -o $@ $(LDFLAGS)"; $(CC) $^ -o $@ $(LDFLAGS)
 
-bin/modules/%-k: $(MODOBJS)
+bin/modules/%-k: $(MODS)
 	$(MKDIR_P) $(dir $@)
-	@echo " $(CC) $< -o $@ $(LDFLAGS)"; $(CC) $< -o $@ $(LDFLAGS)
+	@echo " $(CC) ${subst bin/,,$@.cpp} -o $@ $(LDFLAGS)"; $(CC) ${subst bin/,,$@.cpp} -o $@ $(LDFLAGS)
 	#@echo " $(CC) $(LDFLAGS) $< -o $@"; $(CC) $(LDFLAGS) $< -o $@
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
