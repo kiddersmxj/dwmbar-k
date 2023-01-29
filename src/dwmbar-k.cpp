@@ -1,9 +1,12 @@
 #include <iostream>
+#include <sstream>
 #include "../include/dwmbar-k.h" 
 
 void RunSector(std::string Sector) {
     std::cout << Sector << std::endl;
-    ExecCmd("$HOME/devel/dwmbar-k/./launch.sh " + Sector, 0, 0);
+    std::stringstream stream;
+    stream << "$HOME/devel/dwmbar-k/./launch.sh "<< Sector << " &";
+    system(stream.str().c_str());
 }
 
 int main() {
