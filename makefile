@@ -35,16 +35,11 @@ bin/$(TARGET_EXEC): $(OBJS)
 bin/modules/%-k: $(MODS)
 	$(MKDIR_P) $(dir $@)
 	@echo " $(CC) ${subst bin/,,$@.cpp} -o $@ $(LDFLAGS)"; $(CC) ${subst bin/,,$@.cpp} -o $@ $(LDFLAGS)
-	#@echo " $(CC) $(LDFLAGS) $< -o $@"; $(CC) $(LDFLAGS) $< -o $@
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@echo "Making Objects..."
 	$(MKDIR_P) $(dir $@)
 	@echo " $(CC) $(CPPFLAGS) -c $< -o $@"; $(CC) $(CPPFLAGS) -c $< -o $@
-
-#$(BUILD_DIR)/$(MOD_DIR)%.cpp.o: $(MODS)
-#	@echo " $@"
-#	@echo " $(CC) $(CPPFLAGS) -c $< -o $@"; $(CC) $(CPPFLAGS) -c $< -o $@
 
 .PHONY: clean
 
