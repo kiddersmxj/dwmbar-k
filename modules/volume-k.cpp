@@ -23,6 +23,11 @@ int main(int argc, char** argv) {
 	char *device;
 	char *selem_name;
 
+	if (argc < 2) {
+		printf("Usage:\n\t%s device control volume\n", argv[0]);
+		return 0;
+	}
+
 	device = "default";
 	selem_name = std::getenv("scontrol");
 	vol = atol(argv[1]);
