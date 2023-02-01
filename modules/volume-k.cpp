@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <stdio.h>
 #include <stdlib.h>
 #include <alsa/asoundlib.h>
@@ -6,7 +7,6 @@
 
 const snd_mixer_selem_channel_id_t CHANNEL = SND_MIXER_SCHN_FRONT_LEFT;
 int err;
-long vol;
 snd_mixer_t *h_mixer;
 snd_mixer_selem_id_t *sid;
 snd_mixer_elem_t *elem ;
@@ -22,6 +22,7 @@ static void error_close_exit(const char *errmsg, int err, snd_mixer_t *h_mixer) 
 }
 
 int GetVolumeLevel(char *device, char *selem_name) {
+    long vol;
 	if ((err = snd_mixer_open(&h_mixer, 1)) < 0)
     	error_close_exit("Mixer open error: %s\n", err, NULL);
     
@@ -80,12 +81,12 @@ int main(int argc, char** argv) {
 	selem_name = std::getenv("scontrol");
 
 	if (argc < 2) {
-        GetVolumeLevel(device, selem_name);
-        printf("%ld\n", vol);
+        printf("%ld\n", GetVolumeLevel(device, selem_name));
 		return 0;
 	}
 
-	vol = atol(argv[1]);
+	float vol = atol(argv[1]);
+    vol = round(vol * VolScaler);
     
     SetVolumeLevel(device, selem_name, vol);
 
