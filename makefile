@@ -28,7 +28,7 @@ bin/$(TARGET_EXEC): $(OBJS)
 
 bin/modules/%-k: $(MODS)
 	$(MKDIR_P) $(dir $@)
-	@echo "$(CC) ${subst bin/,,$@.cpp} -o $@ $(LDFLAGS)"; $(CC) ${subst bin/,,$@.cpp} -o $@ $(LDFLAGS)
+	@echo "$(CC) ${subst bin/,,$@.cpp} -o $@ -lasound $(LDFLAGS)"; $(CC) ${subst bin/,,$@.cpp} -o $@ -lasound $(LDFLAGS)
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@echo "Making Objects..."
