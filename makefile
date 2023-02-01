@@ -20,26 +20,20 @@ CPPFLAGS ?= -Wall
 TARGET_EXEC ?= dwmbar-k
 TARGET_MODS ?= $(addprefix bin/,$(subst .cpp,,$(MODS)))
 
-test: all
-	@echo "$(SRCS)"
-	@echo "$(MODS)"
-	@echo "$(TARGET_MODS)"
-	@echo "$(INC_DIRS)"
-
 all: $(TARGET_MODS) bin/$(TARGET_EXEC)
 
 bin/$(TARGET_EXEC): $(OBJS)
 	@echo "Linking..."
-	@echo " $(CC) $^ -o $@ $(LDFLAGS)"; $(CC) $^ -o $@ $(LDFLAGS)
+	@echo "$(CC) $^ -o $@ $(LDFLAGS)"; $(CC) $^ -o $@ $(LDFLAGS)
 
 bin/modules/%-k: $(MODS)
 	$(MKDIR_P) $(dir $@)
-	@echo " $(CC) ${subst bin/,,$@.cpp} -o $@ $(LDFLAGS)"; $(CC) ${subst bin/,,$@.cpp} -o $@ $(LDFLAGS)
+	@echo "$(CC) ${subst bin/,,$@.cpp} -o $@ $(LDFLAGS)"; $(CC) ${subst bin/,,$@.cpp} -o $@ $(LDFLAGS)
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@echo "Making Objects..."
 	$(MKDIR_P) $(dir $@)
-	@echo " $(CC) $(CPPFLAGS) -c $< -o $@"; $(CC) $(CPPFLAGS) -c $< -o $@
+	@echo "$(CC) $(CPPFLAGS) -c $< -o $@"; $(CC) $(CPPFLAGS) -c $< -o $@
 
 .PHONY: clean
 
