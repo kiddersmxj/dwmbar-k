@@ -45,6 +45,7 @@ $(BUILD_DIR)/%.cpp.o: %.cpp
 
 clean:
 	$(RM) -r $(BUILD_DIR)
+	$(RM) -r bin/$(MOD_DIRS)
 
 -include $(DEPS)
 
