@@ -78,19 +78,25 @@ void SetVolumeLevel(char *device, char *selem_name, long vol) {
 }
 
 int main(int argc, char** argv) {
+    // Setup variables used by both fucntions
     char *device;
     char *selem_name;
 	device = "default";
+    // Get $scontrol variable set in .bashrc
 	selem_name = std::getenv("scontrol");
 
+    // If no args are given get volume
 	if (argc < 2) {
         printf("%ld\n", GetVolumeLevel(device, selem_name));
 		return 0;
 	}
 
+    // If args are given assign to var after check
 	float vol = atol(argv[1]);
+    // Scale volume to comply with full volume level
     vol = round(vol * VolScaler);
     
+    // Set volume to given level
     SetVolumeLevel(device, selem_name, vol);
 
 	return 0;
