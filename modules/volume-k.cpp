@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cmath>
-#include <stdio.h>
 #include <stdlib.h>
 #include <alsa/asoundlib.h>
 #include "../include/dwmbar-k.h" 
