@@ -5,8 +5,10 @@
 int main() {
     const char* CurlCmd = R"(timeout 1 curl -s wttr.in/$LOCATION?format=1 | hexdump -v -e '"\\\x" 1/1 "%02x"')";
     std::string WttrHex = ExecCmd(CurlCmd, 0, 0);
-    if(WttrHex == "")
+    if(WttrHex == "") {
         std::cout << "curl did not exec" << std::endl;
+        return 1;
+    }
 
     // Allocating space for array, +1 ro allow for NULL term
     char* HexArray = new char[WttrHex.length() + 1];
