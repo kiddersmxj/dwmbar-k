@@ -35,6 +35,7 @@ int main() {
         substr = strtok(NULL, R"(\)");
         i++;
     }
+    std::cout << std::endl;
     delete[] HexArray;
 
     return 0;
