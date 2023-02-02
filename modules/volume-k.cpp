@@ -45,6 +45,9 @@ int GetVolumeLevel(char *device, char *selem_name) {
     snd_mixer_selem_get_playback_volume(elem, CHANNEL, &vol);
     
 	snd_mixer_close(h_mixer);
+
+    vol = round((float)vol * (1/VolScaler));
+
     return vol;
 }
 
