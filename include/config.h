@@ -7,7 +7,7 @@ const std::string ModuleLayout = "1,2,;,3,4,5";
 
 const float VolScaler = 0.865;
 
-const int BFull = 100;
+const int BFull = 90;
 const int BThreeQuart = 75;
 const int BHalf = 50;
 const int BQuart = 25;
