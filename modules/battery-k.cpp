@@ -15,9 +15,9 @@ const std::string BatteryLevelCmd = R"(acpi -b | awk -F'[,:%]' '{print $3}')";
  * |---|-----------------------------------------------------------------------------
  * | 3 | Discharging - Charging=No, Battery=~ (Checks battery level to choose BIcon)
  * |---|-----------------------------------------------------------------------------
- * | 4 | NOT CHARGING - (Will flash charge icon)
+ * | 4 | NOT CHARGING - (Will flash CIcon)
  * |---|-----------------------------------------------------------------------------
- * | 5 | CHARGING - (Will animate BICON)
+ * | 5 | CHARGING - (Will animate BIcon)
  * ---------------------------------------------------------------------------------- */
 int Charging = 3;
 // Checks if battery has maxxed out to stop not charging warning
