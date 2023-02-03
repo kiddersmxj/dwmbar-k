@@ -13,6 +13,8 @@ const int BHalf = 50;
 const int BQuart = 25;
 const int BEmpty = 10;
 
+const std::string IInternet = R"(\xef\x82\xac)";
+
 const std::string IDate = R"(\xef\x84\xb3)";
 
 const std::string IVolMute = R"(\xef\x9a\xa9)";
