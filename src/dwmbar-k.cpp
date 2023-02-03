@@ -9,13 +9,13 @@ void RunModule(std::string Module) {
     system(LaunchCmd.str().c_str());
 }
 
-void ParseModulePositions(char Positions) {
-    Positions = "skrs";
-}
+/* void ParseModulePositions(char Positions) { */
+/*     Positions = "skrs"; */
+/* } */
 
 int main() {
     char* Positions;
-    ParseModulePositions(*Positions);
+    /* ParseModulePositions(*Positions); */
     for(int i; i<ModulesLength; i++) {
         if(Positions[i] != NULL) {
             std::cout << Positions[i];

@@ -7,7 +7,7 @@ const std::string BatteryLevelCmd = R"(acpi -b | awk -F'[,:%]' '{print $3}')";
 /*
  * Charging status 0-5
  * ----------------------------------------------------------------------------------
- * | 0 | Full - Charging=Yes, Battery=100% (IBatteryFull, ICharging)
+ * | 0 | Full - Charging=Yes, Battery>90% (IBatteryFull, ICharging)
  * |---|-----------------------------------------------------------------------------
  * | 1 | Not charging - Charging=No, Battery=~ (Will auto switch to Charging=4)
  * |---|-----------------------------------------------------------------------------
@@ -20,9 +20,6 @@ const std::string BatteryLevelCmd = R"(acpi -b | awk -F'[,:%]' '{print $3}')";
  * | 5 | CHARGING - (Will animate BIcon)
  * ---------------------------------------------------------------------------------- */
 int Charging = 3;
-// Checks if battery has maxxed out to stop not charging warning
-// Battery will max out at 100% then not charge until it hits 90% again
-int Maxxed = 0;
 std::string BIcon = IBatteryEmpty;
 std::string CIcon = "";
 
@@ -50,6 +47,7 @@ int main() {
         // Get battery info through acpi
         std::string ChargingStat = ExecCmd(ChargingStatCmd, 0, 0);
         std::string BatteryLevelString = ExecCmd(BatteryLevelCmd, 0, 0);
+        // Catch errors
         if(BatteryLevelString == "") {
             std::cout << "acpi did not exec" << std::endl;
             return 1;
@@ -57,41 +55,41 @@ int main() {
         // Format outputs
         ChargingStat = TrimNewLine(TrimWhiteSpace(ChargingStat));
         int BatteryLevel = std::stoi(TrimNewLine(TrimWhiteSpace(BatteryLevelString)));
+
+        std::cout << ChargingStat;
     
+        // Catch errors
         if(ChargingStat == "") {
             std::cout << "acpi did not exec" << std::endl;
             return 1;
         } else if(ChargingStat == "Full") {
-            /* std::cout << "full innit" << std::endl; */
-            Maxxed = 1;
+            // Full only shows when charging (even if 100%)
+            // // Therefore show ICharging
             CIcon = ICharging;
             Charging = 0;
         } else if(ChargingStat == "Not charging") {
-            /* std::cout << ICharging << std::endl; */
-            // Flash charging icon to alert - see if annoying
-            if(Maxxed) {
+            // If BLevel is above 90%
+            if(BatteryLevel > BFull) {
                 CIcon = ICharging;
                 Charging = 0;
             } else if(Charging == 1 || Charging == 4) {
+                // Flash charging icon to alert - see if annoying
                 Charging = 4;
             } else {
                 Charging = 1;
             }
         } else if(ChargingStat == "Charging") {
-            /* std::cout << ICharging << " CHARGE"  << std::endl; */
             CIcon = ICharging;
             if(Charging == 2 || Charging == 5) {
                 Charging = 5;
             } else {
                 Charging = 2;
             }
-            Maxxed = 0;
             // Cycle Icons to show charging
         } else if(ChargingStat == "Discharging") {
             /* std::cout << "DISCHARGE"  << std::endl; */
             CIcon = "";
             Charging = 3;
-            Maxxed = 0;
         } else {
             std::cout << "error cmd: -" << ChargingStat << "- did not match" << std::endl;
         }
