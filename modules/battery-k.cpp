@@ -21,6 +21,7 @@ const std::string BatteryLevelCmd = R"(acpi -b | awk -F'[,:%]' '{print $3}')";
  * ---------------------------------------------------------------------------------- */
 int Charging = 3;
 // Checks if battery has maxxed out to stop not charging warning
+// Battery will max out at 100% then not charge until it hits 90% again
 int Maxxed = 0;
 std::string BIcon = IBatteryEmpty;
 std::string CIcon = "";
