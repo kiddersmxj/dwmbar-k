@@ -38,7 +38,7 @@ int main() {
 
     // Only runs if .bashrc set $dwmbar to 1
     while(getenv("dwmbar")) {
-#ifdef RUN
+#ifndef NORUN
         for(int i=0; i<ModulesLength; i++) {
             if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
                 RunModule(Modules[i]);
@@ -62,6 +62,8 @@ int main() {
         }
         std::cout << std::endl;
         delete[] ModuleNoArray;
+
+        std::cout << "____________" << std::endl;
     }
 
     return 1;
