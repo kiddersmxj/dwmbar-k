@@ -13,11 +13,14 @@ void RunModule(std::string Module) {
 
 std::string GetModuleOutput(std::string Module) {
     std::string Output;
-    std::ifstream ModuleFile("$HOME/devel/dwmbar-k/.tmp/" + Module);
+    std::ifstream ModuleFile;
+
+    ModuleFile.open(HOME + "/devel/dwmbar-k/.tmp/" + Module + ".txt");
 
     while(getline(ModuleFile, Output)) {
         std::cout << Output << std::endl;
     }
+
     ModuleFile.close();
     return Output;
 }
@@ -30,15 +33,16 @@ std::string ParseModuleNo(char* ModuleNo) {
 
 int main() {
     std::string result = ExecCmd(R"(mkdir $HOME/devel/dwmbar-k/.tmp > /dev/null 2>&1 || echo 1)", 0, 0);
-    std::cout << result << " s" << std::endl;
+    std::cout << "CMD-" << result << "-" << std::endl;
     if(result == "") {
         std::cout << "mkdir error";
         return 1;
     }
 
+#ifndef NORUN
     // Only runs if .bashrc set $dwmbar to 1
     while(getenv("dwmbar")) {
-#ifndef NORUN
+
         for(int i=0; i<ModulesLength; i++) {
             if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
                 RunModule(Modules[i]);
@@ -55,6 +59,7 @@ int main() {
             if(strcmp(substr, ";") == 0) {
                 std::cout << ";" << std::endl;
             } else {
+                /* std::cout << ParseModuleNo(substr) << std::endl; */
                 std::cout << GetModuleOutput(ParseModuleNo(substr)) << std::endl;
             }
             substr = strtok(NULL, R"(,)");
@@ -64,7 +69,10 @@ int main() {
         delete[] ModuleNoArray;
 
         std::cout << "____________" << std::endl;
+
+#ifndef NORUN
     }
+#endif
 
     return 1;
 }
