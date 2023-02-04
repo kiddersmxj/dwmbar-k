@@ -1,5 +1,8 @@
 CC = g++
 
+# Build Variables
+DEFS ?= RUN
+
 BUILD_DIR ?= build
 SRC_DIRS ?= src
 MOD_DIRS ?= modules
@@ -24,7 +27,7 @@ all: $(TARGET_MODS) bin/$(TARGET_EXEC)
 
 bin/$(TARGET_EXEC): $(OBJS)
 	@echo "Linking..."
-	@echo "$(CC) $^ -o $@ $(LDFLAGS)"; $(CC) $^ -o $@ $(LDFLAGS)
+	@echo "$(CC) $^ -o $@ $(LDFLAGS)" ; $(CC) $^ -o $@ $(LDFLAGS)
 
 bin/modules/%-k: $(MODS)
 	$(MKDIR_P) $(dir $@)
@@ -33,7 +36,7 @@ bin/modules/%-k: $(MODS)
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@echo "Making Objects..."
 	$(MKDIR_P) $(dir $@)
-	@echo "$(CC) $(CPPFLAGS) -c $< -o $@"; $(CC) $(CPPFLAGS) -c $< -o $@
+	@echo "$(CC) $(CPPFLAGS) -c $< -o $@" -D$(DEFS); $(CC) $(CPPFLAGS) -c $< -o $@ -D$(DEFS)
 
 .PHONY: clean
 
