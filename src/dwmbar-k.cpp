@@ -38,11 +38,13 @@ int main() {
 
     // Only runs if .bashrc set $dwmbar to 1
     while(getenv("dwmbar")) {
+#ifdef RUN
         for(int i=0; i<ModulesLength; i++) {
             if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
                 RunModule(Modules[i]);
             }
         }
+#endif
 
         char* ModuleNoArray = new char[ModuleLayout.length() + 1];
         strcpy(ModuleNoArray, ModuleLayout.c_str());
@@ -53,7 +55,6 @@ int main() {
             if(strcmp(substr, ";") == 0) {
                 std::cout << ";" << std::endl;
             } else {
-                std::cout << ParseModuleNo(substr) << " " << std::endl;
                 std::cout << GetModuleOutput(ParseModuleNo(substr)) << std::endl;
             }
             substr = strtok(NULL, R"(,)");
