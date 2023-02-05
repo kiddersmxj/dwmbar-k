@@ -1,17 +1,33 @@
-#ifndef config
-#define config
+#ifndef Kconfig
+#define Kconfig
 
 const int ModulesLength = 6;
 const std::string Modules[ModulesLength] = { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
-const std::string ModuleLayout = "1,2,;,6,3,4,5";
+const std::vector<std::string> ModuleLayout = { "1", "2", ";", "6", "3", "4", "5" };
 
+// Scale the volume based on individual system - 1 for off
 const float VolScaler = 0.865;
 
-const int BFull = 90;
-const int BThreeQuart = 75;
-const int BHalf = 50;
-const int BQuart = 25;
-const int BEmpty = 10;
+const std::string TmpDir = ".tmp"; // Dir to store tmp files in
+const std::string HOME = getenv("HOME"); // $HOME environment variable
+const std::string WDir = HOME + "/" + "devel/dwmbar-k"; // Working directory
+const std::string TDir = WDir + "/" + TmpDir; // Full TmpDir path
+// Output file store locations
+const std::string NetworkOutputFile = TDir + "/network-k.txt";
+const std::string TimeOutputFile = TDir + "/time-k.txt";
+const std::string WeatherOutputFile = TDir + "/weather-k.txt";
+const std::string VolumeOutputFile = TDir + "/volume-k.txt";
+const std::string MediaOutputFile = TDir + "/media-k.txt";
+const std::string BatteryOutputFile = TDir + "/battery-k.txt";
+
+// Battery levels as a percentage for corresponding icons
+// Stored value is the bottom value for that icon
+// Next value above is the top band for that icon
+const int BFull = 90; // 90-100
+const int BThreeQuart = 75; // 75-89
+const int BHalf = 40; // 40 -74
+const int BQuart = 20; // 20-39
+const int BEmpty = 1; // Recomend non-zero value to catch broken battery
 
 const std::string IInternet = R"(\xef\x82\xac)";
 
