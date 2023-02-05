@@ -2,6 +2,7 @@ CC = g++
 
 # Build Variables
 DEFS ?= RUN
+FLAGS ?=
 
 BUILD_DIR ?= build
 SRC_DIRS ?= src
@@ -31,12 +32,12 @@ bin/$(TARGET_EXEC): $(OBJS)
 
 bin/modules/%-k: $(MODS)
 	$(MKDIR_P) $(dir $@)
-	@echo "$(CC) ${subst bin/,,$@.cpp} -o $@ -lasound $(LDFLAGS)"; $(CC) ${subst bin/,,$@.cpp} -o $@ -lasound $(LDFLAGS)
+	@echo "$(CC) ${subst bin/,,$@.cpp} -o $@ -lasound $(LDFLAGS) $(FLAGS)"; $(CC) ${subst bin/,,$@.cpp} -o $@ -lasound $(LDFLAGS) $(FLAGS)
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@echo "Making Objects..."
 	$(MKDIR_P) $(dir $@)
-	@echo "$(CC) $(CPPFLAGS) -c $< -o $@" -D$(DEFS); $(CC) $(CPPFLAGS) -c $< -o $@ -D$(DEFS)
+	@echo "$(CC) $(CPPFLAGS) -c $< -o $@" -D$(DEFS) $(FLAGS); $(CC) $(CPPFLAGS) -c $< -o $@ -D$(DEFS) $(FLAGS)
 
 .PHONY: clean
 
