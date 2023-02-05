@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstring>
-#include "../include/dwmbar-k.h" 
+#include "../include/dwmbar-k.hpp" 
 
 const std::string ChargingStatCmd = R"(acpi -b | awk -F'[,:] ' '{print $2}')";
 const std::string BatteryLevelCmd = R"(acpi -b | awk -F'[,:%]' '{print $3}')";

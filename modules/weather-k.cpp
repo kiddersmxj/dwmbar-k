@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstring>
-#include "../include/dwmbar-k.h" 
+#include "../include/dwmbar-k.hpp" 
 
 int main() {
     std::string WttrHex = ExecCmd(R"(timeout 1 curl -s wttr.in/$LOCATION?format=1 | hexdump -v -e '"\\\x" 1/1 "%02x"')", 0, 0);

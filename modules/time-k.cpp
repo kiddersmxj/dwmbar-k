@@ -3,7 +3,7 @@
 #include <cstring>
 #include <chrono>
 #include <vector>
-#include "../include/dwmbar-k.h" 
+#include "../include/dwmbar-k.hpp" 
 
 std::string GetDay(std::string day) {
 	int _day = stoi(day.substr(0,2));

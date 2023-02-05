@@ -2,7 +2,7 @@
 #include <cmath>
 #include <stdlib.h>
 #include <alsa/asoundlib.h>
-#include "../include/dwmbar-k.h" 
+#include "../include/dwmbar-k.hpp" 
 
 const snd_mixer_selem_channel_id_t CHANNEL = SND_MIXER_SCHN_FRONT_LEFT;
 int err;
