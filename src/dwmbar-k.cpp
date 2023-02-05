@@ -2,7 +2,7 @@
 #include <sstream>
 #include <fstream>
 #include <cstring>
-#include "../include/dwmbar-k.h" 
+#include "../include/dwmbar-k.hpp"
 
 void RunModule(std::string Module) {
     std::cout << Module << std::endl;
