@@ -1,7 +1,8 @@
-#ifndef dwmbar-k.h 
-#define dwmbar-k.h 
+#ifndef dwmbar-k
+#define dwmbar-k
 
-#include "config.h"
+#include "config.hpp"
+#include "../lib/std-k.hpp"
 
 std::string HOME = getenv("HOME");
 

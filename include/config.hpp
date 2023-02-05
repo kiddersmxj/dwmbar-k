@@ -1,5 +1,5 @@
-#ifndef config.h 
-#define config.h 
+#ifndef config
+#define config
 
 const int ModulesLength = 6;
 const std::string Modules[ModulesLength] = { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
