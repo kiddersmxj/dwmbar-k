@@ -18,6 +18,7 @@ MODOBJS := $(MODS:%=$(BUILD_DIR)$(MOD_DIR)/%.o)
 INC_DIRS := $(shell find $(SRC_DIRS) -type d)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 LDFLAGS := $(shell find $(LIB_DIRS) -name *.o)
+LIBS := $(shell find $(LIB_DIRS)/$(SRC_DIRS) -name *.cpp)
 
 CPPFLAGS ?= -Wall
 
@@ -26,13 +27,16 @@ TARGET_MODS ?= $(addprefix bin/,$(subst .cpp,,$(MODS)))
 
 all: $(TARGET_MODS) bin/$(TARGET_EXEC)
 
+libs: $(LIBS)
+	@echo "$(CC) $(CPPFLAGS) -c $^ -o ${subst src/,,${subst .cpp,.o,$^}}"; $(CC) $(CPPFLAGS) -c $^ -o ${subst src/,,${subst .cpp,.o,$^}}
+
 bin/$(TARGET_EXEC): $(OBJS)
 	@echo "Linking..."
 	@echo "$(CC) $^ -o $@ $(LDFLAGS)" ; $(CC) $^ -o $@ $(LDFLAGS)
 
 bin/modules/%-k: $(MODS)
 	$(MKDIR_P) $(dir $@)
-	@echo "$(CC) ${subst bin/,,$@.cpp} -o $@ -lasound $(LDFLAGS) $(FLAGS)"; $(CC) ${subst bin/,,$@.cpp} -o $@ -lasound $(LDFLAGS) $(FLAGS)
+	@echo "$(CC) $(CPPFLAGS) ${subst bin/,,$@.cpp} -o $@ -lasound -D$(DEFS) $(LDFLAGS) $(FLAGS)"; $(CC) $(CPPFLAGS) ${subst bin/,,$@.cpp} -o $@ -lasound -D$(DEFS) $(LDFLAGS) $(FLAGS)
 
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	@echo "Making Objects..."
