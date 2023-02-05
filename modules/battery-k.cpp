@@ -42,6 +42,9 @@ std::string TrimNewLine(const std::string& str) {
 }
 
 int main() {
+    int I = 0;
+    bool Run = true;
+
     // Adjust to read config file from dwmbar-k
     while(1) {
         // Get battery info through acpi
@@ -56,7 +59,7 @@ int main() {
         ChargingStat = TrimNewLine(TrimWhiteSpace(ChargingStat));
         int BatteryLevel = std::stoi(TrimNewLine(TrimWhiteSpace(BatteryLevelString)));
 
-        std::cout << ChargingStat;
+        /* std::cout << ChargingStat; */
     
         // Catch errors
         if(ChargingStat == "") {
@@ -119,8 +122,10 @@ int main() {
                 BIcon = IBatteryQuart;
             } else if(BatteryLevel >= BEmpty) {
                 BIcon = IBatteryEmpty;
+            } else if(BatteryLevel == 0) {
+                BIcon = "E";
             } else {
-                std::cout << "undefined battery level: " << std::to_string(BatteryLevel) << std::endl;
+                std::cout << "undefined battery level: -" << std::to_string(BatteryLevel) << "-" << std::endl;
             }
         }
     
@@ -133,8 +138,17 @@ int main() {
                 std::cout << "error CIcon cycle for charge: " << CIcon << std::endl;
             }
         }
-    
+
+        std::vector<std::string> Output;
+        Output.push_back(BIcon + " " + std::to_string(BatteryLevel) + "% " + CIcon);
+        WriteFileLines(Output, BatteryOutputFile);
+
+#ifdef NORUN
         std::cout << BIcon << " " << std::to_string(BatteryLevel) << "% " << CIcon << std::endl;
+        BreakPoint();
+#endif
+
+        /* if(ReadFileLines(ClockFile)) == */ 
     
     }
     return 0;
