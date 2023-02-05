@@ -42,5 +42,12 @@ std::string GetDateAndTime() {
 }
 
 int main() {
-    std::cout << GetDateAndTime() << std::endl;
+    std::vector<std::string> Output;
+    Output.push_back(GetDateAndTime());
+    WriteFileLines(Output, TimeOutputFile);
+
+#ifdef NORUN
+    std::cout << Output.front() << std::endl;
+    BreakPoint();
+#endif
 }
