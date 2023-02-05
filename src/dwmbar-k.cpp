@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <sstream>
 #include <fstream>
 #include <cstring>
@@ -11,24 +12,14 @@ void RunModule(std::string Module) {
     system(LaunchCmd.str().c_str());
 }
 
-std::string GetModuleOutput(std::string Module) {
-    std::string Output;
-    std::ifstream ModuleFile;
-
-    ModuleFile.open(HOME + "/devel/dwmbar-k/.tmp/" + Module + ".txt");
-
-    while(getline(ModuleFile, Output)) {
-        std::cout << Output << std::endl;
-    }
-
-    ModuleFile.close();
-    return Output;
+std::vector<std::string> GetModuleOutput(std::string Module) {
+    return ReadFileLines(HOME + "/devel/dwmbar-k/.tmp/" + Module + ".txt");
 }
 
-std::string ParseModuleNo(char* ModuleNo) {
+std::string ParseModuleNo(std::string ModuleNo) {
     std::cout << ModuleNo << " ";
     // -1 to account for 0 based indexing
-    return Modules[atoi(ModuleNo) - 1];
+    return Modules[stoi(ModuleNo) - 1];
 }
 
 int main() {
@@ -42,7 +33,6 @@ int main() {
 #ifndef NORUN
     // Only runs if .bashrc set $dwmbar to 1
     while(getenv("dwmbar")) {
-
         for(int i=0; i<ModulesLength; i++) {
             if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
                 RunModule(Modules[i]);
@@ -50,26 +40,17 @@ int main() {
         }
 #endif
 
-        char* ModuleNoArray = new char[ModuleLayout.length() + 1];
-        strcpy(ModuleNoArray, ModuleLayout.c_str());
-        char* substr = strtok(ModuleNoArray, R"(,)");
-    
-        int i = 0;
-        while(substr != NULL) {
-            if(strcmp(substr, ";") == 0) {
+		for(std::string substr: ModuleLayout) {
+            if(substr == ";") {
                 std::cout << ";" << std::endl;
             } else {
-                /* std::cout << ParseModuleNo(substr) << std::endl; */
-                std::cout << GetModuleOutput(ParseModuleNo(substr)) << std::endl;
+				std::vector<std::string> Output = GetModuleOutput(ParseModuleNo(substr));
+				VPrint(Output);
+				std::cout << std::endl;
             }
-            substr = strtok(NULL, R"(,)");
-            i++;
-        }
-        std::cout << std::endl;
-        delete[] ModuleNoArray;
+		}
 
-        std::cout << "____________" << std::endl;
-
+		BreakPoint();
 #ifndef NORUN
     }
 #endif
