@@ -46,7 +46,7 @@ int main() {
     Output.push_back(GetDateAndTime());
     WriteFileLines(Output, TimeOutputFile);
 
-#ifdef NORUN
+#ifdef COUT
     std::cout << Output.front() << std::endl;
     BreakPoint();
 #endif
