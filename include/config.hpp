@@ -20,6 +20,14 @@ const std::string VolumeOutputFile = TDir + "/volume-k.txt";
 const std::string MediaOutputFile = TDir + "/media-k.txt";
 const std::string BatteryOutputFile = TDir + "/battery-k.txt";
 
+// Volume levels as a percentage for corresponding icons
+// Stored value is the bottom value for that icon
+// Next value above is the top band for that icon
+const int VHigh = 70; // 70-100
+const int VMid = 40; // 40-69
+const int VLow = 1; // 1-39
+const int VMute = 0; // 0
+
 // Battery levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon
 // Next value above is the top band for that icon
