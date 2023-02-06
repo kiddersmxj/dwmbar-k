@@ -86,7 +86,11 @@ int main(int argc, char** argv) {
 
     // If no args are given get volume
 	if (argc < 2) {
-        printf("%ld\n", GetVolumeLevel(device, selem_name));
+        int Level = GetVolumeLevel(device, selem_name);
+        if(Level >= 
+
+        std::vector<std::string> Output;
+#ifdef COUT
 		return 0;
 	}
 
