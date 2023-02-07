@@ -87,7 +87,17 @@ int main(int argc, char** argv) {
     // If no args are given get volume
 	if (argc < 2) {
         int Level = GetVolumeLevel(device, selem_name);
-        if(Level >= 
+        if(Level >= VHigh) {
+            VIcon = IVolHigh;
+        } else if(Level >= VMid) {
+            VIcon = IVolMid;
+        } else if(Level >= VLow) {
+            VIcon = IVolLow;
+        } else if(Level == VMute) {
+            VIcon = IVolMute
+        } else {
+            std::cout << "Vol parsing error: -" << Level << "-" << std::endl;
+        }
 
         std::vector<std::string> Output;
 #ifdef COUT
