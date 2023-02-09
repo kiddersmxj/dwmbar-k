@@ -9,6 +9,7 @@ int err;
 snd_mixer_t *h_mixer;
 snd_mixer_selem_id_t *sid;
 snd_mixer_elem_t *elem ;
+std::string VIcon = "";
 
 static void error_close_exit(const char *errmsg, int err, snd_mixer_t *h_mixer) {
 	if (err == 0)
@@ -94,13 +95,20 @@ int main(int argc, char** argv) {
         } else if(Level >= VLow) {
             VIcon = IVolLow;
         } else if(Level == VMute) {
-            VIcon = IVolMute
+            VIcon = IVolMute;
         } else {
             std::cout << "Vol parsing error: -" << Level << "-" << std::endl;
         }
 
         std::vector<std::string> Output;
+        Output.push_back(VIcon + " " + std::to_string(Level) + "%");
+
+        WriteFileLines(Output, VolumeOutputFile);
+
 #ifdef COUT
+        VPrint(Output);
+#endif
+
 		return 0;
 	}
 
