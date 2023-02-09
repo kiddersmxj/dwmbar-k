@@ -16,27 +16,38 @@ int main() {
 
     int i = 0;
     int space = 0;
-    std::string HexOutput = "\\";
+    std::string HexOutput = "";
     while(substr != NULL) {
-        if(i < 4 && strcmp(substr, "xef") != 0) {
-            HexOutput =+ " \\";
-            HexOutput =+ substr;
-            std::cout << "\\" << substr;
+        if(strcmp(substr, "x0a") == 0) {
+        } else if(i < 4 && strcmp(substr, "xef") != 0) {
+            HexOutput += "\\";
+            HexOutput += substr;
+            /* std::cout << "\\" << substr; */
             /* std::cout << "q"; */
         } else if(strcmp(substr, "x2b") == 0) {
         } else if(strcmp(substr, "x20") == 0 && space == 0) {
             space++;
             /* std::cout << "w"; */
         } else if(space == 1) {
-            HexOutput =+"\\";
-            HexOutput =+ substr;
-            std::cout << "\\" << substr;
+            HexOutput += "\\";
+            HexOutput += substr;
+            /* std::cout << "\\" << substr; */
         }
         substr = strtok(NULL, R"(\)");
         i++;
     }
     std::cout << std::endl;
     delete[] HexArray;
+
+    std::vector<std::string> Output;
+    Output.push_back(HexOutput);
+
+    WriteFileLines(Output, WeatherOutputFile);
+
+#ifdef COUT
+    VPrint(Output);
+#endif
+
 
     return 0;
 }
