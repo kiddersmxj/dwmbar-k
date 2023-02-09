@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <array>
+#include <filesystem>
 #include "../std-k.hpp"
+namespace fs = std::filesystem;
 
 // NULL function to attach breakpoint to in gdb
 void BreakPoint(void) {
@@ -79,5 +81,15 @@ std::vector<std::string> SplitStr(std::string String, const char* Delim) {
     delete[] Array;
 
     return Output;
+}
+
+void PollClock(const std::string Dir) {
+    std::string Tmp;
+    for (const auto & entry : fs::directory_iterator(Dir))
+        Tmp = entry.path();
+    std::cout << Tmp << std::endl;
+    
+    std::vector<std::string> Output = SplitStr(Tmp, R"(/)");
+    VPrint(Output);
 }
 

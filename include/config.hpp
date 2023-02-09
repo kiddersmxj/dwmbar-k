@@ -12,13 +12,17 @@ const std::string TmpDir = ".tmp"; // Dir to store tmp files in
 const std::string HOME = getenv("HOME"); // $HOME environment variable
 const std::string WDir = HOME + "/" + "devel/dwmbar-k"; // Working directory
 const std::string TDir = WDir + "/" + TmpDir; // Full TmpDir path
+const std::string OutputDir = "output"; // Name of output files dir
+const std::string ODir = TDir + "/" + OutputDir; // Full OutputDir path
+const std::string ClockDir = "clock"; // Name of clock file dir
+const std::string CDir = TDir + "/" + ClockDir; // Full ClockDir path
 // Output file store locations
-const std::string NetworkOutputFile = TDir + "/network-k.txt";
-const std::string TimeOutputFile = TDir + "/time-k.txt";
-const std::string WeatherOutputFile = TDir + "/weather-k.txt";
-const std::string VolumeOutputFile = TDir + "/volume-k.txt";
-const std::string MediaOutputFile = TDir + "/media-k.txt";
-const std::string BatteryOutputFile = TDir + "/battery-k.txt";
+const std::string NetworkOutputFile = ODir + "/network-k.txt";
+const std::string TimeOutputFile = ODir + "/time-k.txt";
+const std::string WeatherOutputFile = ODir + "/weather-k.txt";
+const std::string VolumeOutputFile = ODir + "/volume-k.txt";
+const std::string MediaOutputFile = ODir + "/media-k.txt";
+const std::string BatteryOutputFile = ODir + "/battery-k.txt";
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon

@@ -22,7 +22,12 @@ std::string ParseModuleNo(std::string ModuleNo) {
     return Modules[stoi(ModuleNo) - 1];
 }
 
+void InitClock() {
+    PollClock(CDir);
+}
+
 int main() {
+    InitClock();
     std::string result = ExecCmd(R"(mkdir $HOME/devel/dwmbar-k/.tmp > /dev/null 2>&1 || echo 1)", 0, 0);
     std::cout << "CMD-" << result << "-" << std::endl;
     if(result == "") {
