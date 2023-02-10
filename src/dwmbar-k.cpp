@@ -24,8 +24,10 @@ void KillModule(std::string Module) {
     system(KillCmd.str().c_str());
 }
 
-std::vector<std::string> GetModuleOutput(std::string Module) {
-    return ReadFileLines(HOME + "/devel/dwmbar-k/.tmp/" + Module + ".txt");
+std::string GetModuleOutput(std::string Module) {
+    std::vector<std::string> Output = ReadFileLines(TDir + Module + ".txt");
+    std::string O = Output.toString();
+    return O;
 }
 
 std::string ParseModuleNo(std::string ModuleNo) {
@@ -89,6 +91,10 @@ void RunModules() {
 #endif
 }
 
+void XSR(std::string Cmd) {
+    ExecCmd(R"(xsetroot -name "$(printf ")" + Cmd + R"(") ")", 0, 0);
+}
+
 void KillModules() {
         for(int i=0; i<ModulesLength; i++) {
             if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) != "") {
@@ -101,6 +107,8 @@ int main() {
     KillModules();
     InitClock();
     InitDirs();
+    
+    std::vector<std::string> Output;
 
     // Only runs if .bashrc set $dwmbar to 1
     while(getenv("dwmbar")) {
@@ -112,15 +120,16 @@ int main() {
                     std::cout << ";" << std::endl;
 #endif
                 } else {
-				    std::vector<std::string> Output = GetModuleOutput(ParseModuleNo(substr));
-#ifdef COUT
-				    VPrint(Output);
-				    std::cout << std::endl;
-#endif
+                    Output.push_back(GetModuleOutput(ParseModuleNo(substr)));
                 }
 		    }
+#ifdef OCOUT
+			VPrint(Output);
+			std::cout << std::endl;
+#endif
 		    BreakPoint();
             PulseClock();
+            Output.clear();
         }
         C++;
     }
