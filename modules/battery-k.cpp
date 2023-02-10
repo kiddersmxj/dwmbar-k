@@ -152,10 +152,9 @@ int Battery() {
     Output.push_back(BIcon + " " + std::to_string(BatteryLevel) + "% " + CIcon);
     WriteFileLines(Output, BatteryOutputFile);
 
-#ifdef COUT
+#ifdef MCOUT
     std::cout << BIcon << " " << std::to_string(BatteryLevel) << "% " << CIcon << std::endl;
 #endif
-
     BreakPoint();
 
     return 0;
