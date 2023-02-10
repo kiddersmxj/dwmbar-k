@@ -16,6 +16,8 @@ const std::string OutputDir = "output"; // Name of output files dir
 const std::string ODir = TDir + "/" + OutputDir; // Full OutputDir path
 const std::string ClockDir = "clock"; // Name of clock file dir
 const std::string CDir = TDir + "/" + ClockDir; // Full ClockDir path
+const std::string DataDir = "data"; // Name of data file dir
+const std::string DDir = TDir + "/" + DataDir; // Full DataDir path
 // Output file store locations
 const std::string NetworkOutputFile = ODir + "/network-k.txt";
 const std::string TimeOutputFile = ODir + "/time-k.txt";
@@ -23,6 +25,22 @@ const std::string WeatherOutputFile = ODir + "/weather-k.txt";
 const std::string VolumeOutputFile = ODir + "/volume-k.txt";
 const std::string MediaOutputFile = ODir + "/media-k.txt";
 const std::string BatteryOutputFile = ODir + "/battery-k.txt";
+// Data file store locations
+const std::string NetworkDataFile = DDir + "/network.txt";
+const std::string TimeDataFile = DDir + "/time.txt";
+const std::string WeatherDataFile = DDir + "/weather.txt";
+const std::string VolumeDataFile = DDir + "/volume.txt";
+const std::string MediaDataFile = DDir + "/media.txt";
+const std::string BatteryDataFile = DDir + "/battery.txt";
+
+const int MaxClock = 100; // Maximum clock value before reset
+// How many clock cycles each module runs
+const int NetworkFrq = 50;
+const int TimeFrq = 1;
+const int WeatherFrq = 100;
+const int VolumeFrq = 0;
+const int MediaFrq = 0;
+const int BatteryFrq = 10;
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon
