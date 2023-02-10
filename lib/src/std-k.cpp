@@ -103,3 +103,9 @@ void Touch(std::string File) {
     fs.open(File, std::ios::out);
     fs.close();
 }
+
+void Data(std::string Text, std::string File) {
+    std::vector<std::string> Lines;
+    Lines.push_back(Text);
+    WriteFileLines(Lines, File);
+}
