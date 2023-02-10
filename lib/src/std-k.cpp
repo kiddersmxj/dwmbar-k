@@ -98,3 +98,8 @@ int PollClock(const std::string Dir) {
     return FileInt;
 }
 
+void Touch(std::string File) {
+    std::fstream fs;
+    fs.open(File, std::ios::out);
+    fs.close();
+}

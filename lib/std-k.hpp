@@ -11,5 +11,6 @@ std::vector<std::string> ReadFileLines(std::string File);
 void VPrint(std::vector<std::string> Input);
 std::vector<std::string> SplitStr(std::string String, const char* Delim);
 int PollClock(const std::string Dir);
+void Touch(std::string File);
 
 #endif
