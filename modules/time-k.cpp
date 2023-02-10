@@ -62,7 +62,7 @@ int Time() {
     Output.push_back(GetDateAndTime());
     WriteFileLines(Output, TimeOutputFile);
 
-#ifdef COUT
+#ifdef MCOUT
     std::cout << Output.front() << std::endl;
     BreakPoint();
 #endif
