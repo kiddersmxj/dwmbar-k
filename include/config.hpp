@@ -4,6 +4,7 @@
 const int ModulesLength = 6;
 const std::string Modules[ModulesLength] = { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
 const std::vector<std::string> ModuleLayout = { "1", "2", ";", "6", "3", "4", "5" };
+const int EnabledModules[ModulesLength] = { 0, 1, 1, 1, 0, 1 };
 
 // Scale the volume based on individual system - 1 for off
 const float VolScaler = 0.865;
@@ -39,9 +40,11 @@ const int ClockFrq = 1; // How many in prog clock cycles before pulse
 const int NetworkFrq = 50;
 const int TimeFrq = 1;
 const int WeatherFrq = 100;
-const int VolumeFrq = 0;
+const int VolumeFrq = 1;
 const int MediaFrq = 0;
 const int BatteryFrq = 10;
+
+const int SleepTime = 200; // How long while loop waits before re-execution in ms
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon
