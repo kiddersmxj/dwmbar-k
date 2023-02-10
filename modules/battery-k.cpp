@@ -1,5 +1,3 @@
-#include <iostream>
-#include <cstring>
 #include "../include/dwmbar-k.hpp" 
 
 int C = -1;

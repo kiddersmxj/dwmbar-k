@@ -1,14 +1,8 @@
-#include <iostream>
-#include <chrono>
-#include <thread>
-#include <vector>
 #include <sstream>
 #include <fstream>
 #include <filesystem>
-#include <cstring>
 #include "../include/dwmbar-k.hpp"
 namespace fs = std::filesystem;
-using namespace std::chrono_literals;
 
 int C = 0;
 

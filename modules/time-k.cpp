@@ -1,6 +1,4 @@
-#include <iostream>
 #include <ctime>
-#include <cstring>
 #include "../include/dwmbar-k.hpp" 
 
 int C = -1;

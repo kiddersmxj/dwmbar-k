@@ -1,8 +1,4 @@
-#include <iostream>
 #include <cmath>
-#include <thread>
-#include <chrono>
-#include <stdlib.h>
 #include <alsa/asoundlib.h>
 #include "../include/dwmbar-k.hpp" 
 using namespace std::chrono_literals;
