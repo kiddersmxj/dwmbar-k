@@ -2,7 +2,21 @@
 #include <cstring>
 #include "../include/dwmbar-k.hpp" 
 
-int main() {
+int C = -1;
+
+int Run() {
+    if(C == PollClock(CDir)) {
+        return 0;
+    }
+    C = PollClock(CDir);
+    if((PollClock(CDir) % WeatherFrq) == 0 || PollClock(CDir) == 0)
+        return 1;
+    return 0; 
+}
+
+int Weather() {
+    if(!Run())
+        return 1;
     std::string WttrHex = ExecCmd(R"(timeout 1 curl -s wttr.in/$LOCATION?format=1 | hexdump -v -e '"\\\x" 1/1 "%02x"')", 0, 0);
     if(WttrHex == "") {
         std::cout << "curl did not exec" << std::endl;
@@ -44,10 +58,16 @@ int main() {
 
     WriteFileLines(Output, WeatherOutputFile);
 
-#ifdef COUT
+#ifdef MCOUT
     VPrint(Output);
 #endif
+    return 0;
+}
 
+
+int main() {
+    while(1)
+        Weather();
 
     return 0;
 }
