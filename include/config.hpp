@@ -34,6 +34,7 @@ const std::string MediaDataFile = DDir + "/media.txt";
 const std::string BatteryDataFile = DDir + "/battery.txt";
 
 const int MaxClock = 100; // Maximum clock value before reset
+const int ClockFrq = 1; // How many in prog clock cycles before pulse
 // How many clock cycles each module runs
 const int NetworkFrq = 50;
 const int TimeFrq = 1;
