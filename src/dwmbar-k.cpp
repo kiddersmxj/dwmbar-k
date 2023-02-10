@@ -7,6 +7,8 @@
 #include "../include/dwmbar-k.hpp"
 namespace fs = std::filesystem;
 
+int C = 0;
+
 void RunModule(std::string Module) {
     std::cout << Module << std::endl;
     std::stringstream LaunchCmd;
@@ -31,14 +33,26 @@ void InitClock() {
     if(PollClock(CDir) == -1) {
         Touch(CDir + "/0");
     } else if(PollClock(CDir) != 0) {
-        for (const auto & entry : fs::directory_iterator(CDir)) {
+        for (const auto & entry : fs::directory_iterator(CDir))
 	        rename(entry.path(), CDir + "/0");
-        }
     }
 #ifdef COUT
     std::cout << "...Clock=" << PollClock(CDir) << std::endl;
 #endif
 }
+
+void PulseClock() {
+#ifdef COUT
+    std::cout << "Clock=" << PollClock(CDir);
+#endif
+    int Pulse = PollClock(CDir);
+    Pulse++;
+    for (const auto & entry : fs::directory_iterator(CDir))
+	    rename(entry.path(), CDir + "/" + std::to_string(Pulse));
+#ifdef COUT
+    std::cout << "...Clock=" << PollClock(CDir) << std::endl;
+#endif
+} 
 
 int main() {
     InitClock();
@@ -63,15 +77,20 @@ int main() {
 
 		for(std::string substr: ModuleLayout) {
             if(substr == ";") {
+#ifdef COUT
                 std::cout << ";" << std::endl;
+#endif
             } else {
 				std::vector<std::string> Output = GetModuleOutput(ParseModuleNo(substr));
+#ifdef COUT
 				VPrint(Output);
 				std::cout << std::endl;
+#endif
             }
 		}
 
 		BreakPoint();
+        PulseClock();
 #ifndef NORUN
     }
 #endif
