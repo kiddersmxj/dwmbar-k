@@ -163,6 +163,7 @@ int Battery() {
 int main() {
     while(1) {
         Battery();
+        std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
     }
     return 0;
 }

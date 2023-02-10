@@ -1,8 +1,6 @@
 #include <iostream>
 #include <ctime>
 #include <cstring>
-#include <chrono>
-#include <vector>
 #include "../include/dwmbar-k.hpp" 
 
 int C = -1;
@@ -72,5 +70,7 @@ int Time() {
 int main() {
     while(1) {
         Time();
+        std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
     }
+    return 0;
 }

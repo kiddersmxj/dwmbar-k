@@ -50,7 +50,9 @@ int Weather() {
         substr = strtok(NULL, R"(\)");
         i++;
     }
+#ifdef MCOUT
     std::cout << std::endl;
+#endif
     delete[] HexArray;
 
     std::vector<std::string> Output;
@@ -66,9 +68,10 @@ int Weather() {
 
 
 int main() {
-    while(1)
+    while(1) {
         Weather();
-
+        std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
+    }
     return 0;
 }
 
