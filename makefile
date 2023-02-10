@@ -28,7 +28,7 @@ TARGET_MODS ?= $(addprefix bin/,$(subst .cpp,,$(MODS)))
 all: $(TARGET_MODS) bin/$(TARGET_EXEC)
 
 libs: $(LIBS)
-	@echo "$(CC) $(CPPFLAGS) -c $^ -o ${subst src/,,${subst .cpp,.o,$^}}"; $(CC) $(CPPFLAGS) -c $^ -o ${subst src/,,${subst .cpp,.o,$^}}
+	@echo "$(CC) $(CPPFLAGS) -c $^ -o ${subst src/,,${subst .cpp,.o,$^}} -D${DEFS}"; $(CC) $(CPPFLAGS) -c $^ -o ${subst src/,,${subst .cpp,.o,$^}} -D${DEFS}
 
 bin/$(TARGET_EXEC): $(OBJS)
 	@echo "Linking..."
