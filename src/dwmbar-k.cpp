@@ -1,4 +1,6 @@
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include <vector>
 #include <sstream>
 #include <fstream>
@@ -6,6 +8,7 @@
 #include <cstring>
 #include "../include/dwmbar-k.hpp"
 namespace fs = std::filesystem;
+using namespace std::chrono_literals;
 
 int C = 0;
 
@@ -16,6 +19,15 @@ void RunModule(std::string Module) {
     std::stringstream LaunchCmd;
     LaunchCmd << "$HOME/devel/dwmbar-k/./launch.sh "<< Module << " &";
     system(LaunchCmd.str().c_str());
+}
+
+void KillModule(std::string Module) {
+#ifdef COUT
+    std::cout << Module << std::endl;
+#endif
+    std::stringstream KillCmd;
+    KillCmd << "pkill "<< Module << " &";
+    system(KillCmd.str().c_str());
 }
 
 std::vector<std::string> GetModuleOutput(std::string Module) {
@@ -58,47 +70,63 @@ void PulseClock() {
 #endif
 } 
 
-int main() {
-    InitClock();
+void InitDirs() {
     std::string result = ExecCmd(R"(mkdir $HOME/devel/dwmbar-k/.tmp > /dev/null 2>&1 || echo 1)", 0, 0);
 #ifdef COUT
     std::cout << "CMD-" << result << "-" << std::endl;
 #endif
     if(result == "") {
         std::cout << "mkdir error";
-        return 1;
     }
+}
 
+void RunModules() {
 #ifndef NORUN
-    // Only runs if .bashrc set $dwmbar to 1
-    while(getenv("dwmbar")) {
         for(int i=0; i<ModulesLength; i++) {
             if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
                 RunModule(Modules[i]);
             }
         }
 #endif
+}
 
-		for(std::string substr: ModuleLayout) {
-            if(substr == ";") {
-#ifdef COUT
-                std::cout << ";" << std::endl;
-#endif
-            } else {
-				std::vector<std::string> Output = GetModuleOutput(ParseModuleNo(substr));
-#ifdef COUT
-				VPrint(Output);
-				std::cout << std::endl;
-#endif
+void KillModules() {
+        for(int i=0; i<ModulesLength; i++) {
+            if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) != "") {
+                KillModule(Modules[i]);
             }
-		}
+        }
+}
 
-		BreakPoint();
-        PulseClock();
-#ifndef NORUN
-    }
+int main() {
+    KillModules();
+    InitClock();
+    InitDirs();
+
+    // Only runs if .bashrc set $dwmbar to 1
+    while(getenv("dwmbar")) {
+        RunModules();
+        if(C % ClockFrq == 0) {
+	    	for(std::string substr: ModuleLayout) {
+                if(substr == ";") {
+#ifdef COUT
+                    std::cout << ";" << std::endl;
 #endif
-
+                } else {
+				    std::vector<std::string> Output = GetModuleOutput(ParseModuleNo(substr));
+#ifdef COUT
+				    VPrint(Output);
+				    std::cout << std::endl;
+#endif
+                }
+		    }
+		    BreakPoint();
+            PulseClock();
+        } else {
+            /* std::this_thread::sleep_for(2s); */
+        }
+        C++;
+    }
     return 1;
 }
 
