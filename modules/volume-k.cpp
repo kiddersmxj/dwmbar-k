@@ -10,6 +10,21 @@ snd_mixer_t *h_mixer;
 snd_mixer_selem_id_t *sid;
 snd_mixer_elem_t *elem ;
 std::string VIcon = "";
+// Setup variables used by both fucntions
+char *device = "default";
+char *selem_name = std::getenv("scontrol");
+// Get $scontrol variable set in .bashrc
+int C = -1;
+
+int Run() {
+    if(PollClock(CDir) == C)
+        return 0;
+    if(PollClock(CDir) == 0) {
+        C = PollClock(CDir);
+        return 1;
+    }
+    return 0;
+}
 
 static void error_close_exit(const char *errmsg, int err, snd_mixer_t *h_mixer) {
 	if (err == 0)
@@ -77,40 +92,39 @@ void SetVolumeLevel(char *device, char *selem_name, long vol) {
 	snd_mixer_close(h_mixer);
 }
 
-int main(int argc, char** argv) {
-    // Setup variables used by both fucntions
-    char *device;
-    char *selem_name;
-	device = "default";
-    // Get $scontrol variable set in .bashrc
-	selem_name = std::getenv("scontrol");
+int Volume() {
+    if(!Run())
+        return 1;
+    int Level = GetVolumeLevel(device, selem_name);
+    if(Level >= VHigh) {
+        VIcon = IVolHigh;
+    } else if(Level >= VMid) {
+        VIcon = IVolMid;
+    } else if(Level >= VLow) {
+        VIcon = IVolLow;
+    } else if(Level == VMute) {
+        VIcon = IVolMute;
+    } else {
+        std::cout << "Vol parsing error: -" << Level << "-" << std::endl;
+    }
+    
+    std::vector<std::string> Output;
+    Output.push_back(VIcon + " " + std::to_string(Level) + "%");
 
+     WriteFileLines(Output, VolumeOutputFile);
+
+#ifdef MCOUT
+    VPrint(Output);
+#endif
+	return 0;
+	}
+
+int main(int argc, char** argv) {
     // If no args are given get volume
 	if (argc < 2) {
-        int Level = GetVolumeLevel(device, selem_name);
-        if(Level >= VHigh) {
-            VIcon = IVolHigh;
-        } else if(Level >= VMid) {
-            VIcon = IVolMid;
-        } else if(Level >= VLow) {
-            VIcon = IVolLow;
-        } else if(Level == VMute) {
-            VIcon = IVolMute;
-        } else {
-            std::cout << "Vol parsing error: -" << Level << "-" << std::endl;
-        }
-
-        std::vector<std::string> Output;
-        Output.push_back(VIcon + " " + std::to_string(Level) + "%");
-
-        WriteFileLines(Output, VolumeOutputFile);
-
-#ifdef COUT
-        VPrint(Output);
-#endif
-
-		return 0;
-	}
+        while(1)
+            Volume();
+    }
 
     // If args are given assign to var after check
 	float vol = atol(argv[1]);
