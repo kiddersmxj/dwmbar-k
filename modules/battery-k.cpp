@@ -2,6 +2,7 @@
 #include <cstring>
 #include "../include/dwmbar-k.hpp" 
 
+int C = -1;
 const std::string ChargingStatCmd = R"(acpi -b | awk -F'[,:] ' '{print $2}')";
 const std::string BatteryLevelCmd = R"(acpi -b | awk -F'[,:%]' '{print $3}')";
 /*
@@ -41,115 +42,128 @@ std::string TrimNewLine(const std::string& str) {
     return str.substr(first, (last - first + 1));
 }
 
-int main() {
-    int I = 0;
-    bool Run = true;
+int RunCheck() {
+    if(C == PollClock(CDir)) {
+        return 0;
+    }
+    C = PollClock(CDir);
+    if((PollClock(CDir) % BatteryFrq) == 0 || PollClock(CDir) == 0)
+        return 1;
+    return 0; 
+}
 
-    // Adjust to read config file from dwmbar-k
-    while(1) {
-        // Get battery info through acpi
-        std::string ChargingStat = ExecCmd(ChargingStatCmd, 0, 0);
-        std::string BatteryLevelString = ExecCmd(BatteryLevelCmd, 0, 0);
-        // Catch errors
-        if(BatteryLevelString == "") {
-            std::cout << "acpi did not exec" << std::endl;
-            return 1;
-        }
-        // Format outputs
-        ChargingStat = TrimNewLine(TrimWhiteSpace(ChargingStat));
-        int BatteryLevel = std::stoi(TrimNewLine(TrimWhiteSpace(BatteryLevelString)));
+int Battery() {
+    if(!RunCheck()) {
+        return 1;
+    }
+    // Get battery info through acpi
+    std::string ChargingStat = ExecCmd(ChargingStatCmd, 0, 0);
+    std::string BatteryLevelString = ExecCmd(BatteryLevelCmd, 0, 0);
+    // Catch errors
+    if(BatteryLevelString == "") {
+        std::cout << "acpi did not exec" << std::endl;
+        return 1;
+    }
+    // Format outputs
+    ChargingStat = TrimNewLine(TrimWhiteSpace(ChargingStat));
+    int BatteryLevel = std::stoi(TrimNewLine(TrimWhiteSpace(BatteryLevelString)));
 
-        /* std::cout << ChargingStat; */
+    /* std::cout << ChargingStat; */
     
-        // Catch errors
-        if(ChargingStat == "") {
-            std::cout << "acpi did not exec" << std::endl;
-            return 1;
-        } else if(ChargingStat == "Full") {
-            // Full only shows when charging (even if 100%)
-            // // Therefore show ICharging
+    // Catch errors
+    if(ChargingStat == "") {
+        std::cout << "acpi did not exec" << std::endl;
+        return 1;
+    } else if(ChargingStat == "Full") {
+        // Full only shows when charging (even if 100%)
+        // // Therefore show ICharging
+        CIcon = ICharging;
+        Charging = 0;
+    } else if(ChargingStat == "Not charging") {
+        // If BLevel is above 90%
+        if(BatteryLevel > BFull) {
             CIcon = ICharging;
             Charging = 0;
-        } else if(ChargingStat == "Not charging") {
-            // If BLevel is above 90%
-            if(BatteryLevel > BFull) {
-                CIcon = ICharging;
-                Charging = 0;
-            } else if(Charging == 1 || Charging == 4) {
-                // Flash charging icon to alert - see if annoying
-                Charging = 4;
-            } else {
-                Charging = 1;
-            }
-        } else if(ChargingStat == "Charging") {
-            CIcon = ICharging;
-            if(Charging == 2 || Charging == 5) {
-                Charging = 5;
-            } else {
-                Charging = 2;
-            }
-            // Cycle Icons to show charging
-        } else if(ChargingStat == "Discharging") {
-            /* std::cout << "DISCHARGE"  << std::endl; */
-            CIcon = "";
-            Charging = 3;
+        } else if(Charging == 1 || Charging == 4) {
+            // Flash charging icon to alert - see if annoying
+            Charging = 4;
         } else {
-            std::cout << "error cmd: -" << ChargingStat << "- did not match" << std::endl;
+            Charging = 1;
         }
+    } else if(ChargingStat == "Charging") {
+        CIcon = ICharging;
+        if(Charging == 2 || Charging == 5) {
+            Charging = 5;
+        } else {
+            Charging = 2;
+        }
+        // Cycle Icons to show charging
+    } else if(ChargingStat == "Discharging") {
+        /* std::cout << "DISCHARGE"  << std::endl; */
+        CIcon = "";
+        Charging = 3;
+    } else {
+        std::cout << "error cmd: -" << ChargingStat << "- did not match" << std::endl;
+    }
 
-        if(Charging == 5) {
-            if(BIcon == IBatteryFull) {
-                BIcon = IBatteryEmpty;
-            } else if(BIcon == IBatteryThreeQuart) {
-                BIcon = IBatteryFull;
-            } else if(BIcon == IBatteryHalf) {
-                BIcon = IBatteryThreeQuart;
-            } else if(BIcon == IBatteryQuart) {
-                BIcon = IBatteryHalf;
-            } else if(BIcon == IBatteryEmpty) {
-                BIcon = IBatteryQuart;
-            } else {
-                std::cout << "error BIcon cycle for charge: " << BIcon << std::endl;
-            }
+    if(Charging == 5) {
+        if(BIcon == IBatteryFull) {
+            BIcon = IBatteryEmpty;
+        } else if(BIcon == IBatteryThreeQuart) {
+            BIcon = IBatteryFull;
+        } else if(BIcon == IBatteryHalf) {
+            BIcon = IBatteryThreeQuart;
+        } else if(BIcon == IBatteryQuart) {
+            BIcon = IBatteryHalf;
+        } else if(BIcon == IBatteryEmpty) {
+            BIcon = IBatteryQuart;
         } else {
-            if(BatteryLevel == BFull) {
-                BIcon = IBatteryFull;
-            } else if(BatteryLevel >= BThreeQuart) {
-                BIcon = IBatteryThreeQuart;
-            } else if(BatteryLevel >= BHalf) {
-                BIcon = IBatteryHalf;
-            } else if(BatteryLevel >= BQuart) {
-                BIcon = IBatteryQuart;
-            } else if(BatteryLevel >= BEmpty) {
-                BIcon = IBatteryEmpty;
-            } else if(BatteryLevel == 0) {
-                BIcon = "E";
-            } else {
-                std::cout << "undefined battery level: -" << std::to_string(BatteryLevel) << "-" << std::endl;
-            }
+            std::cout << "error BIcon cycle for charge: " << BIcon << std::endl;
         }
+    } else {
+        if(BatteryLevel == BFull) {
+            BIcon = IBatteryFull;
+        } else if(BatteryLevel >= BThreeQuart) {
+            BIcon = IBatteryThreeQuart;
+        } else if(BatteryLevel >= BHalf) {
+            BIcon = IBatteryHalf;
+        } else if(BatteryLevel >= BQuart) {
+            BIcon = IBatteryQuart;
+        } else if(BatteryLevel >= BEmpty) {
+            BIcon = IBatteryEmpty;
+        } else if(BatteryLevel == 0) {
+            BIcon = "E";
+        } else {
+            std::cout << "undefined battery level: -" << std::to_string(BatteryLevel) << "-" << std::endl;
+        }
+    }
     
-        if(Charging == 4) {
-            if(CIcon == ICharging) {
-                CIcon = "";
-            } else if(CIcon == "") {
-                CIcon = ICharging;
-            } else {
-                std::cout << "error CIcon cycle for charge: " << CIcon << std::endl;
-            }
+    if(Charging == 4) {
+        if(CIcon == ICharging) {
+            CIcon = "";
+        } else if(CIcon == "") {
+            CIcon = ICharging;
+        } else {
+            std::cout << "error CIcon cycle for charge: " << CIcon << std::endl;
         }
+    }
 
-        std::vector<std::string> Output;
-        Output.push_back(BIcon + " " + std::to_string(BatteryLevel) + "% " + CIcon);
-        WriteFileLines(Output, BatteryOutputFile);
+    std::vector<std::string> Output;
+    Output.push_back(BIcon + " " + std::to_string(BatteryLevel) + "% " + CIcon);
+    WriteFileLines(Output, BatteryOutputFile);
 
 #ifdef COUT
-        std::cout << BIcon << " " << std::to_string(BatteryLevel) << "% " << CIcon << std::endl;
-        BreakPoint();
+    std::cout << BIcon << " " << std::to_string(BatteryLevel) << "% " << CIcon << std::endl;
 #endif
 
-        /* if(ReadFileLines(ClockFile)) == */ 
-    
+    BreakPoint();
+
+    return 0;
+}
+
+int main() {
+    while(1) {
+        Battery();
     }
     return 0;
 }
