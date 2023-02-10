@@ -42,7 +42,7 @@ std::string TrimNewLine(const std::string& str) {
     return str.substr(first, (last - first + 1));
 }
 
-int RunCheck() {
+int Run() {
     if(C == PollClock(CDir)) {
         return 0;
     }
@@ -53,7 +53,7 @@ int RunCheck() {
 }
 
 int Battery() {
-    if(!RunCheck()) {
+    if(!Run()) {
         return 1;
     }
     // Get battery info through acpi
