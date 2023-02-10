@@ -28,7 +28,9 @@ void InitClock() {
 #ifdef COUT
     std::cout << "Clock=" << PollClock(CDir);
 #endif
-    if(PollClock(CDir) != 0) {
+    if(PollClock(CDir) == -1) {
+        Touch(CDir + "/0");
+    } else if(PollClock(CDir) != 0) {
         for (const auto & entry : fs::directory_iterator(CDir)) {
 	        rename(entry.path(), CDir + "/0");
         }
@@ -40,9 +42,10 @@ void InitClock() {
 
 int main() {
     InitClock();
-    std::cout << PollClock(CDir) << std::endl;
     std::string result = ExecCmd(R"(mkdir $HOME/devel/dwmbar-k/.tmp > /dev/null 2>&1 || echo 1)", 0, 0);
+#ifdef COUT
     std::cout << "CMD-" << result << "-" << std::endl;
+#endif
     if(result == "") {
         std::cout << "mkdir error";
         return 1;
