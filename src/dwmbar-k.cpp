@@ -10,7 +10,9 @@ namespace fs = std::filesystem;
 int C = 0;
 
 void RunModule(std::string Module) {
+#ifdef COUT
     std::cout << Module << std::endl;
+#endif
     std::stringstream LaunchCmd;
     LaunchCmd << "$HOME/devel/dwmbar-k/./launch.sh "<< Module << " &";
     system(LaunchCmd.str().c_str());
@@ -21,7 +23,9 @@ std::vector<std::string> GetModuleOutput(std::string Module) {
 }
 
 std::string ParseModuleNo(std::string ModuleNo) {
+#ifdef COUT
     std::cout << ModuleNo << " ";
+#endif
     // -1 to account for 0 based indexing
     return Modules[stoi(ModuleNo) - 1];
 }
