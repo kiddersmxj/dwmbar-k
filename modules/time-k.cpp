@@ -5,6 +5,18 @@
 #include <vector>
 #include "../include/dwmbar-k.hpp" 
 
+int C = -1;
+
+int Run() {
+    if(C == PollClock(CDir)) {
+        return 0;
+    }
+    C = PollClock(CDir);
+    if((PollClock(CDir) % TimeFrq) == 0 || PollClock(CDir) == 0)
+        return 1;
+    return 0; 
+}
+
 std::string GetDay(std::string day) {
 	int _day = stoi(day.substr(0,2));
 	int month = stoi(day.substr(3,2));
@@ -41,7 +53,11 @@ std::string GetDateAndTime() {
     return status;
 }
 
-int main() {
+int Time() {
+    if(!Run()) {
+        return 1;
+    }
+
     std::vector<std::string> Output;
     Output.push_back(GetDateAndTime());
     WriteFileLines(Output, TimeOutputFile);
@@ -50,4 +66,11 @@ int main() {
     std::cout << Output.front() << std::endl;
     BreakPoint();
 #endif
+    return 0;
+}
+
+int main() {
+    while(1) {
+        Time();
+    }
 }
