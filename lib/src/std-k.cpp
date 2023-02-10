@@ -83,26 +83,18 @@ std::vector<std::string> SplitStr(std::string String, const char* Delim) {
     return Output;
 }
 
-void PollClock(const std::string Dir) {
-    std::string Tmp[3];
-    int i = 0;
-    for (const auto & entry : fs::directory_iterator(Dir)) {
-        Tmp[i] = entry.path();
-        std::cout << Tmp[i] << std::endl;
-        i++;
-    }
-    std::cout << Tmp[0] << std::endl;
-
-    char* TmpArray = new char[30];
-    strcpy(TmpArray, Tmp.c_str());
-    char* substr = strtok(TmpArray, R"(/)");
-    
-    std::vector<std::string> Output;
-    while(substr != NULL) {
-        Output.push_back(substr);
-    }
-    delete[] TmpArray;
-    
-    VPrint(Output);
+int PollClock(const std::string Dir) {
+    std::string File;
+    int FileInt;
+    for (const auto & entry : fs::directory_iterator(Dir))
+        File = fs::path(entry.path()).filename();
+    if(File == "")
+        FileInt = -1;
+    else
+        FileInt = stoi(File);
+#ifdef COUT
+    std::cout << FileInt << std::endl;
+#endif
+    return FileInt;
 }
 

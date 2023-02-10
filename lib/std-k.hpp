@@ -10,6 +10,6 @@ void WriteFileLines(std::vector<std::string> Lines, std::string File);
 std::vector<std::string> ReadFileLines(std::string File);
 void VPrint(std::vector<std::string> Input);
 std::vector<std::string> SplitStr(std::string String, const char* Delim);
-void PollClock(const std::string Dir);
+int PollClock(const std::string Dir);
 
 #endif
