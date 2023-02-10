@@ -80,11 +80,16 @@ void InitDirs() {
     }
 }
 
+int Enabled(int i) {
+    return EnabledModules[i];
+}
+
 void RunModules() {
 #ifndef NORUN
         for(int i=0; i<ModulesLength; i++) {
             if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
-                RunModule(Modules[i]);
+                if(Enabled(i))
+                    RunModule(Modules[i]);
             }
         }
 #endif
@@ -122,8 +127,6 @@ int main() {
 		    }
 		    BreakPoint();
             PulseClock();
-        } else {
-            /* std::this_thread::sleep_for(2s); */
         }
         C++;
     }
