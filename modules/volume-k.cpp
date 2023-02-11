@@ -27,7 +27,7 @@ int Run() {
 
 static void error_close_exit(const char *errmsg, int err, snd_mixer_t *h_mixer) {
 	if (err == 0)
-		fprintf(stderr, errmsg);
+		fprintf(stderr, "%s", errmsg);
 	else
 		fprintf(stderr, errmsg, snd_strerror(err));
 	if (h_mixer != NULL)
