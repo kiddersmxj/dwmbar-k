@@ -5,7 +5,14 @@
 #include "../include/dwmbar-k.hpp"
 namespace fs = std::filesystem;
 
-int C = 0;
+class Clock {
+	public:
+		int Get();
+		void Pulse();
+	private:
+		void Reset();
+		int C = 0;
+};
 
 void InitClock();
 void InitDirs();
@@ -24,6 +31,8 @@ int main() {
     KillModules();
     InitDirs();
     InitClock();
+
+	class Clock Internal;
     
     std::vector<std::string> Output;
 
@@ -59,6 +68,14 @@ int main() {
         C++;
     }
     return 1;
+}
+
+int Clock::Get() {
+	return C;
+}
+
+void Clock::Pulse() {
+	C++;
 }
 
 void RunModule(std::string Module) {
@@ -177,3 +194,4 @@ void KillModules() {
             }
         }
 }
+
