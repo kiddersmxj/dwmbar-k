@@ -1,6 +1,8 @@
 #include <sstream>
+#include <numeric> 
 #include <fstream>
 #include <filesystem>
+#include <vector>
 #include "../include/dwmbar-k.hpp"
 namespace fs = std::filesystem;
 
@@ -25,9 +27,17 @@ void KillModule(std::string Module) {
 }
 
 std::string GetModuleOutput(std::string Module) {
-    std::vector<std::string> Output = ReadFileLines(TDir + Module + ".txt");
-    std::string O = Output.toString();
+	if(Module == "Disabled")
+		return "";
+    std::vector<std::string> Output = ReadFileLines(ODir + "/" + Module + ".txt");
+	std::string O;
+	for(std::string Out: Output) {
+			O = Out;
+	}
+#ifdef COUT
+	std::cout << "Output=" << O << std::endl;
     return O;
+#endif
 }
 
 std::string ParseModuleNo(std::string ModuleNo) {
@@ -35,7 +45,11 @@ std::string ParseModuleNo(std::string ModuleNo) {
     std::cout << ModuleNo << " ";
 #endif
     // -1 to account for 0 based indexing
-    return Modules[stoi(ModuleNo) - 1];
+	int ModNo = stoi(ModuleNo) - 1;
+	if(EnabledModules[ModNo])
+		return Modules[ModNo];
+	else
+		return "Disabled";
 }
 
 void InitClock() {
@@ -67,13 +81,11 @@ void PulseClock() {
 } 
 
 void InitDirs() {
-    std::string result = ExecCmd(R"(mkdir $HOME/devel/dwmbar-k/.tmp > /dev/null 2>&1 || echo 1)", 0, 0);
-#ifdef COUT
-    std::cout << "CMD-" << result << "-" << std::endl;
-#endif
-    if(result == "") {
-        std::cout << "mkdir error";
-    }
+	ExecCmd(R"(mkdir )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    ExecCmd(R"(mkdir )" + TDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    ExecCmd(R"(mkdir )" + CDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    ExecCmd(R"(mkdir )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    ExecCmd(R"(mkdir )" + DDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
 }
 
 int Enabled(int i) {
@@ -91,8 +103,18 @@ void RunModules() {
 #endif
 }
 
-void XSR(std::string Cmd) {
-    ExecCmd(R"(xsetroot -name "$(printf ")" + Cmd + R"(") ")", 0, 0);
+void XSR(std::string Body) {
+	std::string Cmd = R"(xsetroot -name "$(printf ")" + Body + R"(") ")";
+	std::cout << Cmd << std::endl;
+    ExecCmd(Cmd, 0, 0);
+}
+
+std::string ParseXSR(std::vector<std::string> VectorOutput) {
+	std::string XSRBody = "";
+	for( std::string ModOutput: VectorOutput)
+		XSRBody += R"($(printf ")" + ModOutput + R"("))";
+	std::cout << XSRBody << std::endl;
+	return XSRBody;
 }
 
 void KillModules() {
@@ -105,8 +127,8 @@ void KillModules() {
 
 int main() {
     KillModules();
-    InitClock();
     InitDirs();
+    InitClock();
     
     std::vector<std::string> Output;
 
@@ -116,17 +138,25 @@ int main() {
         if(C % ClockFrq == 0) {
 	    	for(std::string substr: ModuleLayout) {
                 if(substr == ";") {
+					Output.push_back(";");
 #ifdef COUT
                     std::cout << ";" << std::endl;
 #endif
                 } else {
-                    Output.push_back(GetModuleOutput(ParseModuleNo(substr)));
+					std::string Out = GetModuleOutput(ParseModuleNo(substr));
+					// Make sure not parsing empty module data
+					if(Out != "")
+						Output.push_back(Out);
                 }
 		    }
 #ifdef OCOUT
+			std::cout << "-" << std::endl;
 			VPrint(Output);
-			std::cout << std::endl;
+			std::cout << "-" << std::endl;
 #endif
+			
+			XSR(ParseXSR(Output));
+
 		    BreakPoint();
             PulseClock();
             Output.clear();
