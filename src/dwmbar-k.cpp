@@ -2,11 +2,64 @@
 #include <numeric> 
 #include <fstream>
 #include <filesystem>
-#include <vector>
 #include "../include/dwmbar-k.hpp"
 namespace fs = std::filesystem;
 
 int C = 0;
+
+void InitClock();
+void InitDirs();
+void PulseClock();
+int Enabled(int i);
+void RunModules();
+void KillModules();
+void RunModule(std::string Module);
+void KillModule(std::string Module);
+std::string GetModuleOutput(std::string Module);
+std::string ParseModuleNo(std::string ModuleNo);
+void XSR(std::string Body);
+std::string ParseXSR(std::vector<std::string> VectorOutput);
+
+int main() {
+    KillModules();
+    InitDirs();
+    InitClock();
+    
+    std::vector<std::string> Output;
+
+    // Only runs if .bashrc set $dwmbar to 1
+    while(getenv("dwmbar")) {
+        RunModules();
+        if(C % ClockFrq == 0) {
+	    	for(std::string substr: ModuleLayout) {
+                if(substr == ";") {
+					Output.push_back(";");
+#ifdef COUT
+                    std::cout << ";" << std::endl;
+#endif
+                } else {
+					std::string Out = GetModuleOutput(ParseModuleNo(substr));
+					// Make sure not parsing empty module data
+					if(Out != "")
+						Output.push_back(Out);
+                }
+		    }
+#ifdef OCOUT
+			std::cout << "-" << std::endl;
+			VPrint(Output);
+			std::cout << "-" << std::endl;
+#endif
+			
+			XSR(ParseXSR(Output));
+
+		    BreakPoint();
+            PulseClock();
+            Output.clear();
+        }
+        C++;
+    }
+    return 1;
+}
 
 void RunModule(std::string Module) {
 #ifdef COUT
@@ -124,45 +177,3 @@ void KillModules() {
             }
         }
 }
-
-int main() {
-    KillModules();
-    InitDirs();
-    InitClock();
-    
-    std::vector<std::string> Output;
-
-    // Only runs if .bashrc set $dwmbar to 1
-    while(getenv("dwmbar")) {
-        RunModules();
-        if(C % ClockFrq == 0) {
-	    	for(std::string substr: ModuleLayout) {
-                if(substr == ";") {
-					Output.push_back(";");
-#ifdef COUT
-                    std::cout << ";" << std::endl;
-#endif
-                } else {
-					std::string Out = GetModuleOutput(ParseModuleNo(substr));
-					// Make sure not parsing empty module data
-					if(Out != "")
-						Output.push_back(Out);
-                }
-		    }
-#ifdef OCOUT
-			std::cout << "-" << std::endl;
-			VPrint(Output);
-			std::cout << "-" << std::endl;
-#endif
-			
-			XSR(ParseXSR(Output));
-
-		    BreakPoint();
-            PulseClock();
-            Output.clear();
-        }
-        C++;
-    }
-    return 1;
-}
-
