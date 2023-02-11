@@ -1,5 +1,10 @@
 #ifndef Kconfig
 #define Kconfig
+// As much as it pains me to include t makes YCM happy
+#ifndef RUN
+#include <string> 
+#include <vector> 
+#endif
 
 const int ModulesLength = 6;
 const std::string Modules[ModulesLength] = { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
