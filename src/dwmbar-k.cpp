@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <sstream>
 #include <numeric> 
 #include <fstream>
@@ -5,7 +6,7 @@
 #include "../include/dwmbar-k.hpp"
 namespace fs = std::filesystem;
 
-class Clock {
+class InternalClock {
 	public:
 		int Get();
 		void Pulse();
@@ -14,9 +15,17 @@ class Clock {
 		int C = 0;
 };
 
-void InitClock();
+class Clock {
+    public:
+        void Init();
+        int Get();
+        void Pulse();
+    private:
+        void Reset();
+        int C = 0;
+};
+
 void InitDirs();
-void PulseClock();
 int Enabled(int i);
 void RunModules();
 void KillModules();
@@ -30,16 +39,18 @@ std::string ParseXSR(std::vector<std::string> VectorOutput);
 int main() {
     KillModules();
     InitDirs();
-    InitClock();
 
-	class Clock Internal;
+    class Clock Clock;
+    Clock.Init();
+
+	class InternalClock Internal;
     
     std::vector<std::string> Output;
 
     // Only runs if .bashrc set $dwmbar to 1
     while(getenv("dwmbar")) {
         RunModules();
-        if(C % ClockFrq == 0) {
+        if(Internal.Get() % ClockFrq == 0) {
 	    	for(std::string substr: ModuleLayout) {
                 if(substr == ";") {
 					Output.push_back(";");
@@ -62,21 +73,56 @@ int main() {
 			XSR(ParseXSR(Output));
 
 		    BreakPoint();
-            PulseClock();
+            Clock.Pulse();
             Output.clear();
         }
-        C++;
+        Internal.Pulse();
     }
     return 1;
 }
 
-int Clock::Get() {
+int InternalClock::Get() {
 	return C;
 }
 
-void Clock::Pulse() {
-	C++;
+void InternalClock::Pulse() {
+    if(C == MaxClock)
+        Reset();
+    else
+	    C++;
 }
+
+void InternalClock::Reset() {
+    C = 0;
+}
+
+void Clock::Init() {
+#ifdef COUT
+    std::cout << "Clock=" << PollClock(CDir);
+#endif
+    if(PollClock(CDir) == -1) {
+        Touch(CDir + "/0");
+    } else if(PollClock(CDir) != 0) {
+        for (const auto & entry : fs::directory_iterator(CDir))
+	        rename(entry.path(), CDir + "/0");
+    }
+#ifdef COUT
+    std::cout << "...Clock=" << PollClock(CDir) << std::endl;
+#endif
+}
+
+void Clock::Pulse() {
+#ifdef COUT
+    std::cout << "Clock=" << PollClock(CDir);
+#endif
+    int Pulse = PollClock(CDir);
+    Pulse++;
+    for (const auto & entry : fs::directory_iterator(CDir))
+	    rename(entry.path(), CDir + "/" + std::to_string(Pulse));
+#ifdef COUT
+    std::cout << "...Clock=" << PollClock(CDir) << std::endl;
+#endif
+} 
 
 void RunModule(std::string Module) {
 #ifdef COUT
@@ -122,34 +168,6 @@ std::string ParseModuleNo(std::string ModuleNo) {
 		return "Disabled";
 }
 
-void InitClock() {
-#ifdef COUT
-    std::cout << "Clock=" << PollClock(CDir);
-#endif
-    if(PollClock(CDir) == -1) {
-        Touch(CDir + "/0");
-    } else if(PollClock(CDir) != 0) {
-        for (const auto & entry : fs::directory_iterator(CDir))
-	        rename(entry.path(), CDir + "/0");
-    }
-#ifdef COUT
-    std::cout << "...Clock=" << PollClock(CDir) << std::endl;
-#endif
-}
-
-void PulseClock() {
-#ifdef COUT
-    std::cout << "Clock=" << PollClock(CDir);
-#endif
-    int Pulse = PollClock(CDir);
-    Pulse++;
-    for (const auto & entry : fs::directory_iterator(CDir))
-	    rename(entry.path(), CDir + "/" + std::to_string(Pulse));
-#ifdef COUT
-    std::cout << "...Clock=" << PollClock(CDir) << std::endl;
-#endif
-} 
-
 void InitDirs() {
 	ExecCmd(R"(mkdir )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
     ExecCmd(R"(mkdir )" + TDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
@@ -174,7 +192,7 @@ void RunModules() {
 }
 
 void XSR(std::string Body) {
-	std::string Cmd = R"(xsetroot -name "$(printf ")" + Body + R"(") ")";
+	std::string Cmd = R"(xsetroot -name ")" + Body + R"(")";
 	std::cout << Cmd << std::endl;
     ExecCmd(Cmd, 0, 0);
 }
@@ -182,7 +200,7 @@ void XSR(std::string Body) {
 std::string ParseXSR(std::vector<std::string> VectorOutput) {
 	std::string XSRBody = "";
 	for( std::string ModOutput: VectorOutput)
-		XSRBody += R"($(printf ")" + ModOutput + R"("))";
+		XSRBody += " " + BarDelimeter + " " + ModOutput;
 	std::cout << XSRBody << std::endl;
 	return XSRBody;
 }
