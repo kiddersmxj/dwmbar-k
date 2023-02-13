@@ -68,6 +68,8 @@ const int BHalf = 40; // 40 -74
 const int BQuart = 20; // 20-39
 const int BEmpty = 1; // Recomend non-zero value to catch broken battery
 
+const std::string BarDelimeter = "|";
+
 const std::string IInternet = R"(\xef\x82\xac)";
 
 const std::string IDate = R"(\xef\x84\xb3)";
