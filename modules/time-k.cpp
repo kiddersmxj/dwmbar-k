@@ -53,9 +53,8 @@ int Time() {
     if(!Run()) {
         return 1;
     }
-
     std::vector<std::string> Output;
-    Output.push_back(GetDateAndTime());
+    Output.push_back(R"($(printf ")" + IDate + " " + GetDateAndTime() + R"("))");
     WriteFileLines(Output, TimeOutputFile);
 
 #ifdef MCOUT

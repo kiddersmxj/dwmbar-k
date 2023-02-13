@@ -54,7 +54,7 @@ int Weather() {
     delete[] HexArray;
 
     std::vector<std::string> Output;
-    Output.push_back(HexOutput);
+    Output.push_back(R"($(printf ")" + HexOutput + R"("))");
 
     WriteFileLines(Output, WeatherOutputFile);
 

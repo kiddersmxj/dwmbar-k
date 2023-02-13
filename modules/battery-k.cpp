@@ -147,11 +147,11 @@ int Battery() {
     }
 
     std::vector<std::string> Output;
-    Output.push_back(R"($(printf ")" + BIcon + " %s " + CIcon + R"(" ")" + std::to_string(BatteryLevel) + "%" + R"(")");
+    Output.push_back(R"($(printf ")" + BIcon + " %s " + CIcon + R"(" ")" + std::to_string(BatteryLevel) + "%" + R"("))");
     WriteFileLines(Output, BatteryOutputFile);
 
 #ifdef MCOUT
-    std::cout Output.front() << std::endl;
+    std::cout << Output.front() << std::endl;
 #endif
     BreakPoint();
 
