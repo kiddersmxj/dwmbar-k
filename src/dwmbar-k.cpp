@@ -217,17 +217,20 @@ void XSR(std::string Body) {
 }
 
 std::string ParseXSR(std::vector<std::string> OutputVector) {
+    std::cout << std::endl;
 	std::string XSRBody = "";
     // Make sure previous Output was not empty or BarDelimeter
     int Escape = 0;
     for(std::string Output: OutputVector) {
+        std::cout << "-" << Output << "-" << std::endl;
         if(Output != BarDelimeter && Output != "" && Escape == 0)
             XSRBody += " " + ModuleDelimeter;
-        else if(Escape)
+        else if(Escape && Output != BarDelimeter && Output != "")
             Escape = 0;
         else
             Escape = 1;
-		XSRBody += " " + Output;
+        if(Output != "")
+		    XSRBody += " " + Output;
     }
 	std::cout << XSRBody << std::endl;
 	return XSRBody;
