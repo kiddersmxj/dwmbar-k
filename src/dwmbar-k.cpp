@@ -157,8 +157,8 @@ void KillModule(std::string Module) {
     std::cout << Module << std::endl;
 #endif
     std::stringstream KillCmd;
-    KillCmd << "pkill "<< Module << " &";
-    system(KillCmd.str().c_str());
+    KillCmd << "pkill "<< Module << " 2> /dev/null &";
+    ExecCmd(KillCmd.str().c_str(), 0, 0);
 }
 
 std::string GetModuleOutput(std::string Module) {
@@ -212,17 +212,23 @@ void RunModules() {
 
 void XSR(std::string Body) {
 	std::string Cmd = R"(xsetroot -name ")" + Body + R"(")";
+#ifdef COUT
 	std::cout << Cmd << std::endl;
+#endif
     ExecCmd(Cmd, 0, 0);
 }
 
 std::string ParseXSR(std::vector<std::string> OutputVector) {
+#ifdef COUT
     std::cout << std::endl;
+#endif
 	std::string XSRBody = "";
     // Make sure previous Output was not empty or BarDelimeter
     int Escape = 0;
     for(std::string Output: OutputVector) {
+#ifdef COUT
         std::cout << "-" << Output << "-" << std::endl;
+#endif
         if(Output != BarDelimeter && Output != "" && Escape == 0)
             XSRBody += " " + ModuleDelimeter;
         else if(Escape && Output != BarDelimeter && Output != "")
@@ -232,7 +238,9 @@ std::string ParseXSR(std::vector<std::string> OutputVector) {
         if(Output != "")
 		    XSRBody += " " + Output;
     }
+#ifdef COUT
 	std::cout << XSRBody << std::endl;
+#endif
 	return XSRBody;
 }
 
