@@ -16,6 +16,7 @@ A minature backend built for dwm making use of X11's `xsetroot -name` written in
     - [ ] media-k
     - [ ] network-k
 - [ ] Colour customization
+- [ ] Remove need for `launch.sh`
 - [ ] Error handling
     - [x] Backup unsuccessful output in case of failure
     - [x] Write backup to output in case of failure
