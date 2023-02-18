@@ -22,6 +22,7 @@ A minature backend built for dwm making use of X11's `xsetroot -name` written in
     - [x] Write backup to output in case of failure
     - [ ] Data file passing to parent
     - [ ] Warning for overly failed output
+- [ ] Code cleanup
     - [ ] Separate std-k and dwmbar-k libs
 - [ ] Third bar
     - [ ] Get bar length
