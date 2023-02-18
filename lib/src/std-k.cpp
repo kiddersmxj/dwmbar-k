@@ -1,6 +1,6 @@
-#include <iostream>
 #include <fstream>
 #include <array>
+#include <algorithm>
 #include <filesystem>
 #include "../std-k.hpp"
 namespace fs = std::filesystem;
@@ -108,4 +108,18 @@ void Data(std::string Text, std::string File) {
     std::vector<std::string> Lines;
     Lines.push_back(Text);
     WriteFileLines(Lines, File);
+}
+
+int GetIndex(std::vector<std::string> v, std::string K) {
+    auto it = std::find(v.begin(), v.end(), K);
+  
+    // If element was found
+    if (it != v.end()) {
+        // calculating the index of K
+        int index = it - v.begin();
+        return index;
+    } else {
+        // If the element is not present in the vector
+        return -1;
+    }
 }
