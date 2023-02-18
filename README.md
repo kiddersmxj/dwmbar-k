@@ -1,6 +1,6 @@
 # dwmbar-k
 
-A minature backend built for dwm making use of X11s `xsetroot -name`. Can be used with main and staus bar patches.
+A minature backend built for dwm making use of X11's `xsetroot -name` written in cpp. Can be used with main and staus bar patches.
 
 ### Current and planned features
 - [x] Modules output
