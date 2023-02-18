@@ -171,8 +171,8 @@ std::string GetModuleOutput(std::string Module) {
 	}
 #ifdef COUT
 	std::cout << "Output=" << O << std::endl;
-    return O;
 #endif
+    return O;
 }
 
 std::string ParseModuleNo(std::string ModuleNo) {
