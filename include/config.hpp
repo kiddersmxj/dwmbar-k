@@ -46,7 +46,7 @@ const int NetworkFrq = 50;
 const int TimeFrq = 1;
 const int WeatherFrq = 100;
 const int VolumeFrq = 1;
-const int MediaFrq = 5;
+const int MediaFrq = 2;
 const int BatteryFrq = 10;
 
 const int SleepTime = 200; // How long while loop waits before re-execution in ms
