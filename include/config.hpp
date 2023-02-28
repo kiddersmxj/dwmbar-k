@@ -12,7 +12,7 @@ const std::vector<std::string> ModuleLayout = { "1", "2", ";", "6", "3", "4", "5
 const int EnabledModules[ModulesLength] = { 0, 1, 1, 1, 1, 1 };
 
 // Scale the volume based on individual system - 1 for off
-const float VolScaler = 0.865;
+const float VolScaler = 1.0;
 
 const std::string TmpDir = ".tmp"; // Dir to store tmp files in
 const std::string HOME = getenv("HOME"); // $HOME environment variable
