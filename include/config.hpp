@@ -9,7 +9,7 @@
 const int ModulesLength = 6;
 const std::string Modules[ModulesLength] = { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
 const std::vector<std::string> ModuleLayout = { "1", "2", ";", "6", "3", "4", "5" };
-const int EnabledModules[ModulesLength] = { 0, 1, 1, 1, 0, 1 };
+const int EnabledModules[ModulesLength] = { 0, 1, 1, 1, 1, 1 };
 
 // Scale the volume based on individual system - 1 for off
 const float VolScaler = 0.865;
@@ -46,7 +46,7 @@ const int NetworkFrq = 50;
 const int TimeFrq = 1;
 const int WeatherFrq = 100;
 const int VolumeFrq = 1;
-const int MediaFrq = 0;
+const int MediaFrq = 5;
 const int BatteryFrq = 10;
 
 const int SleepTime = 200; // How long while loop waits before re-execution in ms
@@ -86,5 +86,8 @@ const std::string IBatteryHalf = R"(\xef\x89\x82)";
 const std::string IBatteryQuart = R"(\xef\x89\x83)";
 const std::string IBatteryEmpty = R"(\xef\x89\x84)";
 const std::string ICharging = R"(\xef\x83\xa7)";
+
+const std::string IPlay = R"(\xe2\x96\xb6)";
+const std::string IPause = R"(\xe2\x8f\xb8)";
 
 #endif 
