@@ -87,7 +87,8 @@ std::string GetTimeFromStart() {
 	std::cout << "min=" << Min << " ";
 	std::cout << "sec=" << Sec << std::endl;
 #endif
-	return std::to_string(Sec);
+	// Return value in Min:Sec format - ternary used to make sure signe digit integers have zero before for formatting
+	return std::to_string(Min) + ":" + (Sec < 10 ? ("0" + std::to_string(Sec)) : std::to_string(Sec));
 }
 
 std::string GetArtist(std::string Player) {
@@ -120,6 +121,7 @@ void Media() {
     std::cout << R"(Player=")" << media.Player << R"(")" << std::endl;
     std::cout << R"(Artist=")" << media.Artist << R"(")" << std::endl;
     std::cout << R"(Title=")" << media.Title << R"(")" << std::endl << std::endl;
+    std::cout << R"(Time=")" << media.Time << R"(")" << std::endl << std::endl;
 #endif
 
     std::string Out = media.Hex + " " + media.Artist + " - " + media.Title + " (" + media.Time + ")";
