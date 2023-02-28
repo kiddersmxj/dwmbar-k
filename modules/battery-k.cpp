@@ -66,7 +66,7 @@ int Battery() {
     ChargingStat = TrimNewLine(TrimWhiteSpace(ChargingStat));
     int BatteryLevel = std::stoi(TrimNewLine(TrimWhiteSpace(BatteryLevelString)));
 
-    /* std::cout << ChargingStat; */
+    std::cout << ChargingStat;
     
     // Catch errors
     if(ChargingStat == "") {
@@ -75,12 +75,10 @@ int Battery() {
     } else if(ChargingStat == "Full") {
         // Full only shows when charging (even if 100%)
         // // Therefore show ICharging
-        CIcon = ICharging;
+        /* CIcon = ICharging; */
         Charging = 0;
     } else if(ChargingStat == "Not charging") {
-        // If BLevel is above 90%
-        if(BatteryLevel > BFull) {
-            CIcon = ICharging;
+        if(BatteryLevel >= BFull) {
             Charging = 0;
         } else if(Charging == 1 || Charging == 4) {
             // Flash charging icon to alert - see if annoying
@@ -89,7 +87,7 @@ int Battery() {
             Charging = 1;
         }
     } else if(ChargingStat == "Charging") {
-        CIcon = ICharging;
+        /* CIcon = ICharging; */
         if(Charging == 2 || Charging == 5) {
             Charging = 5;
         } else {
@@ -104,22 +102,8 @@ int Battery() {
         std::cout << "error cmd: -" << ChargingStat << "- did not match" << std::endl;
     }
 
-    if(Charging == 5) {
-        if(BIcon == IBatteryFull) {
-            BIcon = IBatteryEmpty;
-        } else if(BIcon == IBatteryThreeQuart) {
-            BIcon = IBatteryFull;
-        } else if(BIcon == IBatteryHalf) {
-            BIcon = IBatteryThreeQuart;
-        } else if(BIcon == IBatteryQuart) {
-            BIcon = IBatteryHalf;
-        } else if(BIcon == IBatteryEmpty) {
-            BIcon = IBatteryQuart;
-        } else {
-            std::cout << "error BIcon cycle for charge: " << BIcon << std::endl;
-        }
-    } else {
-        if(BatteryLevel == BFull) {
+    if(Charging != 5) {
+        if(BatteryLevel >= BFull) {
             BIcon = IBatteryFull;
         } else if(BatteryLevel >= BThreeQuart) {
             BIcon = IBatteryThreeQuart;
@@ -160,6 +144,21 @@ int Battery() {
 
 int main() {
     while(1) {
+    if(Charging == 5) {
+        if(BIcon == IBatteryFull) {
+            BIcon = IBatteryEmpty;
+        } else if(BIcon == IBatteryThreeQuart) {
+            BIcon = IBatteryFull;
+        } else if(BIcon == IBatteryHalf) {
+            BIcon = IBatteryThreeQuart;
+        } else if(BIcon == IBatteryQuart) {
+            BIcon = IBatteryHalf;
+        } else if(BIcon == IBatteryEmpty) {
+            BIcon = IBatteryQuart;
+        } else {
+            std::cout << "error BIcon cycle for charge: " << BIcon << std::endl;
+        }
+    }
         Battery();
         std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
     }
