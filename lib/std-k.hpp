@@ -1,6 +1,7 @@
 #ifndef Kstd
 #define Kstd
 
+#include <iostream>
 #include <vector>
 #include <cstring>
 
@@ -13,5 +14,6 @@ std::vector<std::string> SplitStr(std::string String, const char* Delim);
 int PollClock(const std::string Dir);
 void Touch(std::string File);
 void Data(std::string Text, std::string File);
+std::string StripTrailingNL(std::string Input);
 
 #endif

@@ -123,3 +123,9 @@ int GetIndex(std::vector<std::string> v, std::string K) {
         return -1;
     }
 }
+
+std::string StripTrailingNL(std::string Input) {
+    Input.erase(std::remove(Input.begin(), Input.end(), '\n'), Input.cend());
+    return Input;
+}
+
