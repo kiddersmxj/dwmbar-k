@@ -89,15 +89,16 @@ std::string GetTitle(std::string Player) {
 void Media() {
     if(!Run())
         return;
+#ifdef MCOUT
     std::cout << std::endl;
+#endif
     media.Player = GetPlayer();
-	// TODO Add overload to pause old media when new media is played (possibly play again when new media is paused) - togglable?
     if(media.Player != "Paused") {
         media.Hex = IPlay;
         media.Artist = GetArtist(media.Player);
         media.Title = GetTitle(media.Player);
     } else if (media.Player == "Overload") {
-        // TODO overload error
+	    // TODO add overload to pause old media when new media is played (possibly play again when new media is paused) - togglable?
     } else {
         media.Hex = IPause;
     }
@@ -118,6 +119,7 @@ void Media() {
 int main() {
     while(1) {
         Media();
+        std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
         BreakPoint();
     }
     return 0;
