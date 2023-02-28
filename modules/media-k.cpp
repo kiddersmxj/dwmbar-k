@@ -78,6 +78,18 @@ std::string GetPlayer() {
 	return "None";
 }
 
+std::string GetTimeFromStart() {
+	int Time, Sec, Min;
+	Time = stoi(ExecCmd(R"(playerctl position | sed 's/..\{6\}$//')", 0, 0));
+	Min = (Time % 3600) / 60;
+	Sec = Time % 60;
+#ifdef MCOUT
+	std::cout << "min=" << Min << " ";
+	std::cout << "sec=" << Sec << std::endl;
+#endif
+	return std::to_string(Sec);
+}
+
 std::string GetArtist(std::string Player) {
     return StripTrailingNL(ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ artist }}')", 0 ,0));
 }
@@ -97,6 +109,7 @@ void Media() {
         media.Hex = IPlay;
         media.Artist = GetArtist(media.Player);
         media.Title = GetTitle(media.Player);
+		media.Time = GetTimeFromStart();
     } else if (media.Player == "Overload") {
 	    // TODO add overload to pause old media when new media is played (possibly play again when new media is paused) - togglable?
     } else {
@@ -109,7 +122,7 @@ void Media() {
     std::cout << R"(Title=")" << media.Title << R"(")" << std::endl << std::endl;
 #endif
 
-    std::string Out = media.Hex + " " + media.Artist + " - " + media.Title;
+    std::string Out = media.Hex + " " + media.Artist + " - " + media.Title + " (" + media.Time + ")";
 
     std::vector<std::string> Output;
     Output.push_back(R"($(printf ")" + Out + R"("))");
