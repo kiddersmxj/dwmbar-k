@@ -13,10 +13,10 @@ A minature backend built for dwm making use of X11's `xsetroot -name` written in
     - [x] Internal program clock
     - [x] Multi program clock
 - [ ] Additional modules
-    - [ ] media-k
+    - [x] media-k
     - [ ] network-k
 - [ ] Colour customization
-- [ ] Remove need for `launch.sh`
+- [x] Remove need for `launch.sh`
 - [ ] Error handling
     - [x] Backup unsuccessful output in case of failure
     - [x] Write backup to output in case of failure
