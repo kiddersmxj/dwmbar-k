@@ -1,4 +1,4 @@
-# dwmbar-k
+# dwmbar-k [![Makefile](https://github.com/kiddersmxj/dwmbar-k/actions/workflows/make.yml/badge.svg)](https://github.com/kiddersmxj/dwmbar-k/actions/workflows/make.yml)
 
 A minature backend built for dwm making use of X11's `xsetroot -name` written in cpp. Can be used with main and staus bar patches.
 
