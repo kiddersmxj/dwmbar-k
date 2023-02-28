@@ -149,7 +149,7 @@ void RunModule(std::string Module) {
 #endif
     std::stringstream LaunchCmd;
     LaunchCmd << "$HOME/devel/dwmbar-k/./launch.sh "<< Module << " &";
-    system(LaunchCmd.str().c_str());
+    ExecCmd(LaunchCmd.str().c_str(), 0, 0);
 }
 
 void KillModule(std::string Module) {
