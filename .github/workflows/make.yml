@@ -1,4 +1,4 @@
-name: C/C++ CI
+name: Makefile
 
 on:
   push:
@@ -14,5 +14,7 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@master
+    - name: Install deps
+      run: sudo apt-get -y install libasound2-dev
     - name: make
       run: make
