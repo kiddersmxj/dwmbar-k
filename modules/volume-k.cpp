@@ -1,5 +1,6 @@
 #include <cmath>
 #include <alsa/asoundlib.h>
+#include <cstdio>
 #include "../include/dwmbar-k.hpp" 
 using namespace std::chrono_literals;
 
@@ -26,10 +27,15 @@ int Run() {
 }
 
 static void error_close_exit(const char *errmsg, int err, snd_mixer_t *h_mixer) {
-	if (err == 0)
+	if (err == 0) {
 		fprintf(stderr, "%s", errmsg);
-	else
+    } else {
 		fprintf(stderr, errmsg, snd_strerror(err));
+    }
+    std::vector<std::string> Output;
+    Output.push_back("");
+
+    WriteFileLines(Output, VolumeOutputFile);
 	if (h_mixer != NULL)
 		snd_mixer_close(h_mixer);
 	exit(EXIT_FAILURE);
