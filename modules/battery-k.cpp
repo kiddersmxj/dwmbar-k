@@ -54,6 +54,7 @@ int Battery() {
     if(!Run()) {
         return 1;
     }
+    std::cout << "1 " << std::endl;
     // Get battery info through acpi
     std::string ChargingStat = ExecCmd(ChargingStatCmd, 0, 0);
     std::string BatteryLevelString = ExecCmd(BatteryLevelCmd, 0, 0);
@@ -66,7 +67,7 @@ int Battery() {
     ChargingStat = TrimNewLine(TrimWhiteSpace(ChargingStat));
     int BatteryLevel = std::stoi(TrimNewLine(TrimWhiteSpace(BatteryLevelString)));
 
-    std::cout << ChargingStat;
+    std::cout << "CS=" << ChargingStat << std::endl;
     
     // Catch errors
     if(ChargingStat == "") {
