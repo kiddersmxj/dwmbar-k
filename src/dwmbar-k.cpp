@@ -14,7 +14,7 @@ class InternalClock {
 		void Pulse();
 	private:
 		void Reset();
-		int C = 0;
+		int C = 1;
 };
 
 class Clock {
@@ -24,7 +24,7 @@ class Clock {
         void Pulse();
     private:
         void Reset();
-        int C = 0;
+        int C = 1;
 };
 
 void InitDirs();
@@ -105,7 +105,7 @@ void InternalClock::Pulse() {
 }
 
 void InternalClock::Reset() {
-    C = 0;
+    C = 1;
 }
 
 void Clock::Init() {
