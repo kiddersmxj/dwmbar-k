@@ -27,11 +27,10 @@ int Run() {
 }
 
 static void error_close_exit(const char *errmsg, int err, snd_mixer_t *h_mixer) {
-	if (err == 0) {
+    if (err == 0)
 		fprintf(stderr, "%s", errmsg);
-    } else {
-		fprintf(stderr, errmsg, snd_strerror(err));
-    }
+    else
+        fprintf(stderr, errmsg, snd_strerror(err));
     std::vector<std::string> Output;
     Output.push_back("");
 
