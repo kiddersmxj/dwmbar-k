@@ -113,8 +113,8 @@ void Clock::Init() {
     std::cout << "Clock=" << PollClock(CDir);
 #endif
     if(PollClock(CDir) == -1) {
-        Touch(CDir + "/0");
-    } else if(PollClock(CDir) != 0)
+        Touch(CDir + "/1");
+    } else if(PollClock(CDir) != 1)
         Reset();
 #ifdef COUT
     std::cout << "...Clock=" << PollClock(CDir) << std::endl;
@@ -140,7 +140,7 @@ void Clock::Pulse() {
 
 void Clock::Reset() {
         for (const auto & entry : fs::directory_iterator(CDir))
-	        rename(entry.path(), CDir + "/0");
+	        rename(entry.path(), CDir + "/1");
 }
 
 void RunModule(std::string Module) {
