@@ -49,7 +49,7 @@ const int VolumeFrq = 1;
 const int MediaFrq = 2;
 const int BatteryFrq = 10;
 
-const int SleepTime = 200; // How long while loop waits before re-execution in ms
+const int SleepTime = 50; // How long while loop waits before re-execution in ms
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon
