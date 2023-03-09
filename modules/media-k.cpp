@@ -53,15 +53,15 @@ std::string GetPlayer() {
     std::string Player;
 	std::vector<std::string> Players = GetPlayers();
 	for(std::string P: Players) {
-#ifdef MCOUT
+#ifdef MediaDCOUT
         std::cout << "P-" << P << "-" << std::endl;
 #endif
         std::string Output = StripTrailingNL(ExecCmd(R"(playerctl -p )" + P + R"( status)", 0, 0));
-#ifdef MCOUT
+#ifdef MediaDCOUT
         std::cout << "out-" << Output << "-" << std::endl;
 #endif
         if(Output == "Playing") {
-#ifdef MCOUT
+#ifdef MediaDCOUT
             std::cout << "Playing-" << P << "-" << std::endl;
 #endif
             i++;
@@ -86,7 +86,7 @@ std::string GetTimeFromStart() {
 	Time = stoi(ExecCmd(R"(playerctl position | sed 's/..\{6\}$//')", 0, 0));
 	Min = (Time % 3600) / 60;
 	Sec = Time % 60;
-#ifdef MCOUT
+#ifdef MediaDCOUT
 	std::cout << "min=" << Min << " ";
 	std::cout << "sec=" << Sec << std::endl;
 #endif
@@ -105,7 +105,7 @@ std::string GetTitle(std::string Player) {
 void Media() {
     if(!Run())
         return;
-#ifdef MCOUT
+#ifdef MediaDCOUT
     std::cout << std::endl;
 #endif
     media.Player = GetPlayer();
@@ -120,7 +120,7 @@ void Media() {
         media.Hex = IPause;
     }
 
-#ifdef MCOUT
+#ifdef MediaMCOUT
     std::cout << R"(Player=")" << media.Player << R"(")" << std::endl;
     std::cout << R"(Artist=")" << media.Artist << R"(")" << std::endl;
     std::cout << R"(Title=")" << media.Title << R"(")" << std::endl << std::endl;
