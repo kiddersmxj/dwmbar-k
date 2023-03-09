@@ -54,7 +54,9 @@ int Battery() {
     if(!Run()) {
         return 1;
     }
+#ifdef BatDCOUT
     std::cout << "1 " << std::endl;
+#endif
     // Get battery info through acpi
     std::string ChargingStat = ExecCmd(ChargingStatCmd, 0, 0);
     std::string BatteryLevelString = ExecCmd(BatteryLevelCmd, 0, 0);
@@ -67,7 +69,9 @@ int Battery() {
     ChargingStat = TrimNewLine(TrimWhiteSpace(ChargingStat));
     int BatteryLevel = std::stoi(TrimNewLine(TrimWhiteSpace(BatteryLevelString)));
 
+#ifdef BatDCOUT
     std::cout << "CS=" << ChargingStat << std::endl;
+#endif
     
     // Catch errors
     if(ChargingStat == "") {
@@ -135,7 +139,7 @@ int Battery() {
     Output.push_back(R"($(printf ")" + BIcon + " %s" + CIcon + R"(" ")" + std::to_string(BatteryLevel) + "%" + R"("))");
     WriteFileLines(Output, BatteryOutputFile);
 
-#ifdef MCOUT
+#ifdef BatMCOUT
     std::cout << Output.front() << std::endl;
 #endif
     BreakPoint();

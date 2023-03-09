@@ -57,7 +57,7 @@ int Time() {
     Output.push_back(R"($(printf ")" + IDate + " " + GetDateAndTime() + R"("))");
     WriteFileLines(Output, TimeOutputFile);
 
-#ifdef MCOUT
+#ifdef TimeMCOUT
     std::cout << Output.front() << std::endl;
     BreakPoint();
 #endif

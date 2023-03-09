@@ -117,7 +117,7 @@ int Volume() {
 
      WriteFileLines(Output, VolumeOutputFile);
 
-#ifdef MCOUT
+#ifdef VolMCOUT
     VPrint(Output);
 #endif
 	return 0;

@@ -48,7 +48,7 @@ int Weather() {
         substr = strtok(NULL, R"(\)");
         i++;
     }
-#ifdef MCOUT
+#ifdef WeaMCOUT
     std::cout << std::endl;
 #endif
     delete[] HexArray;
@@ -58,7 +58,7 @@ int Weather() {
 
     WriteFileLines(Output, WeatherOutputFile);
 
-#ifdef MCOUT
+#ifdef WeaMCOUT
     VPrint(Output);
 #endif
     return 0;
