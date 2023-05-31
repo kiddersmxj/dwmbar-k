@@ -1,9 +1,12 @@
+#include <chrono>
 #include <cstdint>
+#include <cstdlib>
 #include <sstream>
 #include <numeric> 
 #include <fstream>
 #include <filesystem>
 #include <string>
+#include <thread>
 #include <vector>
 #include "../include/dwmbar-k.hpp"
 namespace fs = std::filesystem;
@@ -53,6 +56,7 @@ int main() {
     std::string Backup[ModulesLength + 1];
 
     while(1) {
+        std::chrono::system_clock::time_point T = std::chrono::system_clock::now();
         RunModules();
         if(Internal.Get() % ClockFrq == 0) {
             int i = 0;
@@ -86,6 +90,9 @@ int main() {
 			XSR(ParseXSR(OutputVector));
 
 		    BreakPoint();
+            std::chrono::system_clock::duration t = std::chrono::system_clock::now() - T;
+            if((200ms - t) > 0s)
+                std::this_thread::sleep_for(200ms - t);
             Clock.Pulse();
         }
         Internal.Pulse();
@@ -225,23 +232,33 @@ std::string ParseXSR(std::vector<std::string> OutputVector) {
 #endif
 	std::string XSRBody = "";
     // Make sure previous Output was not empty or BarDelimeter
-    int Escape = 0;
+    bool Escape = 1;
+    int i = 0;
     for(std::string Output: OutputVector) {
 #ifdef COUT
         std::cout << "-" << Output << "-" << std::endl;
 #endif
-        if(Output != BarDelimeter && Output != "" && Escape == 0)
+        if(Output != "" && Output != BarDelimeter && !Escape) {
             XSRBody += " " + ModuleDelimeter;
-        else if(Escape && Output != BarDelimeter && Output != "")
             Escape = 0;
-        else
+        } else if(Escape == 1 && Output == "")
             Escape = 1;
+        else if(Output == "") {
+            XSRBody += " " + ModuleDelimeter;
+            Escape = 1;
+        } else if(Output == BarDelimeter) 
+            Escape = 1;
+        else
+            Escape = 0;
+
         if(Output != "")
 		    XSRBody += " " + Output;
-    }
+    i++;
 #ifdef COUT
-	std::cout << XSRBody << std::endl;
+    std::cout << "E (" << i << "): " << Escape << std::endl;
+	std::cout << XSRBody << std::endl << std::endl;
 #endif
+    }
 	return XSRBody;
 }
 
