@@ -12,7 +12,8 @@ snd_mixer_elem_t *elem ;
 std::string VIcon = "";
 // Setup variables used by both fucntions
 char *device = "default";
-char *selem_name = std::getenv("scontrol");
+/* char *selem_name = std::getenv("scontrol"); */
+char *selem_name = "Speaker";
 // Get $scontrol variable set in .bashrc
 int C = -1;
 
