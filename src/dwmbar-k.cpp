@@ -231,34 +231,38 @@ std::string ParseXSR(std::vector<std::string> OutputVector) {
     std::cout << std::endl;
 #endif
 	std::string XSRBody = "";
-    // Make sure previous Output was not empty or BarDelimeter
+    std::vector<int> Empty;
     bool Escape = 1;
     int i = 0;
+
+    // Make sure previous Output was not empty or BarDelimeter
     for(std::string Output: OutputVector) {
+        if(Output != "" && Output != BarDelimeter)
 #ifdef COUT
         std::cout << "-" << Output << "-" << std::endl;
 #endif
-        if(Output != "" && Output != BarDelimeter && !Escape) {
-            XSRBody += " " + ModuleDelimeter;
-            Escape = 0;
-        } else if(Escape == 1 && Output == "")
-            Escape = 1;
-        else if(Output == "") {
-            XSRBody += " " + ModuleDelimeter;
-            Escape = 1;
-        } else if(Output == BarDelimeter) 
-            Escape = 1;
+            Empty.push_back(1);
         else
-            Escape = 0;
-
-        if(Output != "")
-		    XSRBody += " " + Output;
-    i++;
+            Empty.push_back(0);
 #ifdef COUT
     std::cout << "E (" << i << "): " << Escape << std::endl;
 	std::cout << XSRBody << std::endl << std::endl;
 #endif
     }
+
+    for(int I: Empty) {
+        if(I == 1) {
+            if(Escape == 0)
+                XSRBody += " " + ModuleDelimeter;
+            else
+                Escape = 0;
+        } else if(OutputVector.at(i) == BarDelimeter)
+            Escape = 1;
+        if(OutputVector.at(i) != "")
+		    XSRBody += " " + OutputVector.at(i);
+        i++;
+    }
+
 	return XSRBody;
 }
 
