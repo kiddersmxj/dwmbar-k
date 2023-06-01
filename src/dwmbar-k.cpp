@@ -121,7 +121,7 @@ void Clock::Init() {
     std::cout << "Clock=" << PollClock(CDir);
 #endif
     if(PollClock(CDir) == -1) {
-        Touch(CDir + "/1");
+        Touch(CDir + "/0");
     } else if(PollClock(CDir) != 1)
         Reset();
 #ifdef COUT

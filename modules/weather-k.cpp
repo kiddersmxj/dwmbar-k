@@ -1,13 +1,15 @@
 #include "../include/dwmbar-k.hpp" 
+#include <vector>
 
 int C = -1;
 
 int Run() {
-    if(C == PollClock(CDir)) {
+    int Clk = PollClock(CDir);
+    if(C == Clk) {
         return 0;
     }
-    C = PollClock(CDir);
-    if((PollClock(CDir) % WeatherFrq) == 0 || PollClock(CDir) == 0)
+    C = Clk;
+    if((Clk % WeatherFrq) == 0 || Clk == 0)
         return 1;
     return 0; 
 }

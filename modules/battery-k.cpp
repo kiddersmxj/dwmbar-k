@@ -41,11 +41,12 @@ std::string TrimNewLine(const std::string& str) {
 }
 
 int Run() {
-    if(C == PollClock(CDir)) {
+    int Clk = PollClock(CDir);
+    if(C == Clk) {
         return 0;
     }
-    C = PollClock(CDir);
-    if((PollClock(CDir) % BatteryFrq) == 0 || PollClock(CDir) == 0)
+    C = Clk;
+    if((Clk % BatteryFrq) == 0 || Clk == 0)
         return 1;
     return 0; 
 }

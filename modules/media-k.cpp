@@ -11,9 +11,6 @@ struct {
 } media;
 
 int Run() {
-	// If first run (or just been killed) run
-	if(C == -1)
-		return 1;
     if(C == PollClock(CDir)) {
         return 0;
     }
