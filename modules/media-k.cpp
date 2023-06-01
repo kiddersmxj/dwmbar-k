@@ -127,10 +127,12 @@ void Media() {
     std::cout << R"(Time=")" << media.Time << R"(")" << std::endl << std::endl;
 #endif
 
-    std::string Out = media.Hex + " " + media.Artist + " - " + media.Title + " (" + media.Time + ")";
-
     std::vector<std::string> Output;
-    Output.push_back(R"($(printf ")" + Out + R"("))");
+    std::string Out = media.Hex + " " + media.Artist + " - " + media.Title + " (" + media.Time + ")";
+    if(media.Title == "")
+        Output.push_back("");
+    else
+        Output.push_back(R"($(printf ")" + Out + R"("))");
     WriteFileLines(Output, MediaOutputFile);
 }
 
