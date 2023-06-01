@@ -9,6 +9,7 @@
 const int ModulesLength = 6;
 const std::string Modules[ModulesLength] = { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
 const int EnabledModules[ModulesLength] =  { 1,           1,        1,           1,          1,         1 };
+
 const std::vector<std::string> ModuleLayout = { "1", "2", ";", "6", "3", "4", "5" };
 
 // Scale the volume based on individual system - 1 for off
@@ -89,5 +90,56 @@ const std::string ICharging = R"(\xef\x83\xa7)";
 
 const std::string IPlay = R"(\xe2\x96\xb6)";
 const std::string IPause = R"(\xe2\x8f\xb8)";
+
+// Colours
+namespace Colour {
+    const std::string Black = "^C0^";
+    const std::string Red = "^C1^";
+    const std::string Green = "^C2^";
+    const std::string Yellow = "^C3^";
+    const std::string Blue = "^C4^";
+    const std::string Magenta = "^C5^";
+    const std::string Cyan = "^C6^";
+    const std::string White = "^C7^";
+    const std::string Grey = "^C8^";
+    const std::string AltRed = "^C9^";
+    const std::string AltGreen = "^C10^";
+    const std::string AltYellow = "^C11^";
+    const std::string AltBlue = "^C12^";
+    const std::string AltMagenta = "^C13^";
+    const std::string AltCyan = "^C14^";
+    const std::string AltWhite = "^C15^";
+};
+
+const int NetworkNumColours = 4;
+const std::string NetworkColours[NetworkNumColours] = {
+    Colour::Green, Colour::Green, Colour::Grey, Colour::Grey
+//          Icon              AP Name           Public IP       Private IP
+};
+const int TimeNumColours = 4;
+const std::string TimeColours[TimeNumColours] = {
+    Colour::Green, Colour::Green, Colour::Grey, Colour::Grey 
+//          Icon              Day               Date              Time
+};
+const int WeatherNumColours = 1;
+const std::string WeatherColours[WeatherNumColours] = {
+    Colour::Green
+//          Icon
+};
+const int VolumeNumColours = 2;
+const std::string VolumeColours[VolumeNumColours] = {
+    Colour::Green, Colour::Green
+//          Icon            Percentage
+};
+const int MediaNumColours = 6;
+const std::string MediaColours[MediaNumColours] = {
+    Colour::Green, Colour::Green, Colour::Grey, Colour::Grey, Colour::Grey, Colour::Grey
+//          Icon              Artist               Dash             Title           Brackets           Duration
+};
+const int BatteryNumColours = 6;
+const std::string BatteryColours[BatteryNumColours] = {
+    Colour::Green, Colour::Green, Colour::Yellow, Colour::Yellow, Colour::Red, Colour::Grey
+//        Icon(4/4)          Icon(3/4)          Icon(2/4)           Icon(1/4)          Icon(0/4)        Percentage
+};
 
 #endif 
