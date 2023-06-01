@@ -31,6 +31,7 @@ class Clock {
 };
 
 void InitDirs();
+void RefreshDirs();
 int Enabled(int i);
 void RunModules();
 void KillModules();
@@ -44,7 +45,7 @@ int GetIndex(std::vector<std::string> v, std::string K);
 
 int main() {
     KillModules();
-    InitDirs();
+    RefreshDirs();
 
     class Clock Clock;
     Clock.Init();
@@ -195,11 +196,17 @@ std::string ParseModuleNo(std::string ModuleNo) {
 		return "Disabled";
 }
 
+void RefreshDirs() {
+	ExecCmd(R"(rm -rf )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    ExecCmd(R"(rm -rf )" + CDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    ExecCmd(R"(rm -rf )" + DDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    InitDirs();
+}
+
 void InitDirs() {
 	ExecCmd(R"(mkdir )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
     ExecCmd(R"(mkdir )" + TDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
     ExecCmd(R"(mkdir )" + CDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    ExecCmd(R"(mkdir )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
     ExecCmd(R"(mkdir )" + DDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
 }
 
