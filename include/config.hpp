@@ -111,35 +111,37 @@ namespace Colour {
     const std::string AltWhite = "^C15^";
 };
 
+const std::string BDCol = Colour::Grey;
+
 const int NetworkNumColours = 4;
-const std::string NetworkColours[NetworkNumColours] = {
-    Colour::Green, Colour::Green, Colour::Grey, Colour::Grey
-//          Icon              AP Name           Public IP       Private IP
+const std::string NCol[NetworkNumColours] = {
+    Colour::Blue, Colour::Blue, Colour::Grey, Colour::Blue
+//          Icon              AP Name         Private IP       Public IP
 };
 const int TimeNumColours = 4;
-const std::string TimeColours[TimeNumColours] = {
-    Colour::Green, Colour::Green, Colour::Grey, Colour::Grey 
+const std::string TCol[TimeNumColours] = {
+    Colour::Red, Colour::Red, Colour::Grey, Colour::Red
 //          Icon              Day               Date              Time
 };
 const int WeatherNumColours = 1;
-const std::string WeatherColours[WeatherNumColours] = {
-    Colour::Green
+const std::string WCol[WeatherNumColours] = {
+    Colour::Yellow
 //          Icon
 };
 const int VolumeNumColours = 2;
-const std::string VolumeColours[VolumeNumColours] = {
-    Colour::Green, Colour::Green
+const std::string VCol[VolumeNumColours] = {
+    Colour::Magenta, Colour::Grey
 //          Icon            Percentage
 };
 const int MediaNumColours = 6;
-const std::string MediaColours[MediaNumColours] = {
-    Colour::Green, Colour::Green, Colour::Grey, Colour::Grey, Colour::Grey, Colour::Grey
+const std::string MCol[MediaNumColours] = {
+    Colour::Green, Colour::Green, Colour::Grey, Colour::Green, Colour::Grey, Colour::Grey
 //          Icon              Artist               Dash             Title           Brackets           Duration
 };
-const int BatteryNumColours = 6;
-const std::string BatteryColours[BatteryNumColours] = {
-    Colour::Green, Colour::Green, Colour::Yellow, Colour::Yellow, Colour::Red, Colour::Grey
-//        Icon(4/4)          Icon(3/4)          Icon(2/4)           Icon(1/4)          Icon(0/4)        Percentage
+const int BatteryNumColours = 7;
+const std::string BCol[BatteryNumColours] = {
+    Colour::Green, Colour::Green, Colour::Yellow, Colour::Yellow, Colour::Red, Colour::Grey, Colour::Grey
+//        Icon(4/4)          Icon(3/4)          Icon(2/4)           Icon(1/4)          Icon(0/4)        Extra Icon     Percentage
 };
 
 #endif 

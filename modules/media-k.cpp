@@ -125,7 +125,7 @@ void Media() {
 #endif
 
     std::vector<std::string> Output;
-    std::string Out = media.Hex + " " + media.Artist + " - " + media.Title + " (" + media.Time + ")";
+    std::string Out = MCol[0] + media.Hex + " " + MCol[1] + media.Artist + MCol[2] + " - " + MCol[3] + media.Title + MCol[4] + " (" + MCol[5] + media.Time + MCol[4] + ")";
     if(media.Title == "")
         Output.push_back("");
     else

@@ -37,7 +37,7 @@ std::string GetDay(std::string day) {
 }
 
 // Get current date/time, format is dd-mm-YYYY hh:mm:ss
-std::string GetDateAndTime() {
+std::vector<std::string> GetDateAndTime() {
     time_t     now = time(0);
     struct tm  tstruct;
     char       date[50];
@@ -48,7 +48,10 @@ std::string GetDateAndTime() {
     std::string _day = GetDay(date);
     strftime(time, sizeof(time), "%X", &tstruct);
 
-    std::string status = _day + " " + date + " " + time;
+    std::vector<std::string> status;
+    status.push_back(_day);
+    status.push_back(date);
+    status.push_back(time);
     return status;
 }
 
@@ -56,8 +59,9 @@ int Time() {
     if(!Run()) {
         return 1;
     }
+    std::vector<std::string> S = GetDateAndTime();
     std::vector<std::string> Output;
-    Output.push_back(R"($(printf ")" + IDate + " " + GetDateAndTime() + R"("))");
+    Output.push_back(R"($(printf ")" + TCol[0] + IDate + " " + TCol[1] + S.at(0) + " " + TCol[2] + S.at(1) + " " + TCol[3] + S.at(2) + BDCol + R"("))");
     WriteFileLines(Output, TimeOutputFile);
 
 #ifdef TimeMCOUT

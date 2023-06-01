@@ -55,6 +55,7 @@ int Battery() {
     if(!Run()) {
         return 1;
     }
+    std::string BColI;
 #ifdef BatDCOUT
     std::cout << "1 " << std::endl;
 #endif
@@ -82,21 +83,27 @@ int Battery() {
         // Full only shows when charging (even if 100%)
         // // Therefore show ICharging
         /* CIcon = ICharging; */
+        BColI = BCol[0];
         Charging = 0;
     } else if(ChargingStat == "Not charging") {
         if(BatteryLevel >= BFull) {
+            BColI = BCol[0];
             Charging = 0;
         } else if(Charging == 1 || Charging == 4) {
             // Flash charging icon to alert - see if annoying
+            BColI = BCol[2];
             Charging = 4;
         } else {
+            BColI = BCol[5];
             Charging = 1;
         }
     } else if(ChargingStat == "Charging") {
         /* CIcon = ICharging; */
         if(Charging == 2 || Charging == 5) {
+            BColI = BCol[1];
             Charging = 5;
         } else {
+            BColI = BCol[5];
             Charging = 2;
         }
         // Cycle Icons to show charging
@@ -110,17 +117,24 @@ int Battery() {
 
     if(Charging != 5) {
         if(BatteryLevel >= BFull) {
+            BColI = BCol[0];
             BIcon = IBatteryFull;
         } else if(BatteryLevel >= BThreeQuart) {
+            BColI = BCol[1];
             BIcon = IBatteryThreeQuart;
         } else if(BatteryLevel >= BHalf) {
+            BColI = BCol[2];
             BIcon = IBatteryHalf;
         } else if(BatteryLevel >= BQuart) {
+            BColI = BCol[3];
             BIcon = IBatteryQuart;
         } else if(BatteryLevel >= BEmpty) {
+            BColI = BCol[4];
             BIcon = IBatteryEmpty;
         } else if(BatteryLevel == 0) {
-            BIcon = "E";
+            BColI = BCol[5];
+            BIcon = IBatteryEmpty;
+            /* BIcon = "E"; */
         } else {
             std::cout << "undefined battery level: -" << std::to_string(BatteryLevel) << "-" << std::endl;
         }
@@ -137,7 +151,10 @@ int Battery() {
     /* } */
 
     std::vector<std::string> Output;
-    Output.push_back(R"($(printf ")" + BIcon + " %s" + CIcon + R"(" ")" + std::to_string(BatteryLevel) + "%" + R"("))");
+#ifdef BatMCOUT
+    std::cout << BCol << Std::endl;
+#endif
+    Output.push_back(R"($(printf ")" + BColI + BIcon + " %s" + CIcon + R"(" ")" + BCol[6] + std::to_string(BatteryLevel) + "%" + R"("))");
     WriteFileLines(Output, BatteryOutputFile);
 
 #ifdef BatMCOUT

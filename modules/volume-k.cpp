@@ -114,7 +114,7 @@ int Volume() {
     }
     
     std::vector<std::string> Output;
-    Output.push_back(R"($(printf ")" + VIcon + R"( %s" ")" + std::to_string(Level) + R"(%"))");
+    Output.push_back(R"($(printf ")" + VCol[0] + VIcon + R"( %s" ")" + VCol[1] + std::to_string(Level) + R"(%"))");
 
      WriteFileLines(Output, VolumeOutputFile);
 

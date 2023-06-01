@@ -41,7 +41,7 @@ int Network() {
         return 1;
     std::vector<std::string> Output;
     if(GetConnectionName() != "")
-        Output.push_back(R"($(printf ")" + IInternet + " " + GetConnectionName() + " " + GetPublicIP() + " " + GetPrivateIP() + R"("))");
+        Output.push_back(R"($(printf ")" + NCol[0] + IInternet + " " + NCol[1] + GetConnectionName() + " " + NCol[2] + GetPrivateIP() + " " + NCol[3] + GetPublicIP() + BDCol + R"("))");
     else
         Output.push_back("");
     WriteFileLines(Output, NetworkOutputFile);
