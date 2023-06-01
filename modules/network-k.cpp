@@ -1,10 +1,57 @@
 #include "../include/dwmbar-k.hpp" 
 
+int C = -1;
+
+int Run() {
+    if(C == PollClock(CDir)) {
+        return 0;
+    }
+    C = PollClock(CDir);
+    if((PollClock(CDir) % NetworkFrq) == 0 || PollClock(CDir) == 0)
+        return 1;
+    return 0; 
+}
+
+std::string GetConnectionName() {
+    std::string Name;
+    Name = ExecCmd(R"(nmcli -a | grep 'Wired connection' | awk 'NR==1{print $1}')", 0, 0);
+    if(Name == "")
+        Name = ExecCmd(R"(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -c 5-)", 0, 0);
+    Name = StripTrailingNL(Name);
+    return Name;
+}
+
+std::string GetPublicIP() {
+    std::string IP;
+    IP = ExecCmd(R"(curl -s https://ipinfo.io/ip)", 0, 0);
+    IP = StripTrailingNL(IP);
+    return IP;
+}
+
+std::string GetPrivateIP() {
+    std::string IP;
+    IP = ExecCmd(R"(nmcli -a | grep -m 1 'inet4 ' | awk '{print $2}')", 0, 0);
+    IP = StripTrailingNL(IP);
+    return IP;
+}
+
+int Network() {
+    if(!Run())
+        return 1;
+    std::vector<std::string> Output;
+    if(GetConnectionName() != "")
+        Output.push_back(R"($(printf ")" + IInternet + " " + GetConnectionName() + " " + GetPublicIP() + " " + GetPrivateIP() + R"("))");
+    else
+        Output.push_back("");
+    WriteFileLines(Output, NetworkOutputFile);
+    return 0;
+}
+
 int main() {
     while(1) {
-        ExecCmd(R"(nmcli -v)", 0, 0);
+        Network();
+        std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
     }
-
-    return 1;
+    return 0;
 }
 

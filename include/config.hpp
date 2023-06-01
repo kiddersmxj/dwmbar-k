@@ -8,8 +8,8 @@
 
 const int ModulesLength = 6;
 const std::string Modules[ModulesLength] = { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
+const int EnabledModules[ModulesLength] =  { 1,           1,        1,           1,          1,         1 };
 const std::vector<std::string> ModuleLayout = { "1", "2", ";", "6", "3", "4", "5" };
-const int EnabledModules[ModulesLength] = { 0, 1, 1, 0, 1, 1 };
 
 // Scale the volume based on individual system - 1 for off
 const float VolScaler = 1.0;
