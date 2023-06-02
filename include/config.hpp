@@ -115,7 +115,7 @@ const std::string BDCol = Colour::Grey;
 
 const int NetworkNumColours = 4;
 const std::string NCol[NetworkNumColours] = {
-    Colour::Blue, Colour::Blue, Colour::Grey, Colour::Blue
+    Colour::Magenta, Colour::Magenta, Colour::Grey, Colour::Magenta
 //          Icon              AP Name         Private IP       Public IP
 };
 const int TimeNumColours = 4;
@@ -130,7 +130,7 @@ const std::string WCol[WeatherNumColours] = {
 };
 const int VolumeNumColours = 2;
 const std::string VCol[VolumeNumColours] = {
-    Colour::Magenta, Colour::Grey
+    Colour::Green, Colour::Grey
 //          Icon            Percentage
 };
 const int MediaNumColours = 6;
