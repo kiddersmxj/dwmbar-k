@@ -120,7 +120,7 @@ const std::string NCol[NetworkNumColours] = {
 };
 const int TimeNumColours = 4;
 const std::string TCol[TimeNumColours] = {
-    Colour::Red, Colour::Red, Colour::Grey, Colour::Red
+    Colour::Green, Colour::Green, Colour::Grey, Colour::Green
 //          Icon              Day               Date              Time
 };
 const int WeatherNumColours = 1;
@@ -135,7 +135,7 @@ const std::string VCol[VolumeNumColours] = {
 };
 const int MediaNumColours = 6;
 const std::string MCol[MediaNumColours] = {
-    Colour::Green, Colour::Green, Colour::Grey, Colour::Green, Colour::Grey, Colour::Grey
+    Colour::Blue, Colour::Blue, Colour::Grey, Colour::Blue, Colour::Grey, Colour::Grey
 //          Icon              Artist               Dash             Title           Brackets           Duration
 };
 const int BatteryNumColours = 7;
