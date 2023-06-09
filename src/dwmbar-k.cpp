@@ -244,7 +244,7 @@ std::string ParseXSR(std::vector<std::string> OutputVector) {
 
     // Make sure previous Output was not empty or BarDelimeter
     for(std::string Output: OutputVector) {
-        if(Output != "" && Output != BarDelimeter)
+        if(Output != " " && Output != "" && Output != BarDelimeter)
 #ifdef COUT
         std::cout << "-" << Output << "-" << std::endl;
 #endif
@@ -265,7 +265,7 @@ std::string ParseXSR(std::vector<std::string> OutputVector) {
                 Escape = 0;
         } else if(OutputVector.at(i) == BarDelimeter)
             Escape = 1;
-        if(OutputVector.at(i) != "")
+        if(OutputVector.at(i) != " " && OutputVector.at(i) != "")
 		    XSRBody += " " + OutputVector.at(i);
         i++;
     }

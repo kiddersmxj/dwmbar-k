@@ -43,7 +43,7 @@ int Network() {
     if(GetConnectionName() != "")
         Output.push_back(R"($(printf ")" + NCol[0] + IInternet + " " + NCol[1] + GetConnectionName() + " " + NCol[2] + GetPrivateIP() + " " + NCol[3] + GetPublicIP() + BDCol + R"("))");
     else
-        Output.push_back("");
+        Output.push_back(" ");
     WriteFileLines(Output, NetworkOutputFile);
     return 0;
 }
