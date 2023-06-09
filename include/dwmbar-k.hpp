@@ -1,11 +1,8 @@
 #ifndef Kdwmbar
 #define Kdwmbar
 
-#include <iostream>
-#include <vector>
-#include <chrono>
 #include <thread>
-#include <string>
+#include <filesystem>
 
 #include "config.hpp"
 #include "../lib/std-k.hpp"

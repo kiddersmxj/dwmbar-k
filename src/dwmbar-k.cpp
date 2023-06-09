@@ -1,13 +1,3 @@
-#include <chrono>
-#include <cstdint>
-#include <cstdlib>
-#include <sstream>
-#include <numeric> 
-#include <fstream>
-#include <filesystem>
-#include <string>
-#include <thread>
-#include <vector>
 #include "../include/dwmbar-k.hpp"
 namespace fs = std::filesystem;
 

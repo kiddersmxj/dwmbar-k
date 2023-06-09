@@ -1,10 +1,10 @@
 #ifndef Kconfig
 #define Kconfig
-// As much as it pains me to include t makes YCM happy
-#ifndef RUN
-#include <string> 
-#include <vector> 
-#endif
+
+#include <iostream>
+#include <vector>
+#include <chrono>
+using std::chrono_literals::operator""ms;
 
 const int ModulesLength = 6;
 const std::string Modules[ModulesLength] = { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
@@ -50,6 +50,7 @@ const int VolumeFrq = 1;
 const int MediaFrq = 2;
 const int BatteryFrq = 3;
 
+const std::chrono::system_clock::duration Latency = 200ms; // How long while loop waits before re-execution in ms
 const int SleepTime = 50; // How long while loop waits before re-execution in ms
 
 // Volume levels as a percentage for corresponding icons
@@ -130,7 +131,7 @@ const std::string WCol[WeatherNumColours] = {
 };
 const int VolumeNumColours = 2;
 const std::string VCol[VolumeNumColours] = {
-    Colour::Green, Colour::Grey
+    Colour::Red, Colour::Grey
 //          Icon            Percentage
 };
 const int MediaNumColours = 6;
