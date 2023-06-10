@@ -9,7 +9,7 @@ using std::chrono_literals::operator""ms;
 const int ModulesLength = 6;
 const std::string Modules[ModulesLength] =  { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
 const int EnabledModules[ModulesLength] =   { 1,           1,        1,           1,          1,         1 };
-const int ParentControlled[ModulesLength] = { 1,           1,        1,           0,          1,         1 };
+const int ParentControlled[ModulesLength] = { 1,           0,        1,           0,          0,         1 };
 
 const std::vector<std::string> ModuleLayout = { "1", "2", ";", "6", "3", "4", "5" };
 
@@ -48,7 +48,7 @@ const int NetworkFrq = 50;
 const int TimeFrq = 1;
 const int WeatherFrq = 100;
 const int VolumeFrq = 1;
-const int MediaFrq = 2;
+const int MediaFrq = 5;
 const int BatteryFrq = 3;
 
 const std::chrono::system_clock::duration Latency = 200ms; // How long while loop waits before re-execution in ms
