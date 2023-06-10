@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <filesystem>
+#include <sstream>
 
 #include "config.hpp"
 #include "../lib/std-k.hpp"

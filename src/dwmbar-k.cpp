@@ -23,7 +23,7 @@ class Clock {
 void InitDirs();
 void RefreshDirs();
 int Enabled(int i);
-void RunModules();
+void RunModules(bool &Started);
 void KillModules();
 void RunModule(std::string Module);
 void KillModule(std::string Module);
@@ -46,9 +46,10 @@ int main() {
     std::string Output[ModulesLength + 1];
     std::string Backup[ModulesLength + 1];
 
+    bool Started = 0;
     while(1) {
         std::chrono::system_clock::time_point T = std::chrono::system_clock::now();
-        RunModules();
+        RunModules(Started);
         if(Internal.Get() % ClockFrq == 0) {
             int i = 0;
 	    	for(std::string substr: ModuleLayout) {
@@ -204,12 +205,18 @@ int Enabled(int i) {
     return EnabledModules[i];
 }
 
-void RunModules() {
+void RunModules(bool &Started) {
 #ifndef NORUN
         for(int i=0; i<ModulesLength; i++) {
-            if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
+            if(ParentLaunched[i]) {
+                if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
+                    if(Enabled(i))
+                        RunModule(Modules[i]);
+                }
+            } else if(!Started) {
                 if(Enabled(i))
                     RunModule(Modules[i]);
+                Started = 1;
             }
         }
 #endif
