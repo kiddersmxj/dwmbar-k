@@ -36,7 +36,7 @@ std::string GetPrivateIP() {
     return IP;
 }
 
-int Network() {
+int Network(std::string &Out) {
     if(!Run())
         return 1;
     std::vector<std::string> Output;
@@ -44,13 +44,16 @@ int Network() {
         Output.push_back(R"($(printf ")" + NCol[0] + IInternet + " " + NCol[1] + GetConnectionName() + " " + NCol[2] + GetPrivateIP() + " " + NCol[3] + GetPublicIP() + BDCol + R"("))");
     else
         Output.push_back(" ");
-    WriteFileLines(Output, NetworkOutputFile);
+    if(Out != Output.at(0))
+        WriteFileLines(Output, NetworkOutputFile);
+    Out = Output.at(0);
     return 0;
 }
 
 int main() {
+    std::string Out = " ";
     while(1) {
-        Network();
+        Network(Out);
         std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
     }
     return 0;

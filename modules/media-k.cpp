@@ -99,7 +99,7 @@ std::string GetTitle(std::string Player) {
     return StripTrailingNL(ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ title }}')", 0, 0));
 }
 
-void Media() {
+void Media(std::string &Out) {
     if(!Run())
         return;
 #ifdef MediaDCOUT
@@ -125,17 +125,29 @@ void Media() {
 #endif
 
     std::vector<std::string> Output;
-    std::string Out = MCol[0] + media.Hex + " " + MCol[1] + media.Artist + MCol[2] + " - " + MCol[3] + media.Title + MCol[4] + " (" + MCol[5] + media.Time + MCol[4] + ")";
-    if(media.Title == "")
-        Output.push_back("");
-    else
-        Output.push_back(R"($(printf ")" + Out + R"("))");
-    WriteFileLines(Output, MediaOutputFile);
+    std::string O;
+    if(media.Title == "") {
+        O = " ";
+        if(Out != O) {
+            Output.push_back(" ");
+            Out = O;
+        }
+        return;
+    }
+
+    O = MCol[0] + media.Hex + " " + MCol[1] + media.Artist + MCol[2] + " - " + MCol[3] + media.Title + MCol[4] + " (" + MCol[5] + media.Time + MCol[4] + ")";
+
+    if(Out != O) {
+        Output.push_back(R"($(printf ")" + O + R"("))");
+        Out = O;
+        WriteFileLines(Output, MediaOutputFile);
+    }
 }
 
 int main() {
+    std::string Out = " ";
     while(1) {
-        Media();
+        Media(Out);
         std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
         BreakPoint();
     }

@@ -51,7 +51,7 @@ int Run() {
     return 0; 
 }
 
-int Battery() {
+int Battery(std::string &Out) {
     if(!Run()) {
         return 1;
     }
@@ -155,7 +155,10 @@ int Battery() {
     std::cout << BCol << Std::endl;
 #endif
     Output.push_back(R"($(printf ")" + BColI + BIcon + " %s" + CIcon + R"(" ")" + BCol[6] + std::to_string(BatteryLevel) + "%" + R"("))");
-    WriteFileLines(Output, BatteryOutputFile);
+    if(!(Output.at(0) == Out)) {
+        WriteFileLines(Output, BatteryOutputFile);
+        Out = Output.at(0);
+    }
 
 #ifdef BatMCOUT
     std::cout << Output.front() << std::endl;
@@ -166,6 +169,7 @@ int Battery() {
 }
 
 int main() {
+    std::string Out = " ";
     while(1) {
     if(Charging == 5) {
         if(BIcon == IBatteryFull) {
@@ -182,7 +186,7 @@ int main() {
             std::cout << "error BIcon cycle for charge: " << BIcon << std::endl;
         }
     }
-        Battery();
+        Battery(Out);
         std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
     }
     return 0;

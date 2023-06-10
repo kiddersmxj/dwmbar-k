@@ -1,14 +1,12 @@
 #include <chrono>
+#include <format>
 #include <ctime>
+#include <string>
 #include "../include/dwmbar-k.hpp" 
 
 int C = -1;
 
 int Run(std::chrono::system_clock::time_point &T) {
-    std::chrono::system_clock::duration t = std::chrono::system_clock::now() - T;
-    if((500ms - t) > 0s)
-        std::this_thread::sleep_for(500ms - t);
-    T = std::chrono::system_clock::now();
     return 1;
 }
 
@@ -60,12 +58,16 @@ std::string GetTime() {
 
 int Time() {
     std::chrono::system_clock::time_point T = std::chrono::system_clock::now() + 1s;
+    std::chrono::system_clock::duration Delay = 990ms;
     std::vector<std::string> S = GetDate();
     while(1) {
-        if(!Run(T)) {
-            return 1;
-        }
+        std::chrono::system_clock::duration t = std::chrono::system_clock::now() - T;
         std::vector<std::string> Output;
+        if((Delay - t) > 0s)
+            std::this_thread::sleep_for(Delay - t);
+        T = std::chrono::system_clock::now();
+        /* time_t tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()); */
+        // TODO get date again when time = 00:00
         Output.push_back(R"($(printf ")" + TCol[0] + IDate + " " + TCol[1] + S.at(0) + " " + TCol[2] + S.at(1) + " " + TCol[3] + GetTime() + BDCol + R"("))");
         WriteFileLines(Output, TimeOutputFile);
 
@@ -73,14 +75,11 @@ int Time() {
         std::cout << Output.front() << std::endl;
         BreakPoint();
 #endif
-        return 0;
     }
+    return 0;
 }
 
 int main() {
-    while(1) {
         Time();
-        std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
-    }
     return 0;
 }

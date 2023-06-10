@@ -14,7 +14,7 @@ int Run() {
     return 0; 
 }
 
-int Weather() {
+int Weather(std::string &Out) {
     if(!Run())
         return 1;
     std::string WttrHex = ExecCmd(R"(timeout 1 curl -s wttr.in/$LOCATION?format=1 | hexdump -v -e '"\\\x" 1/1 "%02x"')", 0, 0);
@@ -58,7 +58,9 @@ int Weather() {
     std::vector<std::string> Output;
     Output.push_back(R"($(printf ")" + WCol[0] + HexOutput + BDCol + R"("))");
 
-    WriteFileLines(Output, WeatherOutputFile);
+    if(Out != Output.at(0))
+        WriteFileLines(Output, WeatherOutputFile);
+    Out = Output.at(0);
 
 #ifdef WeaMCOUT
     VPrint(Output);
@@ -68,8 +70,9 @@ int Weather() {
 
 
 int main() {
+    std::string Out = " ";
     while(1) {
-        Weather();
+        Weather(Out);
         std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
     }
     return 0;
