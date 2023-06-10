@@ -207,18 +207,18 @@ int Enabled(int i) {
 
 void RunModules(bool &Started) {
 #ifndef NORUN
-        for(int i=0; i<ModulesLength; i++) {
-            if(ParentLaunched[i]) {
-                if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
-                    if(Enabled(i))
-                        RunModule(Modules[i]);
-                }
-            } else if(!Started) {
+    for(int i=0; i<ModulesLength; i++) {
+        if(ParentControlled[i]) {
+            if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
                 if(Enabled(i))
                     RunModule(Modules[i]);
-                Started = 1;
             }
+        } else if(!Started) {
+            if(Enabled(i))
+                RunModule(Modules[i]);
         }
+    }
+    Started = 1;
 #endif
 }
 
