@@ -1,19 +1,15 @@
+#include <chrono>
 #include <ctime>
 #include "../include/dwmbar-k.hpp" 
 
 int C = -1;
 
-int Run() {
-	// If first run (or just been killed) run
-	if(C == -1)
-		return 1;
-    if(C == PollClock(CDir)) {
-        return 0;
-    }
-    C = PollClock(CDir);
-    if((PollClock(CDir) % TimeFrq) == 0 || PollClock(CDir) == 0)
-        return 1;
-    return 0; 
+int Run(std::chrono::system_clock::time_point &T) {
+    std::chrono::system_clock::duration t = std::chrono::system_clock::now() - T;
+    if((500ms - t) > 0s)
+        std::this_thread::sleep_for(500ms - t);
+    T = std::chrono::system_clock::now();
+    return 1;
 }
 
 std::string GetDay(std::string day) {
@@ -37,38 +33,48 @@ std::string GetDay(std::string day) {
 }
 
 // Get current date/time, format is dd-mm-YYYY hh:mm:ss
-std::vector<std::string> GetDateAndTime() {
-    time_t     now = time(0);
+std::vector<std::string> GetDate() {
     struct tm  tstruct;
+    time_t     now = time(0);
     char       date[50];
-    char       time[50];
     tstruct = *localtime(&now);
 
     strftime(date, sizeof(date), "%d-%m-%Y", &tstruct);
     std::string _day = GetDay(date);
-    strftime(time, sizeof(time), "%X", &tstruct);
 
     std::vector<std::string> status;
     status.push_back(_day);
     status.push_back(date);
-    status.push_back(time);
     return status;
 }
 
+std::string GetTime() {
+    struct tm  tstruct;
+    time_t     now = time(0);
+    tstruct = *localtime(&now);
+    char       time[50];
+
+    strftime(time, sizeof(time), "%X", &tstruct);
+    return time;
+}
+
 int Time() {
-    if(!Run()) {
-        return 1;
-    }
-    std::vector<std::string> S = GetDateAndTime();
-    std::vector<std::string> Output;
-    Output.push_back(R"($(printf ")" + TCol[0] + IDate + " " + TCol[1] + S.at(0) + " " + TCol[2] + S.at(1) + " " + TCol[3] + S.at(2) + BDCol + R"("))");
-    WriteFileLines(Output, TimeOutputFile);
+    std::chrono::system_clock::time_point T = std::chrono::system_clock::now() + 1s;
+    std::vector<std::string> S = GetDate();
+    while(1) {
+        if(!Run(T)) {
+            return 1;
+        }
+        std::vector<std::string> Output;
+        Output.push_back(R"($(printf ")" + TCol[0] + IDate + " " + TCol[1] + S.at(0) + " " + TCol[2] + S.at(1) + " " + TCol[3] + GetTime() + BDCol + R"("))");
+        WriteFileLines(Output, TimeOutputFile);
 
 #ifdef TimeMCOUT
-    std::cout << Output.front() << std::endl;
-    BreakPoint();
+        std::cout << Output.front() << std::endl;
+        BreakPoint();
 #endif
-    return 0;
+        return 0;
+    }
 }
 
 int main() {
