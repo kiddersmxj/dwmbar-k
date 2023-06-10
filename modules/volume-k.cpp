@@ -17,16 +17,6 @@ char *selem_name = "Speaker";
 // Get $scontrol variable set in .bashrc
 int C = -1;
 
-int Run() {
-    if(C == PollClock(CDir)) {
-        return 0;
-    }
-    C = PollClock(CDir);
-    if((PollClock(CDir) % VolumeFrq) == 0 || PollClock(CDir) == 0)
-        return 1;
-    return 0; 
-}
-
 static void error_close_exit(const char *errmsg, int err, snd_mixer_t *h_mixer) {
     if (err == 0)
 		fprintf(stderr, "%s", errmsg);
@@ -98,8 +88,6 @@ void SetVolumeLevel(char *device, char *selem_name, long vol) {
 }
 
 int Volume() {
-    if(!Run())
-        return 1;
     int Level = GetVolumeLevel(device, selem_name);
     if(Level >= VHigh) {
         VIcon = IVolHigh;
@@ -127,10 +115,8 @@ int Volume() {
 int main(int argc, char** argv) {
     // If no args are given get volume
 	if (argc < 2) {
-        while(1) {
-            Volume();
-            std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
-        }
+        Volume();
+        return 0;
     }
 
     // If args are given assign to var after check
