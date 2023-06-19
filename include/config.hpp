@@ -9,7 +9,7 @@ using std::chrono_literals::operator""ms;
 const int ModulesLength = 6;
 const std::string Modules[ModulesLength] =  { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
 const int EnabledModules[ModulesLength] =   { 1,           1,        1,           1,          1,         1 };
-const int ParentControlled[ModulesLength] = { 1,           0,        1,           0,          0,         1 };
+const int ParentControlled[ModulesLength] = { 0,           0,        0,           0,          0,         0 };
 
 const std::vector<std::string> ModuleLayout = { "1", "2", ";", "6", "3", "4", "5" };
 
