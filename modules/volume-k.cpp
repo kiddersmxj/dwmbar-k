@@ -13,7 +13,7 @@ std::string VIcon = "";
 // Setup variables used by both fucntions
 char *device = "default";
 /* char *selem_name = std::getenv("scontrol"); */
-char *selem_name = "Speaker";
+char *selem_name = "Master";
 // Get $scontrol variable set in .bashrc
 int C = -1;
 
@@ -113,6 +113,12 @@ int Volume() {
 	}
 
 int main(int argc, char** argv) {
+    FILE *file;
+    if ((file = fopen("a.txt", "r"))) {
+      fclose(file);
+        if(ReadFileLines(BluetoothDataFile).at(0) == "1")
+            selem_name = "Master";
+    }
     // If no args are given get volume
 	if (argc < 2) {
         Volume();
