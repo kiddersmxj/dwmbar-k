@@ -6,12 +6,12 @@
 #include <chrono>
 using std::chrono_literals::operator""ms;
 
-const int ModulesLength = 6;
-const std::string Modules[ModulesLength] =  { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k"};
-const int EnabledModules[ModulesLength] =   { 1,           1,        1,           1,          1,         1 };
-const int ParentControlled[ModulesLength] = { 0,           0,        0,           0,          0,         0 };
+const int ModulesLength = 7;
+const std::string Modules[ModulesLength] =  { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k", "bluetooth-k"};
+const int EnabledModules[ModulesLength] =   { 1,           1,        1,           1,          1,         1,           1 };
+const int ParentControlled[ModulesLength] = { 0,           0,        0,           0,          0,         0,           0 };
 
-const std::vector<std::string> ModuleLayout = { "1", "2", ";", "6", "3", "4", "5" };
+const std::vector<std::string> ModuleLayout = { "1", "7", "2", ";", "6", "3", "4", "5" };
 
 // Scale the volume based on individual system - 1 for off
 const float VolScaler = 1.0;
@@ -33,6 +33,7 @@ const std::string WeatherOutputFile = ODir + "/weather-k.txt";
 const std::string VolumeOutputFile = ODir + "/volume-k.txt";
 const std::string MediaOutputFile = ODir + "/media-k.txt";
 const std::string BatteryOutputFile = ODir + "/battery-k.txt";
+const std::string BluetoothOutputFile = ODir + "/bluetooth-k.txt";
 // Data file store locations
 const std::string NetworkDataFile = DDir + "/network.txt";
 const std::string TimeDataFile = DDir + "/time.txt";
@@ -40,6 +41,7 @@ const std::string WeatherDataFile = DDir + "/weather.txt";
 const std::string VolumeDataFile = DDir + "/volume.txt";
 const std::string MediaDataFile = DDir + "/media.txt";
 const std::string BatteryDataFile = DDir + "/battery.txt";
+const std::string BluetoothDataFile = DDir + "/battery.txt";
 
 const int MaxClock = 100; // Maximum clock value before reset
 const int ClockFrq = 1; // How many in prog clock cycles before pulse
@@ -50,6 +52,7 @@ const int WeatherFrq = 100;
 const int VolumeFrq = 1;
 const int MediaFrq = 5;
 const int BatteryFrq = 3;
+const int BluetoothFrq = 5;
 
 const std::chrono::system_clock::duration Latency = 200ms; // How long while loop waits before re-execution in ms
 const int SleepTime = 50; // How long while loop waits before re-execution in ms
@@ -92,6 +95,8 @@ const std::string ICharging = R"(\xef\x83\xa7)";
 
 const std::string IPlay = R"(\xe2\x96\xb6)";
 const std::string IPause = R"(\xe2\x8f\xb8)";
+
+const std::string IBluetooth = R"(\xef\x8a\x94)";
 
 // Colours
 namespace Colour {
@@ -144,6 +149,12 @@ const int BatteryNumColours = 7;
 const std::string BCol[BatteryNumColours] = {
     Colour::Green, Colour::Green, Colour::Yellow, Colour::Yellow, Colour::Red, Colour::Grey, Colour::Grey
 //        Icon(4/4)          Icon(3/4)          Icon(2/4)           Icon(1/4)          Icon(0/4)        Extra Icon     Percentage
+};
+
+const int BluetoothNumColours = 7;
+const std::string BlCol[BluetoothNumColours] = {
+    Colour::Blue, Colour::Grey
+//        Icon                 Name
 };
 
 #endif 
