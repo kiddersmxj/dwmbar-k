@@ -41,7 +41,7 @@ const std::string WeatherDataFile = DDir + "/weather.txt";
 const std::string VolumeDataFile = DDir + "/volume.txt";
 const std::string MediaDataFile = DDir + "/media.txt";
 const std::string BatteryDataFile = DDir + "/battery.txt";
-const std::string BluetoothDataFile = DDir + "/battery.txt";
+const std::string BluetoothDataFile = DDir + "/bluetooth.txt";
 
 const int MaxClock = 100; // Maximum clock value before reset
 const int ClockFrq = 1; // How many in prog clock cycles before pulse
