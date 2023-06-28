@@ -147,7 +147,7 @@ void RunModule(std::string Module) {
     std::cout << Module << std::endl;
 #endif
     std::stringstream LaunchCmd;
-    LaunchCmd << "$HOME/devel/dwmbar-k/bin/modules/" << Module << " &";
+    LaunchCmd << WDir << "/modules/" << Module << " &";
     std::cout << LaunchCmd.str().c_str() << std::endl;
     system(LaunchCmd.str().c_str());
 }
