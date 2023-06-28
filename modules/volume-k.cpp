@@ -1,5 +1,7 @@
 #include <alsa/asoundlib.h>
+#include <concepts>
 #include <std-k.hpp>
+#include <string>
 #include "../include/dwmbar-k.hpp" 
 using namespace std::chrono_literals;
 
@@ -46,7 +48,8 @@ int GetVolumeLevel(char *device, char *selem_name) {
     snd_mixer_selem_id_set_name(sid, selem_name);
     
     if ((elem = snd_mixer_find_selem(h_mixer, sid)) == NULL)
-    	error_close_exit("Cannot find simple element\n", 0, h_mixer);
+    	/* error_close_exit("Cannot find simple element\n", 0, h_mixer); */
+        return -1;
     
     snd_mixer_selem_get_playback_volume(elem, CHANNEL, &vol);
     
@@ -89,6 +92,7 @@ int Volume(char* selem_name) {
     if (selem_name == placeholder) {
         Level = k::Map(Level, 0, 65535, 0, 100);
     }
+
     if(Level >= VHigh) {
         VIcon = IVolHigh;
     } else if(Level >= VMid) {
@@ -97,11 +101,14 @@ int Volume(char* selem_name) {
         VIcon = IVolLow;
     } else if(Level == VMute) {
         VIcon = IVolMute;
+    } else if(Level == -1) {
     } else {
         std::cout << "Vol parsing error: -" << Level << "-" << std::endl;
     }
+
     std::vector<std::string> Output;
-    Output.push_back(R"($(printf ")" + VCol[0] + VIcon + R"( %s" ")" + VCol[1] + std::to_string(Level) + R"(%"))");
+    if(Level == -1) Output.push_back(" ");
+    else Output.push_back(R"($(printf ")" + VCol[0] + VIcon + R"( %s" ")" + VCol[1] + std::to_string(Level) + R"(%"))");
 
     k::WriteFileLines(Output, VolumeOutputFile);
 
