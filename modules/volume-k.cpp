@@ -1,4 +1,5 @@
 #include <alsa/asoundlib.h>
+#include <std-k.hpp>
 #include "../include/dwmbar-k.hpp" 
 using namespace std::chrono_literals;
 
@@ -10,9 +11,6 @@ snd_mixer_elem_t *elem ;
 std::string VIcon = "";
 // Setup variables used by both fucntions
 char *device = "default";
-/* char *selem_name = std::getenv("scontrol"); */
-char *selem_name = "Master";
-// Get $scontrol variable set in .bashrc
 int C = -1;
 
 static void error_close_exit(const char *errmsg, int err, snd_mixer_t *h_mixer) {
@@ -85,11 +83,12 @@ void SetVolumeLevel(char *device, char *selem_name, long vol) {
 	snd_mixer_close(h_mixer);
 }
 
-int Volume() {
+int Volume(char* selem_name) {
     int Level = GetVolumeLevel(device, selem_name);
-    /* if(selem_name == "Master") { */
-    /*     k::map( */
-    /* } */
+    auto placeholder = "Master";
+    if (selem_name == placeholder) {
+        Level = k::Map(Level, 0, 65535, 0, 100);
+    }
     if(Level >= VHigh) {
         VIcon = IVolHigh;
     } else if(Level >= VMid) {
@@ -101,11 +100,10 @@ int Volume() {
     } else {
         std::cout << "Vol parsing error: -" << Level << "-" << std::endl;
     }
-    
     std::vector<std::string> Output;
     Output.push_back(R"($(printf ")" + VCol[0] + VIcon + R"( %s" ")" + VCol[1] + std::to_string(Level) + R"(%"))");
 
-     k::WriteFileLines(Output, VolumeOutputFile);
+    k::WriteFileLines(Output, VolumeOutputFile);
 
 #ifdef VolMCOUT
     VPrint(Output);
@@ -115,14 +113,20 @@ int Volume() {
 
 int main(int argc, char** argv) {
     FILE *file;
-    if ((file = fopen("a.txt", "r"))) {
+    char *selem_name;
+    const char* f = BluetoothDataFile.c_str();
+    if((file = fopen(f, "r"))) {
       fclose(file);
-        if(k::ReadFileLines(BluetoothDataFile).at(0) == "1")
+        if(k::ReadFileLines(BluetoothDataFile).at(0) == "1") {
             selem_name = "Master";
+        } else
+            /* char *selem_name = std::getenv("scontrol"); */
+            selem_name = "Speaker";
+            // Get $scontrol variable set in .bashrc
     }
     // If no args are given get volume
 	if (argc < 2) {
-        Volume();
+        Volume(selem_name);
         return 0;
     }
 

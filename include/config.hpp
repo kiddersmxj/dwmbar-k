@@ -9,17 +9,17 @@
 using std::chrono_literals::operator""ms;
 
 const int ModulesLength = 7;
-const std::string Modules[ModulesLength] =  { "network-k", "time-k", "weather-k", "volume-k", "media-k", "battery-k", "bluetooth-k"};
-const int EnabledModules[ModulesLength] =   { 1,           1,        1,           1,          1,         1,           1 };
-const int ParentControlled[ModulesLength] = { 0,           0,        0,           0,          0,         0,           0 };
+const std::string Modules[ModulesLength] =  { "network-k", "time-k", "weather-k", "bluetooth-k", "media-k", "battery-k", "volume-k" };
+const int EnabledModules[ModulesLength] =   { 1,           1,        1,           1,             1,         1,           1 };
+const int ParentControlled[ModulesLength] = { 0,           0,        0,           0,             0,         0,           1 };
 
-const std::vector<std::string> ModuleLayout = { "1", "7", "2", ";", "6", "3", "4", "5" };
+const std::vector<std::string> ModuleLayout = { "1", "4", "2", ";", "6", "3", "7", "5" };
 
 // Scale the volume based on individual system - 1 for off
 const float VolScaler = 1.0;
 
 const std::string TmpDir = "/tmp/dwmbar-k"; // Dir to store tmp files in
-const std::string WDir = "/usr/local/bin/dwmbar-k/"; // Working directory
+const std::string WDir = "/usr/local/bin/dwmbar-k"; // Working directory
 const std::string TDir = TmpDir; // Full TmpDir path
 const std::string OutputDir = "output"; // Name of output files dir
 const std::string ODir = TDir + "/" + OutputDir; // Full OutputDir path
@@ -51,7 +51,7 @@ const int ClockFrq = 1; // How many in prog clock cycles before pulse
 const int NetworkFrq = 50;
 const int TimeFrq = 1;
 const int WeatherFrq = 100;
-const int VolumeFrq = 1;
+const int VolumeFrq = 5;
 const int MediaFrq = 5;
 const int BatteryFrq = 3;
 const int BluetoothFrq = 5;
