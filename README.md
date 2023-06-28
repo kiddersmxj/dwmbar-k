@@ -1,5 +1,6 @@
-# dwmbar-k [![CMake](https://img.shields.io/github/actions/workflow/status/kiddersmxj/dwmbar-k/cmake.yml?style=for-the-badge)](https://github.com/kiddersmxj/dwmbar-k/actions/workflows/cmake.yml)
-https://img.shields.io/github/actions/workflow/status/kiddersmxj/stdstreams/cmake.yml?style=for-the-badge
+# dwmbar-k 
+[![CMake](https://img.shields.io/github/actions/workflow/status/kiddersmxj/dwmbar-k/cmake.yml?style=for-the-badge)](https://github.com/kiddersmxj/dwmbar-k/actions/workflows/cmake.yml)
+
 A minature backend built for dwm making use of X11's `xsetroot -name` written in cpp. Can be used with main and staus bar patches.
 
 ### Current and planned features
