@@ -1,5 +1,4 @@
 #include "../include/dwmbar-k.hpp" 
-#include <vector>
 
 int C = -1;
 

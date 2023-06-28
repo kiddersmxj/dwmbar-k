@@ -1,8 +1,4 @@
 #include "../include/dwmbar-k.hpp" 
-#include <algorithm>
-#include <iostream>
-#include <string>
-#include <vector>
 
 int C = -1;
 

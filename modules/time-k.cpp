@@ -1,7 +1,3 @@
-#include <chrono>
-#include <format>
-#include <ctime>
-#include <string>
 #include "../include/dwmbar-k.hpp" 
 
 int C = -1;
