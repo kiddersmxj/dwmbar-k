@@ -18,15 +18,16 @@ const std::vector<std::string> ModuleLayout = { "1", "7", "2", ";", "6", "3", "4
 // Scale the volume based on individual system - 1 for off
 const float VolScaler = 1.0;
 
-const std::string TmpDir = ".tmp"; // Dir to store tmp files in
-const std::string WDir = HOME + "/" + "devel/dwmbar-k"; // Working directory
-const std::string TDir = WDir + "/" + TmpDir; // Full TmpDir path
+const std::string TmpDir = "/tmp/dwmbar-k"; // Dir to store tmp files in
+const std::string WDir = "/usr/local/bin/dwmbar-k/"; // Working directory
+const std::string TDir = TmpDir; // Full TmpDir path
 const std::string OutputDir = "output"; // Name of output files dir
 const std::string ODir = TDir + "/" + OutputDir; // Full OutputDir path
 const std::string ClockDir = "clock"; // Name of clock file dir
 const std::string CDir = TDir + "/" + ClockDir; // Full ClockDir path
 const std::string DataDir = "data"; // Name of data file dir
 const std::string DDir = TDir + "/" + DataDir; // Full DataDir path
+const std::string Logfile = HOME + "/.log/log.dwmbar"; // Full DataDir path
 // Output file store locations
 const std::string NetworkOutputFile = ODir + "/network-k.txt";
 const std::string TimeOutputFile = ODir + "/time-k.txt";
