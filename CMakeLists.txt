@@ -23,6 +23,16 @@ project(dwmbar-k
   VERSION 1.0.0
 )
 
+add_executable(dwmbar-k src/dwmbar-k.cpp)
+add_executable(dwmbar src/wrapper.cpp)
+add_executable(battery-k modules/battery-k.cpp)
+add_executable(bluetooth-k modules/bluetooth-k.cpp)
+add_executable(media-k modules/media-k.cpp)
+add_executable(network-k modules/network-k.cpp)
+add_executable(time-k modules/time-k.cpp)
+add_executable(volume-k modules/volume-k.cpp)
+add_executable(weather-k modules/weather-k.cpp)
+
 target_include_directories(dwmbar-k
     PRIVATE src
     SHARED ${std-k_SOURCE_DIR}/inc
@@ -36,6 +46,10 @@ target_include_directories(battery-k
     SHARED ${std-k_SOURCE_DIR}/inc
 )
 target_include_directories(bluetooth-k
+    PRIVATE modules
+    SHARED ${std-k_SOURCE_DIR}/inc
+)
+target_include_directories(media-k
     PRIVATE modules
     SHARED ${std-k_SOURCE_DIR}/inc
 )
@@ -55,16 +69,6 @@ target_include_directories(weather-k
     PRIVATE modules
     SHARED ${std-k_SOURCE_DIR}/inc
 )
-
-add_executable(dwmbar-k src/dwmbar-k.cpp)
-add_executable(dwmbar src/wrapper.cpp)
-add_executable(battery-k modules/battery-k.cpp)
-add_executable(bluetooth-k modules/bluetooth-k.cpp)
-add_executable(media-k modules/media-k.cpp)
-add_executable(network-k modules/network-k.cpp)
-add_executable(time-k modules/time-k.cpp)
-add_executable(volume-k modules/volume-k.cpp)
-add_executable(weather-k modules/weather-k.cpp)
 
 install(
     TARGETS dwmbar-k
@@ -93,7 +97,7 @@ install(
 
 install(
     TARGETS network-k
-    DESTINATION /usr/local/bin/dwmbar-k/modules/
+    DESTINATION /usr/local/bin/dwmbar-k/modulPUBLIC
 )
 
 install(
@@ -122,28 +126,28 @@ endif(ALSA_FOUND)
 
 link_directories( ${std-k_BINARY_DIR} )
 message(${CMAKE_CURRENT_BINARY_DIR})
-message(${std-k_BINARY_DIR})
+message(${std-k_SOURCE_DIR}/inc)
 target_link_libraries(dwmbar-k
-  PRIVATE std-k
+    PUBLIC std-k
 )
 target_link_libraries(dwmbar
-  PRIVATE std-k
+    PUBLIC std-k
 )
 target_link_libraries(battery-k
-  PRIVATE std-k
+    PUBLIC std-k
 )
 target_link_libraries(bluetooth-k
-  PRIVATE std-k
+    PUBLIC std-k
 )
 target_link_libraries(media-k
-  PRIVATE std-k
+    PUBLIC std-k
 )
 target_link_libraries(network-k
-  PRIVATE std-k
+    PUBLIC std-k
 )
 target_link_libraries(time-k
-  PRIVATE std-k
+    PUBLIC std-k
 )
 target_link_libraries(weather-k
-  PRIVATE std-k
+    PUBLIC std-k
 )
