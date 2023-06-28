@@ -1,6 +1,8 @@
 #ifndef Kconfig
 #define Kconfig
 
+#include <std-k.hpp>
+
 #include <iostream>
 #include <vector>
 #include <chrono>
@@ -17,7 +19,6 @@ const std::vector<std::string> ModuleLayout = { "1", "7", "2", ";", "6", "3", "4
 const float VolScaler = 1.0;
 
 const std::string TmpDir = ".tmp"; // Dir to store tmp files in
-const std::string HOME = getenv("HOME"); // $HOME environment variable
 const std::string WDir = HOME + "/" + "devel/dwmbar-k"; // Working directory
 const std::string TDir = WDir + "/" + TmpDir; // Full TmpDir path
 const std::string OutputDir = "output"; // Name of output files dir

@@ -81,7 +81,7 @@ int main() {
             std::vector<std::string> OutputVector(Output, Output + (ModulesLength + 1));
 			XSR(ParseXSR(OutputVector));
 
-		    BreakPoint();
+		    k::BreakPoint();
             std::chrono::system_clock::duration t = std::chrono::system_clock::now() - T;
             if((200ms - t) > 0s)
                 std::this_thread::sleep_for(200ms - t);
@@ -112,7 +112,7 @@ void Clock::Init() {
     std::cout << "Clock=" << PollClock(CDir);
 #endif
     if(PollClock(CDir) == -1) {
-        Touch(CDir + "/0");
+        k::Touch(CDir + "/0");
     } else if(PollClock(CDir) != 1)
         Reset();
 #ifdef COUT
@@ -158,13 +158,13 @@ void KillModule(std::string Module) {
 #endif
     std::stringstream KillCmd;
     KillCmd << "pkill "<< Module << " 2> /dev/null &";
-    ExecCmd(KillCmd.str().c_str(), 0, 0);
+    k::ExecCmd(KillCmd.str().c_str(), 0, 0);
 }
 
 std::string GetModuleOutput(std::string Module) {
 	if(Module == "Disabled")
 		return "";
-    std::vector<std::string> Output = ReadFileLines(ODir + "/" + Module + ".txt");
+    std::vector<std::string> Output = k::ReadFileLines(ODir + "/" + Module + ".txt");
 	std::string O;
 	for(std::string Out: Output) {
 			O = Out;
@@ -188,17 +188,17 @@ std::string ParseModuleNo(std::string ModuleNo) {
 }
 
 void RefreshDirs() {
-	ExecCmd(R"(rm -rf )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    ExecCmd(R"(rm -rf )" + CDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    ExecCmd(R"(rm -rf )" + DDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    k::ExecCmd(R"(rm -rf )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    k::ExecCmd(R"(rm -rf )" + CDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    k::ExecCmd(R"(rm -rf )" + DDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
     InitDirs();
 }
 
 void InitDirs() {
-	ExecCmd(R"(mkdir )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    ExecCmd(R"(mkdir )" + TDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    ExecCmd(R"(mkdir )" + CDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    ExecCmd(R"(mkdir )" + DDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    k::ExecCmd(R"(mkdir )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    k::ExecCmd(R"(mkdir )" + TDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    k::ExecCmd(R"(mkdir )" + CDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    k::ExecCmd(R"(mkdir )" + DDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
 }
 
 int Enabled(int i) {
@@ -209,7 +209,7 @@ void RunModules(bool &Started) {
 #ifndef NORUN
     for(int i=0; i<ModulesLength; i++) {
         if(ParentControlled[i]) {
-            if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
+            if(k::ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
                 if(Enabled(i))
                     RunModule(Modules[i]);
             }
@@ -227,7 +227,7 @@ void XSR(std::string Body) {
 #ifdef COUT
 	std::cout << Cmd << std::endl;
 #endif
-    ExecCmd(Cmd, 0, 0);
+    k::ExecCmd(Cmd, 0, 0);
 }
 
 std::string ParseXSR(std::vector<std::string> OutputVector) {
@@ -272,7 +272,7 @@ std::string ParseXSR(std::vector<std::string> OutputVector) {
 
 void KillModules() {
         for(int i=0; i<ModulesLength; i++) {
-            if(ExecCmd("ps -a | grep " + Modules[i], 0, 0) != "") {
+            if(k::ExecCmd("ps -a | grep " + Modules[i], 0, 0) != "") {
                 KillModule(Modules[i]);
             }
         }

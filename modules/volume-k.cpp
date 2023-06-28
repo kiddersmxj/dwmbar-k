@@ -89,6 +89,9 @@ void SetVolumeLevel(char *device, char *selem_name, long vol) {
 
 int Volume() {
     int Level = GetVolumeLevel(device, selem_name);
+    if(selem_name == "Master") {
+        k::map(
+    }
     if(Level >= VHigh) {
         VIcon = IVolHigh;
     } else if(Level >= VMid) {
