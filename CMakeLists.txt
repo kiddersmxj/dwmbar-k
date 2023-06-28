@@ -23,6 +23,39 @@ project(dwmbar-k
   VERSION 1.0.0
 )
 
+target_include_directories(dwmbar-k
+    PRIVATE src
+    SHARED ${std-k_SOURCE_DIR}/inc
+)
+target_include_directories(dwmbar
+    PRIVATE src
+    SHARED ${std-k_SOURCE_DIR}/inc
+)
+target_include_directories(battery-k
+    PRIVATE modules
+    SHARED ${std-k_SOURCE_DIR}/inc
+)
+target_include_directories(bluetooth-k
+    PRIVATE modules
+    SHARED ${std-k_SOURCE_DIR}/inc
+)
+target_include_directories(network-k
+    PRIVATE modules
+    SHARED ${std-k_SOURCE_DIR}/inc
+)
+target_include_directories(time-k
+    PRIVATE modules
+    SHARED ${std-k_SOURCE_DIR}/inc
+)
+target_include_directories(volume-k
+    PRIVATE modules
+    SHARED ${std-k_SOURCE_DIR}/inc
+)
+target_include_directories(weather-k
+    PRIVATE modules
+    SHARED ${std-k_SOURCE_DIR}/inc
+)
+
 add_executable(dwmbar-k src/dwmbar-k.cpp)
 add_executable(dwmbar src/wrapper.cpp)
 add_executable(battery-k modules/battery-k.cpp)
@@ -76,67 +109,6 @@ install(
 install(
     TARGETS weather-k
     DESTINATION /usr/local/bin/dwmbar-k/modules/
-)
-
-# target_sources(battery-k
-#     PRIVATE modules/battery-k.cpp
-# )
-
-# target_sources(bluetooth-k
-#     PRIVATE modules/bluetooth-k.cpp
-# )
-
-# target_sources(media-k
-#     PRIVATE modules/media-k.cpp
-# )
-
-# target_sources(network-k
-#     PRIVATE modules/network-k.cpp
-# )
-
-# target_sources(time-k
-#     PRIVATE modules/time-k.cpp
-# )
-
-# target_sources(volume-k
-#     PRIVATE modules/volume-k.cpp
-# )
-
-# target_sources(weather-k
-#     PRIVATE modules/weather-k.cpp
-# )
-
-target_include_directories(dwmbar-k
-    PRIVATE src
-    SHARED ${std-k_SOURCE_DIR}/inc
-)
-target_include_directories(dwmbar
-    PRIVATE src
-    SHARED ${std-k_SOURCE_DIR}/inc
-)
-target_include_directories(battery-k
-    PRIVATE modules
-    SHARED ${std-k_SOURCE_DIR}/inc
-)
-target_include_directories(bluetooth-k
-    PRIVATE modules
-    SHARED ${std-k_SOURCE_DIR}/inc
-)
-target_include_directories(network-k
-    PRIVATE modules
-    SHARED ${std-k_SOURCE_DIR}/inc
-)
-target_include_directories(time-k
-    PRIVATE modules
-    SHARED ${std-k_SOURCE_DIR}/inc
-)
-target_include_directories(volume-k
-    PRIVATE modules
-    SHARED ${std-k_SOURCE_DIR}/inc
-)
-target_include_directories(weather-k
-    PRIVATE modules
-    SHARED ${std-k_SOURCE_DIR}/inc
 )
 
 find_package(ALSA REQUIRED)
