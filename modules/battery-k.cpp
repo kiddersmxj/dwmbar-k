@@ -60,8 +60,8 @@ int Battery(std::string &Out) {
     std::cout << "1 " << std::endl;
 #endif
     // Get battery info through acpi
-    std::string ChargingStat = ExecCmd(ChargingStatCmd, 0, 0);
-    std::string BatteryLevelString = ExecCmd(BatteryLevelCmd, 0, 0);
+    std::string ChargingStat = k::ExecCmd(ChargingStatCmd, 0, 0);
+    std::string BatteryLevelString = k::ExecCmd(BatteryLevelCmd, 0, 0);
     // Catch errors
     if(BatteryLevelString == "") {
         std::cout << "acpi did not exec" << std::endl;
@@ -156,14 +156,14 @@ int Battery(std::string &Out) {
 #endif
     Output.push_back(R"($(printf ")" + BColI + BIcon + " %s" + CIcon + R"(" ")" + BCol[6] + std::to_string(BatteryLevel) + "%" + R"("))");
     if(!(Output.at(0) == Out)) {
-        WriteFileLines(Output, BatteryOutputFile);
+        k::WriteFileLines(Output, BatteryOutputFile);
         Out = Output.at(0);
     }
 
 #ifdef BatMCOUT
     std::cout << Output.front() << std::endl;
 #endif
-    BreakPoint();
+    k::BreakPoint();
 
     return 0;
 }

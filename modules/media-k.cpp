@@ -36,7 +36,7 @@ std::vector<std::string> SplitString(const std::string& str) {
 }
 
 std::vector<std::string> GetPlayers() {
-    std::string Players = ExecCmd(R"(playerctl -l)", 0, 0);
+    std::string Players = k::ExecCmd(R"(playerctl -l)", 0, 0);
     std::vector<std::string> PlayersVector = SplitString(Players);
     PlayersVector.pop_back();
 #ifdef MCOUT
@@ -53,7 +53,7 @@ std::string GetPlayer() {
 #ifdef MediaDCOUT
         std::cout << "P-" << P << "-" << std::endl;
 #endif
-        std::string Output = StripTrailingNL(ExecCmd(R"(playerctl -p )" + P + R"( status)", 0, 0));
+        std::string Output = k::StripTrailingNL(k::ExecCmd(R"(playerctl -p )" + P + R"( status)", 0, 0));
 #ifdef MediaDCOUT
         std::cout << "out-" << Output << "-" << std::endl;
 #endif
@@ -80,7 +80,7 @@ std::string GetPlayer() {
 
 std::string GetTimeFromStart() {
 	int Time, Sec, Min;
-	Time = stoi(ExecCmd(R"(playerctl position | sed 's/..\{6\}$//')", 0, 0));
+	Time = stoi(k::ExecCmd(R"(playerctl position | sed 's/..\{6\}$//')", 0, 0));
 	Min = (Time % 3600) / 60;
 	Sec = Time % 60;
 #ifdef MediaDCOUT
@@ -92,11 +92,11 @@ std::string GetTimeFromStart() {
 }
 
 std::string GetArtist(std::string Player) {
-    return StripTrailingNL(ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ artist }}')", 0 ,0));
+    return k::StripTrailingNL(k::ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ artist }}')", 0 ,0));
 }
 
 std::string GetTitle(std::string Player) {
-    return StripTrailingNL(ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ title }}')", 0, 0));
+    return k::StripTrailingNL(k::ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ title }}')", 0, 0));
 }
 
 void Media(std::string &Out) {
@@ -140,7 +140,7 @@ void Media(std::string &Out) {
     if(Out != O) {
         Output.push_back(R"($(printf ")" + O + R"("))");
         Out = O;
-        WriteFileLines(Output, MediaOutputFile);
+        k::WriteFileLines(Output, MediaOutputFile);
     }
 }
 
@@ -149,7 +149,7 @@ int main() {
     while(1) {
         Media(Out);
         std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
-        BreakPoint();
+        k::BreakPoint();
     }
     return 0;
 }

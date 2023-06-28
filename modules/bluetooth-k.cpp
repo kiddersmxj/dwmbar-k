@@ -18,8 +18,8 @@ void Bluetooth(std::string &Out) {
     if(!Run())
         return;
     std::vector<std::string> Output;
-    std::string Device = ExecCmd(R"(bluetoothctl info | grep Name | awk -F': ' '{print $2}')", 0, 0);
-    Device = StripTrailingNL(Device);
+    std::string Device = k::ExecCmd(R"(bluetoothctl info | grep Name | awk -F': ' '{print $2}')", 0, 0);
+    Device = k::StripTrailingNL(Device);
 
     std::vector<std::string> b(1);
     if(Device == "") {
@@ -32,8 +32,8 @@ void Bluetooth(std::string &Out) {
 
     if(Device != Out) {
         Output.push_back(Device);
-        WriteFileLines(Output, BluetoothOutputFile);
-        WriteFileLines(b, BluetoothDataFile);
+        k::WriteFileLines(Output, BluetoothOutputFile);
+        k::WriteFileLines(b, BluetoothDataFile);
     }
     Out = Device;
 }
@@ -42,11 +42,11 @@ int main() {
     std::string Out = " ";
     std::vector<std::string> b(1);
     b.at(0) = "0";
-    WriteFileLines(b, BluetoothDataFile);
+    k::WriteFileLines(b, BluetoothDataFile);
     while(1) {
         Bluetooth(Out);
         std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
-        BreakPoint();
+        k::BreakPoint();
     }
     return 0;
 }

@@ -25,7 +25,7 @@ static void error_close_exit(const char *errmsg, int err, snd_mixer_t *h_mixer) 
     std::vector<std::string> Output;
     Output.push_back("");
 
-    WriteFileLines(Output, VolumeOutputFile);
+    k::WriteFileLines(Output, VolumeOutputFile);
 	if (h_mixer != NULL)
 		snd_mixer_close(h_mixer);
 	exit(EXIT_FAILURE);
@@ -89,9 +89,9 @@ void SetVolumeLevel(char *device, char *selem_name, long vol) {
 
 int Volume() {
     int Level = GetVolumeLevel(device, selem_name);
-    if(selem_name == "Master") {
-        k::map(
-    }
+    /* if(selem_name == "Master") { */
+    /*     k::map( */
+    /* } */
     if(Level >= VHigh) {
         VIcon = IVolHigh;
     } else if(Level >= VMid) {
@@ -107,7 +107,7 @@ int Volume() {
     std::vector<std::string> Output;
     Output.push_back(R"($(printf ")" + VCol[0] + VIcon + R"( %s" ")" + VCol[1] + std::to_string(Level) + R"(%"))");
 
-     WriteFileLines(Output, VolumeOutputFile);
+     k::WriteFileLines(Output, VolumeOutputFile);
 
 #ifdef VolMCOUT
     VPrint(Output);
@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
     FILE *file;
     if ((file = fopen("a.txt", "r"))) {
       fclose(file);
-        if(ReadFileLines(BluetoothDataFile).at(0) == "1")
+        if(k::ReadFileLines(BluetoothDataFile).at(0) == "1")
             selem_name = "Master";
     }
     // If no args are given get volume

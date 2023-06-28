@@ -69,7 +69,8 @@ int Time() {
         /* time_t tt = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()); */
         // TODO get date again when time = 00:00
         Output.push_back(R"($(printf ")" + TCol[0] + IDate + " " + TCol[1] + S.at(0) + " " + TCol[2] + S.at(1) + " " + TCol[3] + GetTime() + BDCol + R"("))");
-        WriteFileLines(Output, TimeOutputFile);
+        /* std::cout << Output.at(0) << std::endl; */
+        k::WriteFileLines(Output, TimeOutputFile);
 
 #ifdef TimeMCOUT
         std::cout << Output.front() << std::endl;
@@ -80,6 +81,7 @@ int Time() {
 }
 
 int main() {
+    std::cout << "T" << std::endl;
         Time();
     return 0;
 }
