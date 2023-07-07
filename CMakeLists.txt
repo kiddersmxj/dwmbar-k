@@ -97,7 +97,7 @@ install(
 
 install(
     TARGETS network-k
-    DESTINATION /usr/local/bin/dwmbar-k/modulPUBLIC
+    DESTINATION /usr/local/bin/dwmbar-k/modules/
 )
 
 install(
