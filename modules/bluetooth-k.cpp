@@ -17,7 +17,8 @@ void Bluetooth(std::string &Out) {
     if(!Run())
         return;
     std::vector<std::string> Output;
-    std::string Device = k::ExecCmd(R"(bluetoothctl info | grep Name | awk -F': ' '{print $2}')", 0, 0);
+    std::string Device;
+    k::ExecCmd(R"(bluetoothctl info | grep Name | awk -F': ' '{print $2}')", Device);
     Device = k::StripTrailingNL(Device);
 
     std::vector<std::string> b(1);

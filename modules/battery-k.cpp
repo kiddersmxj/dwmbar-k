@@ -60,8 +60,10 @@ int Battery(std::string &Out) {
     std::cout << "1 " << std::endl;
 #endif
     // Get battery info through acpi
-    std::string ChargingStat = k::ExecCmd(ChargingStatCmd, 0, 0);
-    std::string BatteryLevelString = k::ExecCmd(BatteryLevelCmd, 0, 0);
+    std::string ChargingStat;
+    k::ExecCmd(ChargingStatCmd, ChargingStat);
+    std::string BatteryLevelString;
+    k::ExecCmd(BatteryLevelCmd, BatteryLevelString);
     // Catch errors
     if(BatteryLevelString == "") {
         std::cout << "acpi did not exec" << std::endl;

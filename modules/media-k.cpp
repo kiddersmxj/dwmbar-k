@@ -32,7 +32,8 @@ std::vector<std::string> SplitString(const std::string& str) {
 }
 
 std::vector<std::string> GetPlayers() {
-    std::string Players = k::ExecCmd(R"(playerctl -l)", 0, 0);
+    std::string Players;
+    k::ExecCmd(R"(playerctl -l)", Players);
     std::vector<std::string> PlayersVector = SplitString(Players);
     PlayersVector.pop_back();
 #ifdef MCOUT
@@ -49,7 +50,9 @@ std::string GetPlayer() {
 #ifdef MediaDCOUT
         std::cout << "P-" << P << "-" << std::endl;
 #endif
-        std::string Output = k::StripTrailingNL(k::ExecCmd(R"(playerctl -p )" + P + R"( status)", 0, 0));
+        std::string Output;
+        k::ExecCmd(R"(playerctl -p )" + P + R"( status)", Output);
+        Output = k::StripTrailingNL(Output);
 #ifdef MediaDCOUT
         std::cout << "out-" << Output << "-" << std::endl;
 #endif
@@ -76,7 +79,9 @@ std::string GetPlayer() {
 
 std::string GetTimeFromStart() {
 	int Time, Sec, Min;
-	Time = stoi(k::ExecCmd(R"(playerctl position | sed 's/..\{6\}$//')", 0, 0));
+    std::string Output;
+    k::ExecCmd(R"(playerctl position | sed 's/..\{6\}$//')", Output);
+	Time = stoi(Output);
 	Min = (Time % 3600) / 60;
 	Sec = Time % 60;
 #ifdef MediaDCOUT
@@ -88,11 +93,15 @@ std::string GetTimeFromStart() {
 }
 
 std::string GetArtist(std::string Player) {
-    return k::StripTrailingNL(k::ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ artist }}')", 0 ,0));
+    std::string Output;
+    k::ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ artist }}')", Output);
+    return k::StripTrailingNL(Output);
 }
 
 std::string GetTitle(std::string Player) {
-    return k::StripTrailingNL(k::ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ title }}')", 0, 0));
+    std::string Output;
+    k::ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ title }}')", Output);
+    return k::StripTrailingNL(Output);
 }
 
 void Media(std::string &Out) {

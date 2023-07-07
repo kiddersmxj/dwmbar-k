@@ -158,7 +158,7 @@ void KillModule(std::string Module) {
 #endif
     std::stringstream KillCmd;
     KillCmd << "pkill "<< Module << " 2> /dev/null &";
-    k::ExecCmd(KillCmd.str().c_str(), 0, 0);
+    k::ExecCmd(KillCmd.str().c_str());
 }
 
 std::string GetModuleOutput(std::string Module) {
@@ -188,17 +188,17 @@ std::string ParseModuleNo(std::string ModuleNo) {
 }
 
 void RefreshDirs() {
-    k::ExecCmd(R"(rm -rf )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    k::ExecCmd(R"(rm -rf )" + CDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    k::ExecCmd(R"(rm -rf )" + DDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    k::ExecCmd(R"(rm -rf )" + ODir + R"( > /dev/null 2>&1 || echo 1)");
+    k::ExecCmd(R"(rm -rf )" + CDir + R"( > /dev/null 2>&1 || echo 1)");
+    k::ExecCmd(R"(rm -rf )" + DDir + R"( > /dev/null 2>&1 || echo 1)");
     InitDirs();
 }
 
 void InitDirs() {
-    k::ExecCmd(R"(mkdir )" + ODir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    k::ExecCmd(R"(mkdir )" + TDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    k::ExecCmd(R"(mkdir )" + CDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
-    k::ExecCmd(R"(mkdir )" + DDir + R"( > /dev/null 2>&1 || echo 1)", 0, 0);
+    k::ExecCmd(R"(mkdir )" + ODir + R"( > /dev/null 2>&1 || echo 1)");
+    k::ExecCmd(R"(mkdir )" + TDir + R"( > /dev/null 2>&1 || echo 1)");
+    k::ExecCmd(R"(mkdir )" + CDir + R"( > /dev/null 2>&1 || echo 1)");
+    k::ExecCmd(R"(mkdir )" + DDir + R"( > /dev/null 2>&1 || echo 1)");
 }
 
 int Enabled(int i) {
@@ -209,7 +209,9 @@ void RunModules(bool &Started) {
 #ifndef NORUN
     for(int i=0; i<ModulesLength; i++) {
         if(ParentControlled[i]) {
-            if(k::ExecCmd("ps -a | grep " + Modules[i], 0, 0) == "") {
+            std::string Output;
+            k::ExecCmd("ps -a | grep " + Modules[i], Output);
+            if(Output == "") {
                 if(Enabled(i))
                     RunModule(Modules[i]);
             }
@@ -227,7 +229,7 @@ void XSR(std::string Body) {
 #ifdef COUT
 	std::cout << Cmd << std::endl;
 #endif
-    k::ExecCmd(Cmd, 0, 0);
+    k::ExecCmd(Cmd);
 }
 
 std::string ParseXSR(std::vector<std::string> OutputVector) {
@@ -272,7 +274,9 @@ std::string ParseXSR(std::vector<std::string> OutputVector) {
 
 void KillModules() {
         for(int i=0; i<ModulesLength; i++) {
-            if(k::ExecCmd("ps -a | grep " + Modules[i], 0, 0) != "") {
+            std::string Output;
+            k::ExecCmd("ps -a | grep " + Modules[i], Output);
+            if(Output != "") {
                 KillModule(Modules[i]);
             }
         }

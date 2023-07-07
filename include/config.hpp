@@ -3,6 +3,8 @@
 
 #include <std-k.hpp>
 
+#include <cstring>
+#include <cmath>
 #include <iostream>
 #include <string>
 #include <vector>

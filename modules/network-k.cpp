@@ -15,23 +15,23 @@ int Run() {
 
 std::string GetConnectionName() {
     std::string Name;
-    Name = k::ExecCmd(R"(nmcli -a | grep 'Wired connection' | awk 'NR==1{print $1}')", 0, 0);
+    k::ExecCmd(R"(nmcli -a | grep 'Wired connection' | awk 'NR==1{print $1}')", Name);
     if(Name == "")
-        Name = k::ExecCmd(R"(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -c 5-)", 0, 0);
+        k::ExecCmd(R"(nmcli -t -f active,ssid dev wifi | grep '^yes' | cut -c 5-)", Name);
     Name = k::StripTrailingNL(Name);
     return Name;
 }
 
 std::string GetPublicIP() {
     std::string IP;
-    IP = k::ExecCmd(R"(curl -s https://ipinfo.io/ip)", 0, 0);
+    k::ExecCmd(R"(curl -s https://ipinfo.io/ip)", IP);
     IP = k::StripTrailingNL(IP);
     return IP;
 }
 
 std::string GetPrivateIP() {
     std::string IP;
-    IP = k::ExecCmd(R"(nmcli -a | grep -m 1 'inet4 ' | awk '{print $2}')", 0, 0);
+    k::ExecCmd(R"(nmcli -a | grep -m 1 'inet4 ' | awk '{print $2}')", IP);
     IP = k::StripTrailingNL(IP);
     return IP;
 }

@@ -16,7 +16,8 @@ int Run() {
 int Weather(std::string &Out) {
     if(!Run())
         return 1;
-    std::string WttrHex = k::ExecCmd(R"(timeout 1 curl -s wttr.in/$LOCATION?format=1 | hexdump -v -e '"\\\x" 1/1 "%02x"')", 0, 0);
+    std::string WttrHex;
+    k::ExecCmd(R"(timeout 1 curl -s wttr.in/$LOCATION?format=1 | hexdump -v -e '"\\\x" 1/1 "%02x"')", WttrHex);
     if(WttrHex == "") {
         std::cout << "curl did not exec" << std::endl;
         return 1;
