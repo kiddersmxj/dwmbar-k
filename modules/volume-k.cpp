@@ -124,11 +124,11 @@ int main(int argc, char** argv) {
     const char* f = BluetoothDataFile.c_str();
     if((file = fopen(f, "r"))) {
       fclose(file);
-        if(k::ReadFileLines(BluetoothDataFile).at(0) == "1") {
+        /* if(k::ReadFileLines(BluetoothDataFile).at(0) == "0") { */
             selem_name = "Master";
-        } else
+        /* } else */
             /* char *selem_name = std::getenv("scontrol"); */
-            selem_name = "Speaker";
+            /* selem_name = "Speaker"; */
             // Get $scontrol variable set in .bashrc
     }
     // If no args are given get volume
