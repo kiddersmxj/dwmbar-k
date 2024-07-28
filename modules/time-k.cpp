@@ -56,6 +56,8 @@ int Time() {
     std::chrono::system_clock::time_point T = std::chrono::system_clock::now() + 1s;
     std::chrono::system_clock::duration Delay = 990ms;
     std::vector<std::string> S = GetDate();
+    std::chrono::system_clock::time_point LastGetDateT = T;
+    std::chrono::system_clock::duration LastGetDateDelay = 5min;
     while(1) {
         std::chrono::system_clock::duration t = std::chrono::system_clock::now() - T;
         std::vector<std::string> Output;
@@ -67,6 +69,12 @@ int Time() {
         Output.push_back(R"($(printf ")" + TCol[0] + IDate + " " + TCol[1] + S.at(0) + " " + TCol[2] + S.at(1) + " " + TCol[3] + GetTime() + BDCol + R"("))");
         /* std::cout << Output.at(0) << std::endl; */
         k::WriteFileLines(Output, TimeOutputFile);
+
+        std::chrono::system_clock::duration LastGetDatet = std::chrono::system_clock::now() - LastGetDateT;
+        if((LastGetDateDelay - LastGetDatet) < 0s) {
+            LastGetDateT = std::chrono::system_clock::now();
+            S = GetDate();
+        }
 
 #ifdef TimeMCOUT
         std::cout << Output.front() << std::endl;
