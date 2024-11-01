@@ -14,11 +14,12 @@
 using std::chrono_literals::operator""ms;
 
 const int ModulesLength = 7;
-const std::string Modules[ModulesLength] =  { "network-k", "time-k", "weather-k", "bluetooth-k", "media-k", "battery-k", "volume-k" };
-const int EnabledModules[ModulesLength] =   { 1,           1,        1,           1,             1,         1,           1 };
-const int ParentControlled[ModulesLength] = { 0,           0,        0,           0,             0,         0,           1 };
+const std::string Modules[ModulesLength] =  { "network", "time", "weather", "bluetooth", "media", "battery", "volume" };
+const int EnabledModules[ModulesLength] =   { 1,         1,      1,         1,           1,       1,         1 };
 
-const std::vector<std::string> ModuleLayout = { "1", "4", "2", ";", "6", "3", "7", "5" };
+const std::vector<std::string> ModuleLayout = { "network", "bluetooth", "time", ";", "battery", "weather", "volume", "media" };
+
+const std::string NoOutputCode = "NaN";
 
 // Scale the volume based on individual system - 1 for off
 const float VolScaler = 1.0;
@@ -33,43 +34,16 @@ const std::string DT = getenv("logdatetime");
 const std::string TmpDir = "/tmp/dwmbar-k"; // Dir to store tmp files in
 const std::string WDir = "/usr/local/bin/dwmbar-k"; // Working directory
 const std::string TDir = TmpDir; // Full TmpDir path
-const std::string OutputDir = "output"; // Name of output files dir
-const std::string ODir = TDir + "/" + OutputDir; // Full OutputDir path
-const std::string ClockDir = "clock"; // Name of clock file dir
-const std::string CDir = TDir + "/" + ClockDir; // Full ClockDir path
-const std::string DataDir = "data"; // Name of data file dir
-const std::string DDir = TDir + "/" + DataDir; // Full DataDir path
 const std::string Logfile = "/log/dwmbar-k/" + DT + ".dwmbar.log"; // Full DataDir path
-// Output file store locations
-const std::string NetworkOutputFile = ODir + "/network-k.txt";
-const std::string TimeOutputFile = ODir + "/time-k.txt";
-const std::string WeatherOutputFile = ODir + "/weather-k.txt";
-const std::string VolumeOutputFile = ODir + "/volume-k.txt";
-const std::string MediaOutputFile = ODir + "/media-k.txt";
-const std::string BatteryOutputFile = ODir + "/battery-k.txt";
-const std::string BluetoothOutputFile = ODir + "/bluetooth-k.txt";
-// Data file store locations
-const std::string NetworkDataFile = DDir + "/network.txt";
-const std::string TimeDataFile = DDir + "/time.txt";
-const std::string WeatherDataFile = DDir + "/weather.txt";
-const std::string VolumeDataFile = DDir + "/volume.txt";
-const std::string MediaDataFile = DDir + "/media.txt";
-const std::string BatteryDataFile = DDir + "/battery.txt";
-const std::string BluetoothDataFile = DDir + "/bluetooth.txt";
-
-const int MaxClock = 100; // Maximum clock value before reset
-const int ClockFrq = 1; // How many in prog clock cycles before pulse
-// How many clock cycles each module runs
-const int NetworkFrq = 50;
-const int TimeFrq = 1;
-const int WeatherFrq = 100;
-const int VolumeFrq = 5;
-const int MediaFrq = 5;
-const int BatteryFrq = 3;
-const int BluetoothFrq = 5;
 
 const std::chrono::system_clock::duration Latency = 200ms; // How long while loop waits before re-execution in ms
-const int SleepTime = 50; // How long while loop waits before re-execution in ms
+const int SleepTime = 200; // How long while loop waits before re-execution in ms
+const int BluetoothSleepTime = 1000;
+const int NetworkSleepTime = 1000;
+const int MediaSleepTime = 100;
+const int VolumeSleepTime = 500;
+const int WeatherSleepTime = 10000;
+const int BatterySleepTime = 600;
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon
