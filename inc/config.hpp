@@ -13,11 +13,11 @@
 
 using std::chrono_literals::operator""ms;
 
-const int ModulesLength = 7;
-const std::string Modules[ModulesLength] =  { "network", "time", "weather", "bluetooth", "media", "battery", "volume" };
-const int EnabledModules[ModulesLength] =   { 1,         1,      1,         1,           1,       1,         1 };
+const int ModulesLength = 8;
+const std::string Modules[ModulesLength] =  { "network", "time", "weather", "bluetooth", "media", "battery", "volume", "signal" };
+const int EnabledModules[ModulesLength] =   { 1,         1,      1,         1,           1,       1,         1,             1 };
 
-const std::vector<std::string> ModuleLayout = { "network", "bluetooth", "time", ";", "battery", "weather", "volume", "media" };
+const std::vector<std::string> ModuleLayout = { "network", "bluetooth", "time", ";", "battery", "signal", "weather", "volume", "media" };
 
 const std::string NoOutputCode = "NaN";
 
@@ -37,13 +37,14 @@ const std::string TDir = TmpDir; // Full TmpDir path
 const std::string Logfile = "/log/dwmbar-k/" + DT + ".dwmbar.log"; // Full DataDir path
 
 const std::chrono::system_clock::duration Latency = 200ms; // How long while loop waits before re-execution in ms
-const int SleepTime = 200; // How long while loop waits before re-execution in ms
+const int SleepTime = 100; // How long while loop waits before re-execution in ms
 const int BluetoothSleepTime = 1000;
 const int NetworkSleepTime = 1000;
-const int MediaSleepTime = 100;
+const int MediaSleepTime = 50;
 const int VolumeSleepTime = 500;
 const int WeatherSleepTime = 10000;
 const int BatterySleepTime = 600;
+const int SignalSleepTime = 500;
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon
@@ -66,6 +67,9 @@ const std::string ModuleDelimeter = "|";
 const std::string BarDelimeter = ";";
 
 const std::string IInternet = R"(\xef\x82\xac)";
+
+const std::string IArrowUp = R"(\xef\x85\xb6)";
+const std::string IArrowDown = R"(\xef\x85\xb5)";
 
 const std::string IDate = R"(\xef\x84\xb3)";
 
@@ -108,6 +112,11 @@ namespace Colour {
 
 const std::string BDCol = Colour::Grey;
 
+const int SignalNumColours = 6;
+const std::string SCol[SignalNumColours] = {
+    Colour::Magenta, Colour::Magenta, Colour::Grey, Colour::Magenta, Colour::Magenta, Colour::Grey
+//              Icon                Number              Unit                Icon                Number              Unit
+};
 const int NetworkNumColours = 4;
 const std::string NCol[NetworkNumColours] = {
     Colour::Magenta, Colour::Magenta, Colour::Grey, Colour::Magenta

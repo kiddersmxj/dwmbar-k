@@ -13,6 +13,7 @@
 #include "volume.hpp"
 #include "weather.hpp"
 #include "battery.hpp"
+#include "signal.hpp"
 #include "config.hpp"
 
 
