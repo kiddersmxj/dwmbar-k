@@ -18,24 +18,24 @@ endif()
  
 # ------------------------------------------------------------------------------
 
-project(dwmbar
+project(dwmbarsrc
   LANGUAGES CXX
   VERSION 1.0.0
 )
 
-add_executable(dwmbar src/dwmbar.cpp)
-# add_executable(dwmbar src/wrapper.cpp)
+add_executable(dwmbarsrc src/dwmbar.cpp)
+add_executable(dwmbar src/wrapper.cpp)
 
+target_include_directories(dwmbarsrc
+    PRIVATE src
+    SHARED ${std-k_SOURCE_DIR}/inc
+)
 target_include_directories(dwmbar
     PRIVATE src
     SHARED ${std-k_SOURCE_DIR}/inc
 )
-# target_include_directories(dwmbar
-#     PRIVATE src
-#     SHARED ${std-k_SOURCE_DIR}/inc
-# )
 
-target_sources(dwmbar
+target_sources(dwmbarsrc
     PRIVATE src/dwmbar.cpp
     PRIVATE src/bluetooth.cpp
     PRIVATE src/network.cpp
@@ -47,20 +47,24 @@ target_sources(dwmbar
     PRIVATE src/module.cpp
 )
 
-install(
-    TARGETS dwmbar
-    DESTINATION /usr/local/bin/dwmbar-k/
+target_sources(dwmbar
+    PRIVATE src/wrapper.cpp
 )
 
-# install(
-#     TARGETS dwmbar
-#     DESTINATION /usr/local/bin/
-# )
+install(
+    TARGETS dwmbarsrc
+    DESTINATION /usr/local/bin/dwmbarsrc/
+)
+
+install(
+    TARGETS dwmbar
+    DESTINATION /usr/local/bin/
+)
 
 find_package(ALSA REQUIRED)
 if(ALSA_FOUND)                 
     include_directories(${ALSA_INCLUDE_DIRS})
-    target_link_libraries(dwmbar
+    target_link_libraries(dwmbarsrc
         PRIVATE ${ALSA_LIBRARIES}
         PRIVATE std-k
     )
@@ -69,9 +73,9 @@ endif(ALSA_FOUND)
 link_directories( ${std-k_BINARY_DIR} )
 message(${CMAKE_CURRENT_BINARY_DIR})
 message(${std-k_SOURCE_DIR}/inc)
+target_link_libraries(dwmbarsrc
+    PUBLIC std-k
+)
 target_link_libraries(dwmbar
     PUBLIC std-k
 )
-# target_link_libraries(dwmbar
-#     PUBLIC std-k
-# )
