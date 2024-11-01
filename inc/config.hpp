@@ -37,12 +37,12 @@ const std::string TDir = TmpDir; // Full TmpDir path
 const std::string Logfile = "/log/dwmbar-k/" + DT + ".dwmbar.log"; // Full DataDir path
 
 const std::chrono::system_clock::duration Latency = 200ms; // How long while loop waits before re-execution in ms
-const int SleepTime = 100; // How long while loop waits before re-execution in ms
+const int SleepTime = 200; // How long while loop waits before re-execution in ms
 const int BluetoothSleepTime = 1000;
 const int NetworkSleepTime = 1000;
 const int MediaSleepTime = 100;
-const int VolumeSleepTime = 100;
-const int WeatherSleepTime = 100;
+const int VolumeSleepTime = 500;
+const int WeatherSleepTime = 10000;
 const int BatterySleepTime = 600;
 
 // Volume levels as a percentage for corresponding icons
