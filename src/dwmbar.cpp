@@ -12,6 +12,7 @@ int main() {
     VolumeModule volumeModule;
     WeatherModule weatherModule;
     BatteryModule batteryModule;
+    SignalModule signalModule;
 
     std::thread networkThread(&NetworkModule::run, &networkModule);
     std::thread bluetoothThread(&BluetoothModule::run, &bluetoothModule);
@@ -20,6 +21,7 @@ int main() {
     std::thread volumeThread(&VolumeModule::run, &volumeModule);
     std::thread weatherThread(&WeatherModule::run, &weatherModule);
     std::thread batteryThread(&BatteryModule::run, &batteryModule);
+    std::thread signalThread(&SignalModule::run, &signalModule);
 
     std::vector<std::pair<std::string, Module*>> modules = {
         {"network", &networkModule},
@@ -29,6 +31,7 @@ int main() {
         {"volume", &volumeModule},
         {"weather", &weatherModule},
         {"battery", &batteryModule},
+        {"signal", &signalModule},
     };
 
     while (true) {
@@ -85,7 +88,9 @@ int main() {
     volumeThread.join();
     weatherThread.join();
     batteryThread.join();
-    return 1;
+    signalThread.join();
+
+    return 0;
 }
 
 int Enabled(int i) {
