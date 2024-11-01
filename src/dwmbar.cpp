@@ -40,6 +40,7 @@ int main() {
             std::unique_lock<std::mutex> lock(mod->getOutputMutex());
             if (mod->getOutputCV().wait_for(lock, std::chrono::milliseconds(1), [&]{ return !mod->getOutputNoLock().empty(); })) {
                 output = mod->getOutputNoLock();
+                if(output == "NaN") output = "";
                 outputVector.emplace_back(name, output);  // Add name-output pair to vector
             }
         }
