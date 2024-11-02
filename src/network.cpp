@@ -11,8 +11,8 @@ void NetworkModule::run() {
         std::string publicIP = getPublicIP();
 
         if (!connName.empty()) {
-            output = R"($(printf ")" + NCol[0] + IInternet + " " + NCol[1] + connName + " " \
-                     + NCol[2] + privateIP + NCol[3] + " " + publicIP + BDCol + R"("))";
+            output = NCol[0] + IInternet + " " + NCol[1] + connName + " " \
+                     + NCol[2] + privateIP + NCol[3] + " " + publicIP + BDCol;
             // std::cout << "NetworkModule: Updating output to " << output << std::endl;  // Debug
 
             updateOutput(output);

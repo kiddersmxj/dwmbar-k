@@ -15,7 +15,7 @@ void MediaModule::run() {
             title = GetTitle(player);
             time = GetTimeFromStart();
 
-            output = R"($(printf ")" + MCol[0] + IPlay + " " + MCol[1] + artist + MCol[2] + " - " + MCol[3] + title + MCol[4] + " (" + MCol[5] + time + MCol[4] + ")" + R"("))";
+            output = MCol[0] + IPlay + " " + MCol[1] + artist + MCol[2] + " - " + MCol[3] + title + MCol[4] + " (" + MCol[5] + time + MCol[4] + ")";
 
             updateOutput(output);
         } else {

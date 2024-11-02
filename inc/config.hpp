@@ -17,7 +17,22 @@ const int ModulesLength = 10;
 const std::string Modules[ModulesLength] =  { "network", "time", "weather", "bluetooth", "media", "battery", "volume", "signal", "cpu", "throttling" };
 const int EnabledModules[ModulesLength] =   { 1,         1,      1,         1,           1,       1,         1,         1,      1};
 
-const std::vector<std::string> ModuleLayout = { "network", "bluetooth", "time", ";", "battery", "signal", "weather", "throttling", "cpu", "volume", "media" };
+const std::string Separator = ";";
+
+const std::vector<std::string> ModuleLayout = {
+    "network",
+    "time",
+    Separator,
+    "cpu",
+    "throttling",
+    "bluetooth",
+    "signal",
+    "weather",
+    Separator,
+    "battery",
+    "volume",
+    "media",
+};
 
 const std::string NoOutputCode = "NaN";
 
@@ -46,7 +61,7 @@ const int WeatherSleepTime = 10000;
 const int BatterySleepTime = 600;
 const int SignalSleepTime = 500;
 const int CPUSleepTime = 500;
-const int ThermalThrottleSleepTime = 500;
+const int ThermalThrottleSleepTime = 2000;
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon

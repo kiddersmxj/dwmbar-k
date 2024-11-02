@@ -96,8 +96,8 @@ int BatteryModule::Battery() {
         }
     }
 
-    std::string formattedOutput = R"($(printf ")" + BColI + BIcon + " %s" + CIcon + R"(" ")" \
-                                  + BCol[6] + std::to_string(BatteryLevel) + "%" + R"("))";
+    std::string formattedOutput = BColI + BIcon + CIcon + " " \
+                                  + BCol[6] + std::to_string(BatteryLevel) + "%";
 
     updateOutput(formattedOutput);
 

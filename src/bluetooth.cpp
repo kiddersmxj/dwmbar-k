@@ -10,8 +10,8 @@ void BluetoothModule::run() {
         std::string deviceName = getBluetoothDeviceName();
 
         if (!deviceName.empty()) {
-            output = R"($(printf ")" + BlCol[0] + IBluetooth + " " + BlCol[1] + deviceName + R"("))";
-            std::cout << "BluetoothModule: Updating output to " << output << std::endl;  // Debug
+            output = BlCol[0] + IBluetooth + " " + BlCol[1] + deviceName;
+            // std::cout << "BluetoothModule: Updating output to " << output << std::endl;  // Debug
             updateOutput(output);
         } else {
             // std::cout << "BluetoothModule: No Bluetooth" << std::endl;  // Debug

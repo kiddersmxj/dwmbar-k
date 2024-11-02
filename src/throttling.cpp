@@ -18,7 +18,7 @@ bool ThermalThrottlingModule::CheckThermalThrottling() {
         return false;
     }
 
-    std::cout << throttleCount << std::endl;
+    // std::cout << throttleCount << std::endl;
 
     return throttleCount > 0;
 }
@@ -26,10 +26,10 @@ bool ThermalThrottlingModule::CheckThermalThrottling() {
 void ThermalThrottlingModule::run() {
     while (true) {
         bool isThrottling = CheckThermalThrottling();
-        std::string output = isThrottling ? R"($(printf ")" + ThCol[0] + IThermometer + R"("))" \
+        std::string output = isThrottling ? ThCol[0] + IThermometer \
                              + BDCol : "";
         updateOutput(output);
-        std::cout << output << std::endl; // Debug print
+        // std::cout << output << std::endl; // Debug print
         std::this_thread::sleep_for(std::chrono::milliseconds(ThermalThrottleSleepTime));
     }
 }

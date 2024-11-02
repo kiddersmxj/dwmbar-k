@@ -30,7 +30,7 @@ void VolumeModule::run() {
         
         if (Level >= 0) {
             std::string Icon = (Level >= VHigh) ? IVolHigh : (Level >= VMid) ? IVolMid : (Level >= VLow) ? IVolLow : IVolMute;
-            Out = R"($(printf ")" + VCol[0] + Icon + R"( %s" ")" + VCol[1] + std::to_string(Level) + R"(%"))";
+            Out = VCol[0] + Icon + " " + VCol[1] + std::to_string(Level) + "%";
         } else {
             Out = "Muted";
         }

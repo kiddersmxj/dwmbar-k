@@ -20,7 +20,7 @@ void TimeModule::run() {
             std::this_thread::sleep_for(Delay - t);
         T = std::chrono::system_clock::now();
 
-        Out = R"($(printf ")" + TCol[0] + IDate + " " + TCol[1] + S.at(0) + " " + TCol[2] + S.at(1) + " " + TCol[3] + GetTime() + BDCol + R"("))";
+        Out = TCol[0] + IDate + " " + TCol[1] + S.at(0) + " " + TCol[2] + S.at(1) + " " + TCol[3] + GetTime() + BDCol;
 
         updateOutput(Out);
 

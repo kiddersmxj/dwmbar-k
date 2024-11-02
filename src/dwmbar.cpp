@@ -1,4 +1,8 @@
 #include "../inc/dwmbar.hpp"
+#include <X11/Xlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <thread>
 #include <iostream>
 #include <vector>
@@ -62,9 +66,9 @@ int main() {
         // Order the outputs based on ModuleLayout
         std::vector<std::string> OrderedVector;
         for (const auto& moduleName : ModuleLayout) {
-            if (moduleName == ";") {
+            if (moduleName == Separator) {
                 // Add the separator directly to OrderedVector
-                OrderedVector.push_back(";");
+                OrderedVector.push_back(Separator);
             } else {
                 // Find the corresponding output in outputVector
                 auto it = std::find_if(outputVector.begin(), outputVector.end(),
@@ -105,10 +109,10 @@ int Enabled(int i) {
     return EnabledModules[i];
 }
 
-void XSR(std::string Body) {
-	std::string Cmd = R"(xsetroot -name ")" + Body + R"(")";
-    k::ExecCmd(Cmd);
-}
+// void XSR(std::string Body) {
+// 	std::string Cmd = R"(xsetroot -name ")" + Body + R"(")";
+//     k::ExecCmd(Cmd);
+// }
 
 std::string ParseXSR(std::vector<std::string> OutputVector) {
 	std::string XSRBody = "";
@@ -138,6 +142,43 @@ std::string ParseXSR(std::vector<std::string> OutputVector) {
     }
 
 	return XSRBody;
+}
+
+// Function to decode hex-encoded sequences
+void decode_hex_string(const char *input, char *output) {
+    while (*input) {
+        if (*input == '\\' && *(input + 1) == 'x') {
+            // Convert the hex pair to a character
+            char hex[3] = { *(input + 2), *(input + 3), '\0' };
+            *output++ = (char)strtol(hex, NULL, 16);
+            input += 4; // Move past the hex sequence
+        } else {
+            *output++ = *input++;
+        }
+    }
+    *output = '\0'; // Null-terminate the output string
+}
+
+// Function to set the root window name with a passed status string
+void XSR(const std::string &raw_status) {
+    Display *display = XOpenDisplay(NULL);
+    if (display == NULL) {
+        fprintf(stderr, "Unable to open X display\n");
+        return;
+    }
+
+    Window root = DefaultRootWindow(display);
+
+    // Decode the status string
+    char decoded_status[2048];
+    decode_hex_string(raw_status.c_str(), decoded_status);
+
+    // Set the root window name
+    XStoreName(display, root, decoded_status);
+    XFlush(display);
+
+    // Close the connection to the X server
+    XCloseDisplay(display);
 }
 
 std::string ParseModuleNo(std::string ModuleNo) {

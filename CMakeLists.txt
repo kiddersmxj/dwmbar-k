@@ -64,6 +64,14 @@ install(
     DESTINATION /usr/local/bin/
 )
 
+find_package(X11 REQUIRED)
+if (X11_FOUND)
+    target_include_directories(dwmbarsrc PRIVATE ${X11_INCLUDE_DIR})
+    target_link_libraries(dwmbarsrc PRIVATE ${X11_LIBRARIES})
+else()
+    message(FATAL_ERROR "X11 not found on your system")
+endif()
+
 find_package(ALSA REQUIRED)
 if(ALSA_FOUND)                 
     include_directories(${ALSA_INCLUDE_DIRS})
