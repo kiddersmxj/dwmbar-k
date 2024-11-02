@@ -16,6 +16,7 @@
 #include "signal.hpp"
 #include "cpu.hpp"
 #include "throttling.hpp"
+#include "brightness.hpp"
 #include "config.hpp"
 
 

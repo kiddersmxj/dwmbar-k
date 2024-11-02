@@ -13,9 +13,22 @@
 
 using std::chrono_literals::operator""ms;
 
-const int ModulesLength = 10;
-const std::string Modules[ModulesLength] =  { "network", "time", "weather", "bluetooth", "media", "battery", "volume", "signal", "cpu", "throttling" };
-const int EnabledModules[ModulesLength] =   { 1,         1,      1,         1,           1,       1,         1,         1,      1};
+const int ModulesLength = 11;
+const std::string Modules[ModulesLength] =  { 
+    "network",
+    "time",
+    "weather",
+    "bluetooth",
+    "media",
+    "battery",
+    "volume",
+    "signal",
+    "cpu",
+    "throttling",
+    "brightness",
+};
+
+const int EnabledModules[ModulesLength] = { 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
 const std::string Separator = ";";
 
@@ -25,6 +38,7 @@ const std::vector<std::string> ModuleLayout = {
     Separator,
     "cpu",
     "throttling",
+    "brightness",
     "bluetooth",
     "signal",
     "weather",
@@ -62,6 +76,7 @@ const int BatterySleepTime = 600;
 const int SignalSleepTime = 500;
 const int CPUSleepTime = 500;
 const int ThermalThrottleSleepTime = 2000;
+const int BrightnessSleepTime = 500;
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon
@@ -110,6 +125,8 @@ const std::string IPause = R"(\xe2\x8f\xb8)";
 const std::string IBluetooth = R"(\xef\x8a\x94)";
 
 const std::string IThermometer = R"(\xef\x8b\x87)";
+
+const std::string ILight = R"(\xef\x83\xab)";
 
 // Colours
 namespace Colour {
@@ -172,6 +189,11 @@ const int CPUNumColours = 2;
 const std::string CPUCol[CPUNumColours] = {
     Colour::Green, Colour::Grey
 //        Icon                 Number
+};
+const int BrightnessNumColours = 2;
+const std::string BrCol[BrightnessNumColours] = {
+    Colour::Yellow, Colour::Grey
+//        Icon                 Name
 };
 const int BluetoothNumColours = 2;
 const std::string BlCol[BluetoothNumColours] = {
