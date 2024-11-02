@@ -15,6 +15,7 @@
 #include "battery.hpp"
 #include "signal.hpp"
 #include "cpu.hpp"
+#include "throttling.hpp"
 #include "config.hpp"
 
 

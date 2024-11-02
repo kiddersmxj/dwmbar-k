@@ -46,6 +46,7 @@ target_sources(dwmbarsrc
     PRIVATE src/battery.cpp
     PRIVATE src/signal.cpp
     PRIVATE src/cpu.cpp
+    PRIVATE src/throttling.cpp
     PRIVATE src/module.cpp
 )
 
