@@ -13,11 +13,11 @@
 
 using std::chrono_literals::operator""ms;
 
-const int ModulesLength = 9;
-const std::string Modules[ModulesLength] =  { "network", "time", "weather", "bluetooth", "media", "battery", "volume", "signal", "cpu" };
+const int ModulesLength = 10;
+const std::string Modules[ModulesLength] =  { "network", "time", "weather", "bluetooth", "media", "battery", "volume", "signal", "cpu", "throttling" };
 const int EnabledModules[ModulesLength] =   { 1,         1,      1,         1,           1,       1,         1,         1,      1};
 
-const std::vector<std::string> ModuleLayout = { "network", "bluetooth", "time", ";", "battery", "signal", "weather", "cpu", "volume", "media" };
+const std::vector<std::string> ModuleLayout = { "network", "bluetooth", "time", ";", "battery", "signal", "weather", "throttling", "cpu", "volume", "media" };
 
 const std::string NoOutputCode = "NaN";
 
@@ -46,6 +46,7 @@ const int WeatherSleepTime = 10000;
 const int BatterySleepTime = 600;
 const int SignalSleepTime = 500;
 const int CPUSleepTime = 500;
+const int ThermalThrottleSleepTime = 500;
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon
@@ -93,6 +94,8 @@ const std::string IPause = R"(\xe2\x8f\xb8)";
 
 const std::string IBluetooth = R"(\xef\x8a\x94)";
 
+const std::string IThermometer = R"(\xef\x8b\x87)";
+
 // Colours
 namespace Colour {
     const std::string Black = "^C0^";
@@ -117,7 +120,7 @@ const std::string BDCol = Colour::Grey;
 
 const int SignalNumColours = 6;
 const std::string SCol[SignalNumColours] = {
-    Colour::Magenta, Colour::Magenta, Colour::Grey, Colour::Magenta, Colour::Magenta, Colour::Grey
+    Colour::Magenta, Colour::Grey, Colour::Grey, Colour::Magenta, Colour::Grey, Colour::Grey
 //              Icon                Number              Unit                Icon                Number              Unit
 };
 const int NetworkNumColours = 4;
@@ -155,10 +158,15 @@ const std::string CPUCol[CPUNumColours] = {
     Colour::Green, Colour::Grey
 //        Icon                 Number
 };
-const int BluetoothNumColours = 7;
+const int BluetoothNumColours = 2;
 const std::string BlCol[BluetoothNumColours] = {
     Colour::Blue, Colour::Grey
 //        Icon                 Name
+};
+const int ThrottlingNumColours = 1;
+const std::string ThCol[ThrottlingNumColours] = {
+    Colour::Red
+//        Icon
 };
 
 #endif 
