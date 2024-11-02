@@ -19,6 +19,7 @@ int main() {
     SignalModule signalModule;
     CPUModule cpuModule;
     ThermalThrottlingModule thermalthorttlingModule;
+    BrightnessModule brightnessModule;
 
     std::thread networkThread(&NetworkModule::run, &networkModule);
     std::thread bluetoothThread(&BluetoothModule::run, &bluetoothModule);
@@ -30,6 +31,7 @@ int main() {
     std::thread signalThread(&SignalModule::run, &signalModule);
     std::thread cpuThread(&CPUModule::run, &cpuModule);
     std::thread thermalthortlingThread(&ThermalThrottlingModule::run, &thermalthorttlingModule);
+    std::thread brightnessThread(&BrightnessModule::run, &brightnessModule);
 
     std::vector<std::pair<std::string, Module*>> modules = {
         {"network", &networkModule},
@@ -42,6 +44,7 @@ int main() {
         {"signal", &signalModule},
         {"cpu", &cpuModule},
         {"throttling", &thermalthorttlingModule},
+        {"brightness", &brightnessModule},
     };
 
     while (true) {
@@ -101,6 +104,7 @@ int main() {
     signalThread.join();
     cpuThread.join();
     thermalthortlingThread.join();
+    brightnessThread.join();
 
     return 0;
 }

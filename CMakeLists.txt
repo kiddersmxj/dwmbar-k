@@ -47,6 +47,7 @@ target_sources(dwmbarsrc
     PRIVATE src/signal.cpp
     PRIVATE src/cpu.cpp
     PRIVATE src/throttling.cpp
+    PRIVATE src/brightness.cpp
     PRIVATE src/module.cpp
 )
 
