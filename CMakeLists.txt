@@ -45,6 +45,7 @@ target_sources(dwmbarsrc
     PRIVATE src/weather.cpp
     PRIVATE src/battery.cpp
     PRIVATE src/signal.cpp
+    PRIVATE src/cpu.cpp
     PRIVATE src/module.cpp
 )
 
