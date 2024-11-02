@@ -14,6 +14,7 @@
 #include "weather.hpp"
 #include "battery.hpp"
 #include "signal.hpp"
+#include "cpu.hpp"
 #include "config.hpp"
 
 

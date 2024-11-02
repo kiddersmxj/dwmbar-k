@@ -13,11 +13,11 @@
 
 using std::chrono_literals::operator""ms;
 
-const int ModulesLength = 8;
-const std::string Modules[ModulesLength] =  { "network", "time", "weather", "bluetooth", "media", "battery", "volume", "signal" };
-const int EnabledModules[ModulesLength] =   { 1,         1,      1,         1,           1,       1,         1,             1 };
+const int ModulesLength = 9;
+const std::string Modules[ModulesLength] =  { "network", "time", "weather", "bluetooth", "media", "battery", "volume", "signal", "cpu" };
+const int EnabledModules[ModulesLength] =   { 1,         1,      1,         1,           1,       1,         1,         1,      1};
 
-const std::vector<std::string> ModuleLayout = { "network", "bluetooth", "time", ";", "battery", "signal", "weather", "volume", "media" };
+const std::vector<std::string> ModuleLayout = { "network", "bluetooth", "time", ";", "battery", "signal", "weather", "cpu", "volume", "media" };
 
 const std::string NoOutputCode = "NaN";
 
@@ -45,6 +45,7 @@ const int VolumeSleepTime = 500;
 const int WeatherSleepTime = 10000;
 const int BatterySleepTime = 600;
 const int SignalSleepTime = 500;
+const int CPUSleepTime = 500;
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon
@@ -67,6 +68,8 @@ const std::string ModuleDelimeter = "|";
 const std::string BarDelimeter = ";";
 
 const std::string IInternet = R"(\xef\x82\xac)";
+
+const std::string ICPU = R"(\xef\x8b\x9b)";
 
 const std::string IArrowUp = R"(\xef\x85\xb6)";
 const std::string IArrowDown = R"(\xef\x85\xb5)";
@@ -147,7 +150,11 @@ const std::string BCol[BatteryNumColours] = {
     Colour::Green, Colour::Green, Colour::Yellow, Colour::Yellow, Colour::Red, Colour::Grey, Colour::Grey
 //        Icon(4/4)          Icon(3/4)          Icon(2/4)           Icon(1/4)          Icon(0/4)        Extra Icon     Percentage
 };
-
+const int CPUNumColours = 2;
+const std::string CPUCol[CPUNumColours] = {
+    Colour::Green, Colour::Grey
+//        Icon                 Number
+};
 const int BluetoothNumColours = 7;
 const std::string BlCol[BluetoothNumColours] = {
     Colour::Blue, Colour::Grey
