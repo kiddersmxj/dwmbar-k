@@ -63,9 +63,9 @@ void SignalModule::run() {
         prev_rx_bytes = current_rx_bytes;
         prev_tx_bytes = current_tx_bytes;
 
-        output = R"($(printf ")" + SCol[0] + IArrowDown + " " + SCol[1] \
+        output = SCol[0] + IArrowDown + " " + SCol[1] \
                  + formatted_rx_number + " " + SCol[2] + rx_unit + SCol[3] + " " \
-                 + IArrowUp + " " + SCol[4] + formatted_tx_number + " " + SCol[5] + tx_unit + BDCol + R"("))";
+                 + IArrowUp + " " + SCol[4] + formatted_tx_number + " " + SCol[5] + tx_unit + BDCol;
 
         updateOutput(output);
 

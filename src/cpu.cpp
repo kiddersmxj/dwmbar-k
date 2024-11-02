@@ -61,8 +61,8 @@ void CPUModule::run() {
     while (true) {
         double usage = GetCpuUsage();
         usage = static_cast<int>(usage + 0.5);
-        std::string output = R"($(printf ")" + CPUCol[0] + ICPU + R"( %s" ")" + CPUCol[1] \
-                             + std::to_string(static_cast<int>(usage + 0.5)) + R"(%"))";
+        std::string output = CPUCol[0] + ICPU + " " + CPUCol[1] \
+                             + std::to_string(static_cast<int>(usage + 0.5)) + "%";
         updateOutput(output);
         std::this_thread::sleep_for(std::chrono::milliseconds(CPUSleepTime));
     }

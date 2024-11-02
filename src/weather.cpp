@@ -42,7 +42,7 @@ std::string WeatherModule::GetWeather() {
     }
     delete[] HexArray;
 
-    HexOutput = R"($(printf ")" + WCol[0] + HexOutput + BDCol + R"("))";
+    HexOutput = WCol[0] + HexOutput + BDCol;
 
     return HexOutput;
 }

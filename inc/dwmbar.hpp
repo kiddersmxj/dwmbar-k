@@ -20,7 +20,9 @@
 
 
 std::string ParseModuleNo(std::string ModuleNo);
-void XSR(std::string Body);
+// void XSR(std::string Body);
+void decode_hex_string(const char *input, char *output);
+void XSR(const std::string &raw_status);
 std::string ParseXSR(std::vector<std::string> VectorOutput);
 int GetIndex(std::vector<std::string> v, std::string K);
 int Enabled(int i);
