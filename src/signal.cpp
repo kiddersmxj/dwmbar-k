@@ -56,8 +56,8 @@ void SignalModule::run() {
         auto [formatted_rx_number, rx_unit] = formatSpeed(rx_speed);
         auto [formatted_tx_number, tx_unit] = formatSpeed(tx_speed);
 
-        std::cout << "Download (rx): " << formatted_rx_number << rx_unit << std::endl;
-        std::cout << "Upload (tx): " << formatted_tx_number << tx_unit << std::endl;
+        // std::cout << "Download (rx): " << formatted_rx_number << rx_unit << std::endl;
+        // std::cout << "Upload (tx): " << formatted_tx_number << tx_unit << std::endl;
 
         // Update previous values
         prev_rx_bytes = current_rx_bytes;
