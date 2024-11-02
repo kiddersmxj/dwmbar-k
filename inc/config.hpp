@@ -17,16 +17,18 @@ const int ModulesLength = 10;
 const std::string Modules[ModulesLength] =  { "network", "time", "weather", "bluetooth", "media", "battery", "volume", "signal", "cpu", "throttling" };
 const int EnabledModules[ModulesLength] =   { 1,         1,      1,         1,           1,       1,         1,         1,      1};
 
+const std::string Separator = ";";
+
 const std::vector<std::string> ModuleLayout = {
     "network",
     "time",
-    ";",
+    Separator,
     "cpu",
     "throttling",
     "bluetooth",
     "signal",
     "weather",
-    ";",
+    Separator,
     "battery",
     "volume",
     "media",

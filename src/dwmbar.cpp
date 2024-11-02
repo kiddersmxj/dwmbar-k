@@ -66,9 +66,9 @@ int main() {
         // Order the outputs based on ModuleLayout
         std::vector<std::string> OrderedVector;
         for (const auto& moduleName : ModuleLayout) {
-            if (moduleName == ";") {
+            if (moduleName == Separator) {
                 // Add the separator directly to OrderedVector
-                OrderedVector.push_back(";");
+                OrderedVector.push_back(Separator);
             } else {
                 // Find the corresponding output in outputVector
                 auto it = std::find_if(outputVector.begin(), outputVector.end(),
