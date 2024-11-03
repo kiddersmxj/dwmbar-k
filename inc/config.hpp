@@ -13,6 +13,26 @@
 
 using std::chrono_literals::operator""ms;
 
+const std::string ConfigFile = "/home/kidders/.dwmbar.conf";
+
+// Define configuration variables with default values using inline
+inline std::vector<std::string> ModuleLayout = {};
+
+inline int SleepTime; // How long while loop waits before re-execution in ms
+inline int BluetoothSleepTime;
+inline int NetworkSleepTime;
+inline int MediaSleepTime;
+inline int VolumeSleepTime;
+inline int WeatherSleepTime;
+inline int BatterySleepTime;
+inline int SignalSleepTime;
+inline int CPUSleepTime;
+inline int ThermalThrottleSleepTime;
+inline int BrightnessSleepTime;
+
+// Function to initialize global configuration variables
+int initializeConfig(const std::string& filePath);
+
 const int ModulesLength = 11;
 const std::string Modules[ModulesLength] =  { 
     "network",
@@ -32,21 +52,21 @@ const int EnabledModules[ModulesLength] = { 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
 const std::string Separator = ";";
 
-const std::vector<std::string> ModuleLayout = {
-    "network",
-    "time",
-    Separator,
-    "cpu",
-    "throttling",
-    "brightness",
-    "bluetooth",
-    "signal",
-    "weather",
-    Separator,
-    "battery",
-    "volume",
-    "media",
-};
+// const std::vector<std::string> ModuleLayout = {
+//     "network",
+//     "time",
+//     Separator,
+//     "cpu",
+//     "throttling",
+//     "brightness",
+//     "bluetooth",
+//     "signal",
+//     "weather",
+//     Separator,
+//     "battery",
+//     "volume",
+//     "media",
+// };
 
 const std::string NoOutputCode = "NaN";
 
@@ -66,17 +86,6 @@ const std::string TDir = TmpDir; // Full TmpDir path
 const std::string Logfile = "/log/dwmbar-k/" + DT + ".dwmbar.log"; // Full DataDir path
 
 const std::chrono::system_clock::duration Latency = 200ms; // How long while loop waits before re-execution in ms
-const int SleepTime = 100; // How long while loop waits before re-execution in ms
-const int BluetoothSleepTime = 1000;
-const int NetworkSleepTime = 1000;
-const int MediaSleepTime = 50;
-const int VolumeSleepTime = 500;
-const int WeatherSleepTime = 10000;
-const int BatterySleepTime = 600;
-const int SignalSleepTime = 500;
-const int CPUSleepTime = 500;
-const int ThermalThrottleSleepTime = 2000;
-const int BrightnessSleepTime = 500;
 
 // Volume levels as a percentage for corresponding icons
 // Stored value is the bottom value for that icon
