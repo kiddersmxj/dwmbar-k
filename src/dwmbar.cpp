@@ -8,6 +8,7 @@
 #include <vector>
 
 int main() {
+    initializeConfig(ConfigFile);
 
     NetworkModule networkModule;
     BluetoothModule bluetoothModule;

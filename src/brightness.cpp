@@ -47,7 +47,7 @@ void BrightnessModule::run() {
                                  + std::to_string(static_cast<int>(brightnessPercentage)) \
                                  + "%";
             updateOutput(output);
-            std::cout << output << std::endl; // Debug print
+            // std::cout << output << std::endl; // Debug print
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(BrightnessSleepTime));
     }
