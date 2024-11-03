@@ -49,6 +49,7 @@ target_sources(dwmbarsrc
     PRIVATE src/throttling.cpp
     PRIVATE src/brightness.cpp
     PRIVATE src/module.cpp
+    PRIVATE src/config.cpp
 )
 
 target_sources(dwmbar
@@ -91,3 +92,35 @@ target_link_libraries(dwmbarsrc
 target_link_libraries(dwmbar
     PUBLIC std-k
 )
+
+# --- Install dwmbar.conf and copy to $HOME if it doesn't exist ----------------
+
+install(CODE "
+    # Determine the original user
+    if(DEFINED ENV{SUDO_USER} AND NOT \"\$ENV{SUDO_USER}\" STREQUAL \"root\")
+        set(ORIGINAL_USER \"\$ENV{SUDO_USER}\")
+    else()
+        set(ORIGINAL_USER \"\$ENV{USER}\")
+    endif()
+
+    # Get the home directory of the original user
+    execute_process(
+        COMMAND sh -c \"getent passwd \${ORIGINAL_USER} | cut -d: -f6\"
+        OUTPUT_VARIABLE USER_HOME
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    if(NOT USER_HOME)
+        message(FATAL_ERROR \"Failed to determine home directory for user '\${ORIGINAL_USER}'\")
+    endif()
+
+    set(CONFIG_FILE \"\${USER_HOME}/.dwmbar.conf\")
+
+    if(NOT EXISTS \"\${CONFIG_FILE}\")
+        message(\"Installing configuration file to \${CONFIG_FILE}\")
+        file(COPY \"${CMAKE_SOURCE_DIR}/dwmbar.conf\" DESTINATION \"\${USER_HOME}\" FILE_PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ)
+        file(RENAME \"\${USER_HOME}/dwmbar.conf\" \"\${CONFIG_FILE}\")
+    else()
+        message(\"Configuration file already exists at \${CONFIG_FILE}\")
+    endif()
+")
