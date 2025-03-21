@@ -23,7 +23,7 @@ void BluetoothModule::run() {
 
 std::string BluetoothModule::getBluetoothDeviceName() {
     std::string device;
-    k::ExecCmd("bluetoothctl info | grep Name | awk -F': ' '{print $2}'", device);
+    k::ExecCmd("bluetoothctl info | grep Alias | awk -F': ' '{print $2}'", device);
     return k::StripTrailingNL(device);
 }
 
