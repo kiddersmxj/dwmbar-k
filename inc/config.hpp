@@ -29,11 +29,12 @@ inline int SignalSleepTime;
 inline int CPUSleepTime;
 inline int ThermalThrottleSleepTime;
 inline int BrightnessSleepTime;
+inline int WinConnectSleepTime;
 
 // Function to initialize global configuration variables
 int initializeConfig(const std::string& filePath);
 
-const int ModulesLength = 11;
+const int ModulesLength = 12;
 const std::string Modules[ModulesLength] =  { 
     "network",
     "time",
@@ -46,6 +47,7 @@ const std::string Modules[ModulesLength] =  {
     "cpu",
     "throttling",
     "brightness",
+    "winconnect",
 };
 
 const int EnabledModules[ModulesLength] = { 1, 1, 1, 1, 1, 1, 1, 1, 1};
@@ -137,6 +139,8 @@ const std::string IThermometer = R"(\xef\x8b\x87)";
 
 const std::string ILight = R"(\xef\x83\xab)";
 
+const std::string IHdd = R"(\xef\x82\xa0)";
+
 // Colours
 namespace Colour {
     const std::string Black = "^C0^";
@@ -212,6 +216,12 @@ const std::string BlCol[BluetoothNumColours] = {
 const int ThrottlingNumColours = 1;
 const std::string ThCol[ThrottlingNumColours] = {
     Colour::Red
+//        Icon
+};
+
+const int WinConnectNumColours = 1;
+const std::string WCCol[WinConnectNumColours] = {
+    Colour::Blue
 //        Icon
 };
 

@@ -50,6 +50,7 @@ target_sources(dwmbarsrc
     PRIVATE src/brightness.cpp
     PRIVATE src/module.cpp
     PRIVATE src/config.cpp
+    PRIVATE src/winconnect.cpp
 )
 
 target_sources(dwmbar

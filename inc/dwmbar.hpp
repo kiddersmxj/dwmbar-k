@@ -17,6 +17,7 @@
 #include "cpu.hpp"
 #include "throttling.hpp"
 #include "brightness.hpp"
+#include "winconnect.hpp"
 #include "config.hpp"
 
 
