@@ -114,15 +114,6 @@ int main() {
     return 0;
 }
 
-int Enabled(int i) {
-    return EnabledModules[i];
-}
-
-// void XSR(std::string Body) {
-// 	std::string Cmd = R"(xsetroot -name ")" + Body + R"(")";
-//     k::ExecCmd(Cmd);
-// }
-
 std::string ParseXSR(std::vector<std::string> OutputVector) {
 	std::string XSRBody = "";
     std::vector<int> Empty;
@@ -188,15 +179,6 @@ void XSR(const std::string &raw_status) {
 
     // Close the connection to the X server
     XCloseDisplay(display);
-}
-
-std::string ParseModuleNo(std::string ModuleNo) {
-    // -1 to account for 0 based indexing
-	int ModNo = stoi(ModuleNo) - 1;
-	if(EnabledModules[ModNo])
-		return Modules[ModNo];
-	else
-		return "Disabled";
 }
 
 // Copyright (c) 2024, Maxamilian Kidd-May

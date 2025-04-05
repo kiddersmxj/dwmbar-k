@@ -50,8 +50,6 @@ const std::string Modules[ModulesLength] =  {
     "winconnect",
 };
 
-const int EnabledModules[ModulesLength] = { 1, 1, 1, 1, 1, 1, 1, 1, 1};
-
 const std::string Separator = ";";
 
 // const std::vector<std::string> ModuleLayout = {
