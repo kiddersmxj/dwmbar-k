@@ -9,6 +9,8 @@ class ChronologModule : public Module {
     public:
         void run() override;
     private:
+        int Cooldown = 0;
+
         bool IsRunning(std::string Name);
         bool StringToBool(const std::string &input);
         std::string GetElapsed(std::string Name);

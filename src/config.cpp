@@ -22,6 +22,8 @@ int initializeConfig(const std::string& config_file_path) {
     KCONFIG_VAR(WinConnectSleepTime, "sleep.winconnect", 500)
     KCONFIG_VAR(ChronologSleepTime, "sleep.chronolog", 500)
 
+    KCONFIG_VAR(ChronologCooldown, "chronolog.cooldown", 500)
+
     KCONFIG_ARRAY_REQUIRED(ModuleLayout, "layout.layout")
 
     std::cout << "Modules Layout: " << std::endl;

@@ -51,8 +51,14 @@ void ChronologModule::run() {
         bool isRunning = IsRunning(Name);
         if(isRunning) {
             output =  CLCol[0] + Name + " " + CLCol[1] + k::StripTrailingNL(GetElapsed(Name)) + BDCol;
+            Cooldown = ChronologCooldown;
         } else {
-            output = "";
+            if(Cooldown > 0) {
+                output =  CLCol[0] + Name + " " + CLCol[1] + k::StripTrailingNL(GetElapsed(Name)) + BDCol;
+                Cooldown--;
+            } else {
+                output = "";
+            }
         }
 
         updateOutput(output);

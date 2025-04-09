@@ -32,6 +32,9 @@ inline int BrightnessSleepTime;
 inline int WinConnectSleepTime;
 inline int ChronologSleepTime;
 
+// Cooldown for keeping timer on bar after stop
+inline int ChronologCooldown;
+
 // Function to initialize global configuration variables
 int initializeConfig(const std::string& filePath);
 
