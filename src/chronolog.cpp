@@ -17,8 +17,12 @@ bool ChronologModule::StringToBool(const std::string &input) {
         return false;
     }
 
-    // Throw an exception if the string does not represent a valid boolean value.
-    throw std::invalid_argument("Invalid input for conversion to bool: '" + input + "'");
+    // Log detailed error and return false
+    std::cerr << "ChronologModule::StringToBool() - Failed to convert input:\n"
+              << "  Original input: '" << input << "'\n"
+              << "  Normalized input: '" << normalized << "'\n"
+              << "  Accepted values: true/1/yes/on or false/0/no/off\n";
+    return false;
 }
 
 bool ChronologModule::IsRunning(std::string Name) {
