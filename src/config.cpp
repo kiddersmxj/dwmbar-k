@@ -20,6 +20,7 @@ int initializeConfig(const std::string& config_file_path) {
     KCONFIG_VAR(ThermalThrottleSleepTime, "sleep.throttle", 500)
     KCONFIG_VAR(BrightnessSleepTime, "sleep.brightness", 500)
     KCONFIG_VAR(WinConnectSleepTime, "sleep.winconnect", 500)
+    KCONFIG_VAR(ChronologSleepTime, "sleep.chronolog", 500)
 
     KCONFIG_ARRAY_REQUIRED(ModuleLayout, "layout.layout")
 

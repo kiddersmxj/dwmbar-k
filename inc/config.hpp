@@ -30,6 +30,7 @@ inline int CPUSleepTime;
 inline int ThermalThrottleSleepTime;
 inline int BrightnessSleepTime;
 inline int WinConnectSleepTime;
+inline int ChronologSleepTime;
 
 // Function to initialize global configuration variables
 int initializeConfig(const std::string& filePath);
@@ -221,6 +222,12 @@ const int WinConnectNumColours = 1;
 const std::string WCCol[WinConnectNumColours] = {
     Colour::Blue
 //        Icon
+};
+
+const int ChronologNumColours = 2;
+const std::string CLCol[ChronologNumColours] = {
+    Colour::Red,   Colour::Grey
+//        Name              Time
 };
 
 #endif 

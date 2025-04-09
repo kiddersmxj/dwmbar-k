@@ -51,6 +51,7 @@ target_sources(dwmbarsrc
     PRIVATE src/module.cpp
     PRIVATE src/config.cpp
     PRIVATE src/winconnect.cpp
+    PRIVATE src/chronolog.cpp
 )
 
 target_sources(dwmbar

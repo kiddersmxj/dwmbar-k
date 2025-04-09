@@ -18,6 +18,7 @@
 #include "throttling.hpp"
 #include "brightness.hpp"
 #include "winconnect.hpp"
+#include "chronolog.hpp"
 #include "config.hpp"
 
 
