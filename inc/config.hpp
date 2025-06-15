@@ -31,6 +31,7 @@ inline int ThermalThrottleSleepTime;
 inline int BrightnessSleepTime;
 inline int WinConnectSleepTime;
 inline int ChronologSleepTime;
+inline int MemorySleepTime;
 
 // Cooldown for keeping timer on bar after stop
 inline int ChronologCooldown;
@@ -38,7 +39,7 @@ inline int ChronologCooldown;
 // Function to initialize global configuration variables
 int initializeConfig(const std::string& filePath);
 
-const int ModulesLength = 12;
+const int ModulesLength = 13;
 const std::string Modules[ModulesLength] =  { 
     "network",
     "time",
@@ -52,6 +53,7 @@ const std::string Modules[ModulesLength] =  {
     "throttling",
     "brightness",
     "winconnect",
+    "memory",
 };
 
 const std::string Separator = ";";
@@ -143,6 +145,8 @@ const std::string ILight = R"(\xef\x83\xab)";
 
 const std::string IHdd = R"(\xef\x82\xa0)";
 
+const std::string IMemory = R"(\xef\x94\xb8)";
+
 // Colours
 namespace Colour {
     const std::string Black = "^C0^";
@@ -231,6 +235,11 @@ const int ChronologNumColours = 2;
 const std::string CLCol[ChronologNumColours] = {
     Colour::Red,   Colour::Grey
 //        Name              Time
+};
+const int MemoryNumColours = 4;
+const std::string MemCol[MemoryNumColours] = {
+    Colour::Blue, Colour::Grey
+//        Icon                 Memory
 };
 
 #endif 

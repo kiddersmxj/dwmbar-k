@@ -19,6 +19,7 @@
 #include "brightness.hpp"
 #include "winconnect.hpp"
 #include "chronolog.hpp"
+#include "memory.hpp"
 #include "config.hpp"
 
 
