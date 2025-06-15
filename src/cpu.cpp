@@ -60,10 +60,28 @@ double CPUModule::GetCpuUsage() {
 void CPUModule::run() {
     while (true) {
         double usage = GetCpuUsage();
-        usage = static_cast<int>(usage + 0.5);
-        std::string output = CPUCol[0] + ICPU + " " + CPUCol[1] \
-                             + std::to_string(static_cast<int>(usage + 0.5)) + "%";
-        updateOutput(output);
+        // std::cout << "CPUModule: " << usage << std::endl;
+
+        if (std::isnan(usage) || std::isinf(usage) || usage < 0.0 || usage > 100.0) {
+            updateOutput(NoOutputCode);
+        } else {
+            usage = static_cast<int>(usage + 0.5);
+
+            // Determine colour based on usage
+            std::string colour;
+            if (usage > CPURed) {
+                colour = CPUCol[3];
+            } else if (usage > CPUYellow) {
+                colour = CPUCol[2];
+            } else {
+                colour = CPUCol[1];
+            }
+
+            std::string output = colour + ICPU + " " + CPUCol[0] \
+                                 + std::to_string(static_cast<int>(usage + 0.5)) + "%";
+            updateOutput(output);
+        }
+
         std::this_thread::sleep_for(std::chrono::milliseconds(CPUSleepTime));
     }
 }

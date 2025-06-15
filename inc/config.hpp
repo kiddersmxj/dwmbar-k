@@ -112,6 +112,10 @@ const int BHalf = 40; // 40 -74
 const int BQuart = 20; // 20-39
 const int BEmpty = 1; // Recomend non-zero value to catch broken battery
 
+// CPU Thresholds for icon colour change
+const int CPURed = 70;
+const int CPUYellow = 50;
+
 const std::string ModuleDelimeter = "|";
 const std::string BarDelimeter = ";";
 
@@ -206,10 +210,10 @@ const std::string BCol[BatteryNumColours] = {
     Colour::Green, Colour::Green, Colour::Yellow, Colour::Yellow, Colour::Red, Colour::Grey, Colour::Grey
 //        Icon(4/4)          Icon(3/4)          Icon(2/4)           Icon(1/4)          Icon(0/4)        Extra Icon     Percentage
 };
-const int CPUNumColours = 2;
+const int CPUNumColours = 4;
 const std::string CPUCol[CPUNumColours] = {
-    Colour::Green, Colour::Grey
-//        Icon                 Number
+    Colour::Grey, Colour::Green, Colour::Yellow, Colour::Red
+//        Number            Icon 1              Icon2               Icon3
 };
 const int BrightnessNumColours = 2;
 const std::string BrCol[BrightnessNumColours] = {
