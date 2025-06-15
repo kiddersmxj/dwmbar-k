@@ -32,6 +32,7 @@ inline int BrightnessSleepTime;
 inline int WinConnectSleepTime;
 inline int ChronologSleepTime;
 inline int MemorySleepTime;
+inline int StorageSleepTime;
 
 // Cooldown for keeping timer on bar after stop
 inline int ChronologCooldown;
@@ -39,7 +40,7 @@ inline int ChronologCooldown;
 // Function to initialize global configuration variables
 int initializeConfig(const std::string& filePath);
 
-const int ModulesLength = 13;
+const int ModulesLength = 14;
 const std::string Modules[ModulesLength] =  { 
     "network",
     "time",
@@ -54,6 +55,7 @@ const std::string Modules[ModulesLength] =  {
     "brightness",
     "winconnect",
     "memory",
+    "storage",
 };
 
 const std::string Separator = ";";
@@ -143,9 +145,9 @@ const std::string IThermometer = R"(\xef\x8b\x87)";
 
 const std::string ILight = R"(\xef\x83\xab)";
 
-const std::string IHdd = R"(\xef\x82\xa0)";
-
 const std::string IMemory = R"(\xef\x94\xb8)";
+
+const std::string IHdd = R"(\xef\x82\xa0)";
 
 // Colours
 namespace Colour {
@@ -239,6 +241,11 @@ const std::string CLCol[ChronologNumColours] = {
 const int MemoryNumColours = 4;
 const std::string MemCol[MemoryNumColours] = {
     Colour::Blue, Colour::Grey
+//        Icon                 Memory
+};
+const int StorageNumColours = 4;
+const std::string StrCol[StorageNumColours] = {
+    Colour::Red, Colour::Grey
 //        Icon                 Memory
 };
 

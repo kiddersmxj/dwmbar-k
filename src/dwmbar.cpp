@@ -24,6 +24,7 @@ int main() {
     WinConnectModule winconnectModule;
     ChronologModule chronologModule;
     MemoryModule memoryModule;
+    StorageModule storageModule;
 
     std::thread networkThread(&NetworkModule::run, &networkModule);
     std::thread bluetoothThread(&BluetoothModule::run, &bluetoothModule);
@@ -39,6 +40,7 @@ int main() {
     std::thread winconnectThread(&WinConnectModule::run, &winconnectModule);
     std::thread chronologThread(&ChronologModule::run, &chronologModule);
     std::thread memoryThread(&MemoryModule::run, &memoryModule);
+    std::thread storageThread(&StorageModule::run, &storageModule);
 
     std::vector<std::pair<std::string, Module*>> modules = {
         {"network", &networkModule},
@@ -55,6 +57,7 @@ int main() {
         {"winconnect", &winconnectModule},
         {"chronolog", &chronologModule},
         {"memory", &memoryModule},
+        {"storage", &storageModule},
     };
 
     while (true) {
@@ -118,6 +121,7 @@ int main() {
     winconnectThread.join();
     chronologThread.join();
     memoryThread.join();
+    storageThread.join();
 
     return 0;
 }

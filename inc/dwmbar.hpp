@@ -20,6 +20,7 @@
 #include "winconnect.hpp"
 #include "chronolog.hpp"
 #include "memory.hpp"
+#include "storage.hpp"
 #include "config.hpp"
 
 
