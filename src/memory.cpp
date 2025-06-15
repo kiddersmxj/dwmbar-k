@@ -13,11 +13,11 @@ void MemoryModule::run() {
 
         if (S != 0) {
             output = MemCol[0] + IMemory + " " + MemCol[1] + Mem + "%/" + Swp + "%";
-            std::cout << "MemoryModule: Updating output to " << output << std::endl;  // Debug
+            // std::cout << "MemoryModule: Updating output to " << output << std::endl;  // Debug
             updateOutput(output);
         } else {
             output = MemCol[0] + IMemory + " " + MemCol[1] + Mem + "%";
-            std::cout << "MemoryModule: Updating output to " << output << std::endl;  // Debug
+            // std::cout << "MemoryModule: Updating output to " << output << std::endl;  // Debug
             updateOutput(output);
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(MemorySleepTime));
