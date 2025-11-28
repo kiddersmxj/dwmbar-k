@@ -25,6 +25,7 @@ int main() {
     ChronologModule chronologModule;
     MemoryModule memoryModule;
     StorageModule storageModule;
+    TogglModule togglModule;
 
     std::thread networkThread(&NetworkModule::run, &networkModule);
     std::thread bluetoothThread(&BluetoothModule::run, &bluetoothModule);
@@ -41,6 +42,7 @@ int main() {
     std::thread chronologThread(&ChronologModule::run, &chronologModule);
     std::thread memoryThread(&MemoryModule::run, &memoryModule);
     std::thread storageThread(&StorageModule::run, &storageModule);
+    std::thread togglThread(&TogglModule::run, &togglModule);
 
     std::vector<std::pair<std::string, Module*>> modules = {
         {"network", &networkModule},
@@ -58,6 +60,7 @@ int main() {
         {"chronolog", &chronologModule},
         {"memory", &memoryModule},
         {"storage", &storageModule},
+        {"toggl", &togglModule},
     };
 
     while (true) {
@@ -122,6 +125,7 @@ int main() {
     chronologThread.join();
     memoryThread.join();
     storageThread.join();
+    togglThread.join();
 
     return 0;
 }

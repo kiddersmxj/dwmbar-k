@@ -54,6 +54,7 @@ target_sources(dwmbarsrc
     PRIVATE src/chronolog.cpp
     PRIVATE src/memory.cpp
     PRIVATE src/storage.cpp
+    PRIVATE src/toggl.cpp
 )
 
 target_sources(dwmbar

@@ -21,6 +21,7 @@
 #include "chronolog.hpp"
 #include "memory.hpp"
 #include "storage.hpp"
+#include "toggl.hpp"
 #include "config.hpp"
 
 
