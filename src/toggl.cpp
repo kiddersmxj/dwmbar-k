@@ -51,7 +51,7 @@ TogglModule::TogglStatus TogglModule::GetStatus() {
     // If Toggl isn’t running anything, script prints:
     //   "No current Toggl timer."
     if (Raw.find("No current Toggl timer") != std::string::npos) {
-        std::cerr << "Toggl: " << Raw << std::endl;
+        // std::cerr << "Toggl: " << Raw << std::endl;
         ts.status = "none";
         return ts;
     }
