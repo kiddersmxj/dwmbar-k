@@ -1,11 +1,12 @@
+#pragma once
+
 #include "config.hpp"
 #include "module.hpp"
-
-#pragma once
 
 class NetworkModule : public Module {
 public:
     void run() override;
+
 private:
     std::string getConnectionName();
     std::string getPublicIP();
