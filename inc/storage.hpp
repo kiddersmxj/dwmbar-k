@@ -1,11 +1,12 @@
 #ifndef K_STORAGE
 #define K_STORAGE
 
+#pragma once
+
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 #include <string>
-
-#pragma once
 
 class StorageModule : public Module {
 public:
@@ -16,6 +17,8 @@ private:
 
 
 #endif
+
+REGISTER_MODULE("storage", StorageModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

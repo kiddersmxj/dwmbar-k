@@ -1,4 +1,5 @@
 #pragma once
+#include "moduleregistry.hpp"
 #include "module.hpp"
 #include <string>
 
@@ -9,6 +10,8 @@ public:
 private:
     std::string GetWeather();
 };
+
+REGISTER_MODULE("weather", WeatherModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

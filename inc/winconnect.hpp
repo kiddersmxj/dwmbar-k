@@ -2,6 +2,7 @@
 #define K_WINCONNECT
 
 #pragma once
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 
@@ -13,6 +14,8 @@ class WinConnectModule : public Module {
 };
 
 #endif
+
+REGISTER_MODULE("winconnect", WinConnectModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

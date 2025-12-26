@@ -1,4 +1,5 @@
 #pragma once
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 
@@ -9,6 +10,8 @@ public:
 private:
     bool CheckThermalThrottling();
 };
+
+REGISTER_MODULE("throttling", ThermalThrottlingModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

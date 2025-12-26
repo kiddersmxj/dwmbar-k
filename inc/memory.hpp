@@ -1,11 +1,11 @@
 #ifndef K_MEMORY
 #define K_MEMORY
 
+#pragma once
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 #include <string>
-
-#pragma once
 
 class MemoryModule : public Module {
 public:
@@ -18,6 +18,8 @@ private:
 
 
 #endif
+
+REGISTER_MODULE("memory", MemoryModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

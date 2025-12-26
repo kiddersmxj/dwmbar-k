@@ -1,6 +1,8 @@
 #ifndef K_TOGGL
 #define K_TOGGL
 
+#pragma once
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 
@@ -27,6 +29,8 @@ class TogglModule : public Module {
 };
 
 #endif
+
+REGISTER_MODULE("toggl", TogglModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

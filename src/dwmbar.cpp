@@ -6,126 +6,104 @@
 #include <thread>
 #include <iostream>
 #include <vector>
+#include <unordered_set>
 
 int main() {
     initializeConfig(ConfigFile);
 
-    NetworkModule networkModule;
-    BluetoothModule bluetoothModule;
-    MediaModule mediaModule;
-    TimeModule timeModule;
-    VolumeModule volumeModule;
-    WeatherModule weatherModule;
-    BatteryModule batteryModule;
-    SignalModule signalModule;
-    CPUModule cpuModule;
-    ThermalThrottlingModule thermalthorttlingModule;
-    BrightnessModule brightnessModule;
-    WinConnectModule winconnectModule;
-    ChronologModule chronologModule;
-    MemoryModule memoryModule;
-    StorageModule storageModule;
-    TogglModule togglModule;
+    ModuleRegistry& registry = ModuleRegistry::instance();
 
-    std::thread networkThread(&NetworkModule::run, &networkModule);
-    std::thread bluetoothThread(&BluetoothModule::run, &bluetoothModule);
-    std::thread mediaThread(&MediaModule::run, &mediaModule);
-    std::thread timeThread(&TimeModule::run, &timeModule);
-    std::thread volumeThread(&VolumeModule::run, &volumeModule);
-    std::thread weatherThread(&WeatherModule::run, &weatherModule);
-    std::thread batteryThread(&BatteryModule::run, &batteryModule);
-    std::thread signalThread(&SignalModule::run, &signalModule);
-    std::thread cpuThread(&CPUModule::run, &cpuModule);
-    std::thread thermalthortlingThread(&ThermalThrottlingModule::run, &thermalthorttlingModule);
-    std::thread brightnessThread(&BrightnessModule::run, &brightnessModule);
-    std::thread winconnectThread(&WinConnectModule::run, &winconnectModule);
-    std::thread chronologThread(&ChronologModule::run, &chronologModule);
-    std::thread memoryThread(&MemoryModule::run, &memoryModule);
-    std::thread storageThread(&StorageModule::run, &storageModule);
-    std::thread togglThread(&TogglModule::run, &togglModule);
+    // Build list of modules to actually run, based on ModuleLayout
+    std::vector<ModuleInfo> modules;
+    modules.reserve(ModuleLayout.size());
 
-    std::vector<std::pair<std::string, Module*>> modules = {
-        {"network", &networkModule},
-        {"bluetooth", &bluetoothModule},
-        {"media", &mediaModule},
-        {"time", &timeModule},
-        {"volume", &volumeModule},
-        {"weather", &weatherModule},
-        {"battery", &batteryModule},
-        {"signal", &signalModule},
-        {"cpu", &cpuModule},
-        {"throttling", &thermalthorttlingModule},
-        {"brightness", &brightnessModule},
-        {"winconnect", &winconnectModule},
-        {"chronolog", &chronologModule},
-        {"memory", &memoryModule},
-        {"storage", &storageModule},
-        {"toggl", &togglModule},
-    };
+    std::unordered_set<std::string> seenNames;
 
+    for (const auto& name : ModuleLayout) {
+        if (name == Separator) {
+            continue; // not a module name
+        }
+
+        // Avoid starting multiple threads for the same module name
+        if (!seenNames.insert(name).second) {
+            continue; // already instantiated
+        }
+
+        std::unique_ptr<Module> instance = registry.create(name);
+        if (!instance) {
+            std::cerr << "Warning: unknown module name in layout: " << name << '\n';
+            continue;
+        }
+
+        Module* rawPtr = instance.get();
+
+        ModuleInfo info;
+        info.name = name;
+        info.module = std::move(instance);
+        info.thread = std::thread(&Module::run, rawPtr);
+
+        modules.push_back(std::move(info));
+    }
+
+    // Main loop
     while (true) {
-        // Collect output from modules
+        // 1. Collect outputs
         std::vector<std::pair<std::string, std::string>> outputVector;
+        outputVector.reserve(modules.size());
 
-        for (auto& [name, mod] : modules) {
+        for (auto& info : modules) {
+            Module* mod = info.module.get();
             std::string output;
+
             std::unique_lock<std::mutex> lock(mod->getOutputMutex());
-            if (mod->getOutputCV().wait_for(lock, std::chrono::milliseconds(1), [&]{ return !mod->getOutputNoLock().empty(); })) {
+            if (mod->getOutputCV().wait_for(
+                    lock,
+                    std::chrono::milliseconds(1),
+                    [&] { return !mod->getOutputNoLock().empty(); })) {
+
                 output = mod->getOutputNoLock();
-                if(output == "NaN") output = "";
-                outputVector.emplace_back(name, output);  // Add name-output pair to vector
+                if (output == "NaN") {
+                    output.clear();
+                }
+                outputVector.emplace_back(info.name, output);
             }
         }
 
-        // Print all collected outputs
-        // for (const auto& [name, output] : outputVector) {
-        //     std::cout << "Module: " << name << " | Output: " << output << std::endl;
-        // }
-
-        // Order the outputs based on ModuleLayout
+        // 2. Order according to ModuleLayout (with separators)
         std::vector<std::string> OrderedVector;
+        OrderedVector.reserve(ModuleLayout.size());
+
         for (const auto& moduleName : ModuleLayout) {
             if (moduleName == Separator) {
-                // Add the separator directly to OrderedVector
                 OrderedVector.push_back(Separator);
             } else {
-                // Find the corresponding output in outputVector
-                auto it = std::find_if(outputVector.begin(), outputVector.end(),
-                                       [&](const std::pair<std::string, std::string>& p) { return p.first == moduleName; });
+                auto it = std::find_if(
+                    outputVector.begin(),
+                    outputVector.end(),
+                    [&](const std::pair<std::string, std::string>& p) {
+                        return p.first == moduleName;
+                    }
+                );
+
                 if (it != outputVector.end()) {
-                    OrderedVector.push_back(it->second);  // Add the output to OrderedVector
+                    OrderedVector.push_back(it->second);
                 }
+                // If a module produced nothing in this tick, it is just omitted.
             }
         }
 
-        // Print the ordered outputs
-        // std::cout << "Ordered Output: ";
-        // for (const auto& output : OrderedVector) {
-        //     std::cout << output << " ";
-        // }
-        // std::cout << std::endl;
-
+        // 3. Render to X root window
         XSR(ParseXSR(OrderedVector));
 
         std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
     }
 
-    networkThread.join();
-    bluetoothThread.join();
-    mediaThread.join();
-    timeThread.join();
-    volumeThread.join();
-    weatherThread.join();
-    batteryThread.join();
-    signalThread.join();
-    cpuThread.join();
-    thermalthortlingThread.join();
-    brightnessThread.join();
-    winconnectThread.join();
-    chronologThread.join();
-    memoryThread.join();
-    storageThread.join();
-    togglThread.join();
+    // If you ever add a proper shutdown, you would break the loop and then:
+    // for (auto& info : modules) {
+    //     if (info.thread.joinable()) {
+    //         info.thread.join();
+    //     }
+    // }
 
     return 0;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 #include <string>
@@ -12,6 +13,8 @@ private:
     double getBrightnessPercentage();
     double getBrightnessFromBrightnessctl();
 };
+
+REGISTER_MODULE("brightness", BrightnessModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

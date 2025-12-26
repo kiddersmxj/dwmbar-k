@@ -1,9 +1,9 @@
+#pragma once
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 #include <string>
 #include <vector>
-
-#pragma once
 
 class MediaModule : public Module {
 public:
@@ -18,6 +18,8 @@ private:
     std::string GetTitle(std::string player);
     bool runCondition();
 };
+
+REGISTER_MODULE("media", MediaModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

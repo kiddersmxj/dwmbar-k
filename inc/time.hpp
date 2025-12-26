@@ -2,6 +2,7 @@
 
 #include "config.hpp"
 
+#include "moduleregistry.hpp"
 #include "module.hpp"
 #include <string>
 #include <vector>
@@ -15,6 +16,8 @@ private:
     std::string GetDay(std::string day);
     std::vector<std::string> GetDate();
 };
+
+REGISTER_MODULE("time", TimeModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

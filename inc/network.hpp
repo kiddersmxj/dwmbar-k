@@ -1,5 +1,6 @@
 #pragma once
 
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 
@@ -12,6 +13,8 @@ private:
     std::string getPublicIP();
     std::string getPrivateIP();
 };
+
+REGISTER_MODULE("network", NetworkModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

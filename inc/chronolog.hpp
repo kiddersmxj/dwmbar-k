@@ -2,6 +2,7 @@
 #define K_CHRONOLOG
 
 #pragma once
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 
@@ -17,6 +18,8 @@ class ChronologModule : public Module {
 };
 
 #endif
+
+REGISTER_MODULE("chronolog", ChronologModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

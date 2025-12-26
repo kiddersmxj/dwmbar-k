@@ -24,6 +24,11 @@
 #include "toggl.hpp"
 #include "config.hpp"
 
+struct ModuleInfo {
+    std::string name;
+    std::unique_ptr<Module> module;
+    std::thread thread;
+};
 
 std::string ParseModuleNo(std::string ModuleNo);
 // void XSR(std::string Body);

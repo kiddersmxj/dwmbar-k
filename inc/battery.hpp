@@ -1,4 +1,5 @@
 #pragma once
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 #include <string>
@@ -16,6 +17,8 @@ private:
     std::string BIcon = IBatteryEmpty;
     std::string CIcon = "";
 };
+
+REGISTER_MODULE("battery", BatteryModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

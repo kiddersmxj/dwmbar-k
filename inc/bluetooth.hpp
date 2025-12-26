@@ -1,3 +1,5 @@
+
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 #include <string>
@@ -10,6 +12,8 @@ public:
 private:
     std::string getBluetoothDeviceName();
 };
+
+REGISTER_MODULE("bluetooth", BluetoothModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

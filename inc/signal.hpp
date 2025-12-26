@@ -1,3 +1,5 @@
+#pragma once
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 
@@ -10,6 +12,8 @@ private:
     std::string getActiveInterface();
 
 };
+
+REGISTER_MODULE("signal", SignalModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.

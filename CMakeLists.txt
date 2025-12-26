@@ -55,6 +55,7 @@ target_sources(dwmbarsrc
     PRIVATE src/memory.cpp
     PRIVATE src/storage.cpp
     PRIVATE src/toggl.cpp
+    PRIVATE src/moduleregistry.cpp
 )
 
 target_sources(dwmbar

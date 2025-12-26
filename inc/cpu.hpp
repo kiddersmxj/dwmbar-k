@@ -1,5 +1,6 @@
 #pragma once
 
+#include "moduleregistry.hpp"
 #include "config.hpp"
 #include "module.hpp"
 #include <string>
@@ -11,6 +12,8 @@ public:
 private:
     double GetCpuUsage();
 };
+
+REGISTER_MODULE("cpu", CPUModule)
 
 // Copyright (c) 2024, Maxamilian Kidd-May
 // All rights reserved.
