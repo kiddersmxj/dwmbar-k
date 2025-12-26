@@ -4,6 +4,38 @@
 #include <string>
 #include <chrono>
 #include <thread>
+#include <string>
+#include <std-k>
+
+// Fallback brightness reader using brightnessctl
+double BrightnessModule::getBrightnessFromBrightnessctl() {
+    std::string Output;
+    k::ExecCmd("brightnessctl", Output);
+
+    if (Output.empty()) {
+        std::cerr << "brightnessctl returned no output" << std::endl;
+        return -1.0;
+    }
+
+    // Look for "(xx%)"
+    std::size_t openParen = Output.find('(');
+    std::size_t percent = Output.find('%', openParen);
+
+    if (openParen == std::string::npos || percent == std::string::npos) {
+        std::cerr << "Unable to parse brightnessctl output" << std::endl;
+        return -1.0;
+    }
+
+    std::string numberStr = Output.substr(openParen + 1, percent - openParen - 1);
+
+    try {
+        double value = std::stod(numberStr);
+        return value;
+    } catch (...) {
+        std::cerr << "Failed converting brightnessctl percentage" << std::endl;
+        return -1.0;
+    }
+}
 
 double BrightnessModule::getBrightnessPercentage() {
     std::string brightnessPath = "/sys/class/backlight/intel_backlight/brightness";
@@ -19,8 +51,8 @@ double BrightnessModule::getBrightnessPercentage() {
         brightnessFile >> currentBrightness;
         brightnessFile.close();
     } else {
-        std::cerr << "Unable to open file: " << brightnessPath << std::endl;
-        return -1.0; // Indicate an error
+        // std::cerr << "Unable to open file: " << brightnessPath << std::endl;
+        return getBrightnessFromBrightnessctl();
     }
 
     if (maxBrightnessFile.is_open()) {
@@ -28,14 +60,18 @@ double BrightnessModule::getBrightnessPercentage() {
         maxBrightnessFile.close();
     } else {
         std::cerr << "Unable to open file: " << maxBrightnessPath << std::endl;
-        return -1.0; // Indicate an error
+        return getBrightnessFromBrightnessctl();
     }
 
     if (maxBrightness != 0) {
-        return (static_cast<double>(currentBrightness) / maxBrightness) * 100;
+        double value = (static_cast<double>(currentBrightness) / maxBrightness) * 100;
+        if (value <= 0.0) {
+            return getBrightnessFromBrightnessctl();
+        }
+        return value;
     } else {
         std::cerr << "Error: max brightness value is zero or not found." << std::endl;
-        return -1.0; // Indicate an error
+        return getBrightnessFromBrightnessctl();
     }
 }
 

@@ -2,6 +2,7 @@
 #include "config.hpp"
 #include "module.hpp"
 #include <string>
+#include <std-k.hpp>
 
 class BrightnessModule : public Module {
 public:
@@ -9,6 +10,7 @@ public:
 
 private:
     double getBrightnessPercentage();
+    double getBrightnessFromBrightnessctl();
 };
 
 // Copyright (c) 2024, Maxamilian Kidd-May
