@@ -173,7 +173,7 @@ const std::string IHdd = R"(\xef\x82\xa0)";
 
 const std::string IToggl = R"(\xef\x80\x97)";
 
-const std::string IReset  = R"(\xe2\x86\xba)"; // U+21BA ↺
+const std::string IReset  = R"(\xef\x8b\xb9)"; // U+F2F9 rotate-right
 
 // Colours
 namespace Colour {
