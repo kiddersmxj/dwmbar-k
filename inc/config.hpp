@@ -86,6 +86,9 @@ const std::string NoOutputCode = "NaN";
 
 // Scale the volume based on individual system - 1 for off
 const float VolScaler = 1.0;
+// VolDisplayMax: MAX_VOL * 100 — must match MAX_VOL in media.sh.
+// Maps wpctl's 0–MAX_VOL range onto 0–100 % for the bar display.
+const int VolDisplayMax = 300;
 const std::time_t t = std::time(0);
 inline const std::tm* now = std::localtime(&t);
 const std::string DT = getenv("logdatetime");
