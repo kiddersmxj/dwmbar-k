@@ -24,10 +24,15 @@ int initializeConfig(const std::string& config_file_path) {
     KCONFIG_VAR(MemorySleepTime, "sleep.memory", 100)
     KCONFIG_VAR(StorageSleepTime, "sleep.storage", 100000)
     KCONFIG_VAR(TogglSleepTime, "sleep.toggl", 100)
+    KCONFIG_VAR(ClaudeSleepTime, "sleep.claude", 1000)
 
     KCONFIG_VAR(ChronologCooldown, "chronolog.cooldown", 500)
 
     KCONFIG_VAR(TogglGetStatusWait, "toggl.poll", 1200)
+
+    KCONFIG_VAR(ClaudeGetStatusWait, "claude.poll", 120)
+    KCONFIG_VAR(ClaudeFiveHourYellow, "claude.fivehour.yellow", 60)
+    KCONFIG_VAR(ClaudeFiveHourRed, "claude.fivehour.red", 85)
 
     KCONFIG_ARRAY_REQUIRED(ModuleLayout, "layout.layout")
 

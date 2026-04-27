@@ -34,6 +34,7 @@ inline int ChronologSleepTime;
 inline int MemorySleepTime;
 inline int StorageSleepTime;
 inline int TogglSleepTime;
+inline int ClaudeSleepTime;
 
 // Cooldown for keeping timer on bar after stop
 inline int ChronologCooldown;
@@ -42,11 +43,18 @@ inline int ChronologCooldown;
 // equal to ToggleGetStatusWait x TogglSleepTime
 inline int TogglGetStatusWait;
 
+// Claude module: how many ticks between API polls
+inline int ClaudeGetStatusWait;
+// Claude module: 5-hour utilisation thresholds (% of quota) at which
+// the icons shift colour to yellow / red
+inline int ClaudeFiveHourYellow;
+inline int ClaudeFiveHourRed;
+
 // Function to initialize global configuration variables
 int initializeConfig(const std::string& filePath);
 
-const int ModulesLength = 15;
-const std::string Modules[ModulesLength] =  { 
+const int ModulesLength = 16;
+const std::string Modules[ModulesLength] =  {
     "network",
     "time",
     "weather",
@@ -62,6 +70,7 @@ const std::string Modules[ModulesLength] =  {
     "memory",
     "storage",
     "toggl",
+    "claude",
 };
 
 const std::string Separator = ";";
@@ -163,6 +172,8 @@ const std::string IMemory = R"(\xef\x94\xb8)";
 const std::string IHdd = R"(\xef\x82\xa0)";
 
 const std::string IToggl = R"(\xef\x80\x97)";
+
+const std::string IReset  = R"(\xe2\x86\xba)"; // U+21BA ↺
 
 // Colours
 namespace Colour {
@@ -268,6 +279,24 @@ const int TogglNumColours = 4;
 const std::string TglCol[StorageNumColours] = {
     Colour::Magenta, Colour::Grey, Colour::Magenta
 //        Icon                 Tags             Description
+};
+
+const int ClaudeNumColours = 4;
+const std::string ClCol[ClaudeNumColours] = {
+    Colour::Green, Colour::Grey, Colour::Green, Colour::Grey
+//        Gauge          5h%/7d%        IReset            Time
+};
+const int ClaudeNumTiers = 3;
+const std::string ClTier[ClaudeNumTiers] = {
+    Colour::Green, Colour::Yellow, Colour::Red
+//        <yellow         <red          ≥red
+};
+// Gauge icon per tier: simple (low + mid), simple-high (high) — keeps the
+// "simple" gauge aesthetic and gives a double-cue (icon + colour) at red.
+const std::string ClGauge[ClaudeNumTiers] = {
+    R"(\xef\x98\xa9)", // gauge-simple        U+F629  (low)
+    R"(\xef\x98\xa9)", // gauge-simple        U+F629  (mid)
+    R"(\xef\x98\xaa)", // gauge-simple-high   U+F62A  (high)
 };
 
 #endif 

@@ -22,6 +22,7 @@
 #include "memory.hpp"
 #include "storage.hpp"
 #include "toggl.hpp"
+#include "claude.hpp"
 #include "config.hpp"
 
 struct ModuleInfo {
