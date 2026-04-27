@@ -77,7 +77,13 @@ std::string MediaModule::GetTimeFromStart() {
 	int Time, Sec, Min;
     std::string Output;
     k::ExecCmd(R"(playerctl position | sed 's/..\{6\}$//')", Output);
-	Time = stoi(Output);
+    // stoi throws std::invalid_argument if playerctl returns non-numeric output
+    // (e.g. "No players found" when the player disconnects). Catch and return "0:00".
+    try {
+        Time = stoi(Output);
+    } catch (...) {
+        return "0:00";
+    }
 	Min = (Time % 3600) / 60;
 	Sec = Time % 60;
 
