@@ -23,6 +23,7 @@
 #include "storage.hpp"
 #include "toggl.hpp"
 #include "claude.hpp"
+#include "archaudit.hpp"
 #include "config.hpp"
 
 struct ModuleInfo {

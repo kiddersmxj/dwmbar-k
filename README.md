@@ -30,6 +30,7 @@ icons and per-module separators render correctly.
 | `storage`     | Root filesystem utilisation                          |
 | `toggl`       | Current Toggl timer (description, tags, duration)    |
 | `claude`      | Claude.ai OAuth quota: 5h/7d %, reset time, gauge    |
+| `archaudit`   | `arch-audit` vulnerable/upgradable count (shield)    |
 
 Every module is independent — none of them are required to be
 present, and the runtime composition is driven entirely by the
@@ -77,6 +78,7 @@ For the latest tagged release see
 | `bluetooth`                | `bluetoothctl`                                     |
 | `claude`                   | `jq`, `curl`, `date`, `~/.claude/.credentials.json`|
 | `toggl`                    | external `/usr/bin/toggl.sh`                       |
+| `archaudit`                | `arch-audit`                                       |
 | All                        | a Font Awesome (or compatible Nerd) font for icons |
 
 ## Usage

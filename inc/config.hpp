@@ -35,6 +35,7 @@ inline int MemorySleepTime;
 inline int StorageSleepTime;
 inline int TogglSleepTime;
 inline int ClaudeSleepTime;
+inline int ArchAuditSleepTime;
 
 // Cooldown for keeping timer on bar after stop
 inline int ChronologCooldown;
@@ -50,10 +51,17 @@ inline int ClaudeGetStatusWait;
 inline int ClaudeFiveHourYellow;
 inline int ClaudeFiveHourRed;
 
+// ArchAudit module: how many ticks between arch-audit polls
+inline int ArchAuditGetStatusWait;
+// ArchAudit module: vulnerable-package count thresholds at which the
+// shield icon shifts colour to yellow / red
+inline int ArchAuditYellow;
+inline int ArchAuditRed;
+
 // Function to initialize global configuration variables
 int initializeConfig(const std::string& filePath);
 
-const int ModulesLength = 16;
+const int ModulesLength = 17;
 const std::string Modules[ModulesLength] =  {
     "network",
     "time",
@@ -71,6 +79,7 @@ const std::string Modules[ModulesLength] =  {
     "storage",
     "toggl",
     "claude",
+    "archaudit",
 };
 
 const std::string Separator = ";";
@@ -299,4 +308,21 @@ const std::string ClGauge[ClaudeNumTiers] = {
     R"(\xef\x98\xaa)", // gauge-simple-high   U+F62A  (high)
 };
 
-#endif 
+const int ArchAuditNumColours = 2;
+const std::string ArCol[ArchAuditNumColours] = {
+    Colour::Green, Colour::Grey
+//        Icon            Count
+};
+const int ArchAuditNumTiers = 3;
+const std::string ArTier[ArchAuditNumTiers] = {
+    Colour::Green, Colour::Yellow, Colour::Red
+//        0 vulns        <red          ≥red
+};
+// Shield icon — severity is conveyed by the tier colour (green/yellow/
+// red), same single-icon-plus-tier-colour ethos as the cpu module.
+// md-security (outline shield). If it doesn't render, fall back to
+// md-shield_half U+F0780 (\xf3\xb0\x9e\x80) or fa-shield_halved
+// U+F3ED (\xef\x8f\xad).
+const std::string IArchAudit = R"(\xf3\xb0\x92\x83)"; // md-security U+F0483
+
+#endif

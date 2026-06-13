@@ -56,6 +56,7 @@ target_sources(dwmbarsrc
     PRIVATE src/storage.cpp
     PRIVATE src/toggl.cpp
     PRIVATE src/claude.cpp
+    PRIVATE src/archaudit.cpp
     PRIVATE src/moduleregistry.cpp
 )
 
