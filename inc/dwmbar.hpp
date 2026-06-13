@@ -24,6 +24,7 @@
 #include "toggl.hpp"
 #include "claude.hpp"
 #include "archaudit.hpp"
+#include "ccorral.hpp"
 #include "config.hpp"
 
 struct ModuleInfo {

@@ -36,6 +36,7 @@ inline int StorageSleepTime;
 inline int TogglSleepTime;
 inline int ClaudeSleepTime;
 inline int ArchAuditSleepTime;
+inline int CcorralSleepTime;
 
 // Cooldown for keeping timer on bar after stop
 inline int ChronologCooldown;
@@ -58,10 +59,13 @@ inline int ArchAuditGetStatusWait;
 inline int ArchAuditYellow;
 inline int ArchAuditRed;
 
+// Ccorral module: how many ticks between `ccorral count attention` (X11) polls
+inline int CcorralAttentionWait;
+
 // Function to initialize global configuration variables
 int initializeConfig(const std::string& filePath);
 
-const int ModulesLength = 17;
+const int ModulesLength = 18;
 const std::string Modules[ModulesLength] =  {
     "network",
     "time",
@@ -80,6 +84,7 @@ const std::string Modules[ModulesLength] =  {
     "toggl",
     "claude",
     "archaudit",
+    "ccorral",
 };
 
 const std::string Separator = ";";
@@ -324,5 +329,15 @@ const std::string ArTier[ArchAuditNumTiers] = {
 // md-shield_half U+F0780 (\xf3\xb0\x9e\x80) or fa-shield_halved
 // U+F3ED (\xef\x8f\xad).
 const std::string IArchAudit = R"(\xf3\xb0\x92\x83)"; // md-security U+F0483
+
+const int CcorralNumColours = 2;
+const std::string CcCol[CcorralNumColours] = {
+    Colour::Green, Colour::Grey
+//        Bell           Counts
+};
+// Ccorral module: a single bell icon whose glyph reflects mute state.
+// Both render green; the open/slashed bell carries the meaning.
+const std::string ICcorralBell  = R"(\xef\x83\xb3)"; // fa-bell        U+F0F3
+const std::string ICcorralMuted = R"(\xef\x87\xb6)"; // fa-bell_slash  U+F1F6
 
 #endif

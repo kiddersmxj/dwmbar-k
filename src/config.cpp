@@ -26,6 +26,7 @@ int initializeConfig(const std::string& config_file_path) {
     KCONFIG_VAR(TogglSleepTime, "sleep.toggl", 100)
     KCONFIG_VAR(ClaudeSleepTime, "sleep.claude", 1000)
     KCONFIG_VAR(ArchAuditSleepTime, "sleep.archaudit", 1000)
+    KCONFIG_VAR(CcorralSleepTime, "sleep.ccorral", 1000)
 
     KCONFIG_VAR(ChronologCooldown, "chronolog.cooldown", 500)
 
@@ -38,6 +39,8 @@ int initializeConfig(const std::string& config_file_path) {
     KCONFIG_VAR(ArchAuditGetStatusWait, "archaudit.poll", 1800)
     KCONFIG_VAR(ArchAuditYellow, "archaudit.yellow", 1)
     KCONFIG_VAR(ArchAuditRed, "archaudit.red", 5)
+
+    KCONFIG_VAR(CcorralAttentionWait, "ccorral.attention-poll", 3)
 
     KCONFIG_ARRAY_REQUIRED(ModuleLayout, "layout.layout")
 

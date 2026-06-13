@@ -135,6 +135,11 @@ std::string ParseXSR(std::vector<std::string> OutputVector) {
         i++;
     }
 
+    // Trailing pad: dwm clips the last glyph of the status string. A trailing
+    // space gets ignored, so append a newline (\x0a) — that reserves the slack
+    // dwm eats, keeping the final module's content intact.
+    XSRBody += R"(\x0a)";
+
 	return XSRBody;
 }
 
