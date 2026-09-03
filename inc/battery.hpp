@@ -9,6 +9,8 @@ public:
     void run() override;
 
 private:
+    // Kernel-backed read; falls back to acpi when no battery is exposed.
+    bool readSysfs(std::string& status, int& level);
     std::string TrimWhiteSpace(const std::string& str);
     std::string TrimNewLine(const std::string& str);
     int Battery();

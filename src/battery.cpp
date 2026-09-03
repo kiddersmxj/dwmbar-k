@@ -1,9 +1,14 @@
 #include "../inc/battery.hpp"
 #include <iostream>
+#include <fstream>
+#include <filesystem>
 #include <vector>
 #include <thread>
 #include <chrono>
 
+// Fallback only. The kernel exposes both values directly (see readSysfs); these
+// ran twice per tick, each a shell plus acpi plus awk, for data already sitting
+// in two one-line files.
 const std::string ChargingStatCmd = R"(acpi -b | awk -F'[,:] ' '{print $2}')";
 const std::string BatteryLevelCmd = R"(acpi -b | awk -F'[,:%]' '{print $3}')";
 
@@ -25,20 +30,49 @@ std::string BatteryModule::TrimNewLine(const std::string& str) {
     return str.substr(first, (last - first + 1));
 }
 
+// Read status and capacity from the first battery the kernel reports. The
+// status strings ("Charging", "Discharging", "Not charging", "Full") are the
+// same words acpi prints, so the branches below are unchanged.
+bool BatteryModule::readSysfs(std::string& status, int& level) {
+    namespace fs = std::filesystem;
+
+    std::error_code ec;
+    for (const auto& entry : fs::directory_iterator("/sys/class/power_supply", ec)) {
+        const std::string name = entry.path().filename().string();
+        if (name.rfind("BAT", 0) != 0) continue;          // BAT0, BAT1, …
+
+        std::ifstream sf(entry.path() / "status");
+        std::ifstream cf(entry.path() / "capacity");
+        if (!sf || !cf) continue;
+
+        int capacity;
+        if (!(cf >> capacity)) continue;
+        if (!std::getline(sf, status)) continue;
+
+        level = capacity;
+        return true;
+    }
+    return false;                                          // no battery, or ec set
+}
+
 int BatteryModule::Battery() {
     std::string BColI;
     std::string ChargingStat;
-    k::ExecCmd(ChargingStatCmd, ChargingStat);
-    std::string BatteryLevelString;
-    k::ExecCmd(BatteryLevelCmd, BatteryLevelString);
+    int BatteryLevel = 0;
 
-    if (BatteryLevelString.empty()) {
-        std::cout << "acpi did not exec" << std::endl;
-        return 1;
+    if (!readSysfs(ChargingStat, BatteryLevel)) {
+        std::string BatteryLevelString;
+        k::ExecCmd(ChargingStatCmd, ChargingStat);
+        k::ExecCmd(BatteryLevelCmd, BatteryLevelString);
+
+        if (BatteryLevelString.empty()) {
+            std::cout << "acpi did not exec" << std::endl;
+            return 1;
+        }
+        BatteryLevel = std::stoi(TrimNewLine(TrimWhiteSpace(BatteryLevelString)));
     }
 
     ChargingStat = TrimNewLine(TrimWhiteSpace(ChargingStat));
-    int BatteryLevel = std::stoi(TrimNewLine(TrimWhiteSpace(BatteryLevelString)));
 
     if (ChargingStat.empty()) {
         std::cout << "acpi did not exec" << std::endl;

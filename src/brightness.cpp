@@ -1,6 +1,7 @@
 #include "../inc/brightness.hpp"
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 #include <string>
 #include <chrono>
 #include <thread>
@@ -37,42 +38,32 @@ double BrightnessModule::getBrightnessFromBrightnessctl() {
     }
 }
 
+// Enumerate /sys/class/backlight rather than assuming a vendor. This used to
+// hardcode intel_backlight, so on AMD (amdgpu_bl*) or any other driver the
+// sysfs path never resolved and every tick fell through to brightnessctl.
 double BrightnessModule::getBrightnessPercentage() {
-    std::string brightnessPath = "/sys/class/backlight/intel_backlight/brightness";
-    std::string maxBrightnessPath = "/sys/class/backlight/intel_backlight/max_brightness";
+    namespace fs = std::filesystem;
 
-    std::ifstream brightnessFile(brightnessPath);
-    std::ifstream maxBrightnessFile(maxBrightnessPath);
+    std::error_code ec;
+    for (const auto& entry : fs::directory_iterator("/sys/class/backlight", ec)) {
+        std::ifstream brightnessFile(entry.path() / "brightness");
+        std::ifstream maxBrightnessFile(entry.path() / "max_brightness");
 
-    int currentBrightness = 0;
-    int maxBrightness = 0;
+        int currentBrightness = 0;
+        int maxBrightness = 0;
 
-    if (brightnessFile.is_open()) {
-        brightnessFile >> currentBrightness;
-        brightnessFile.close();
-    } else {
-        // std::cerr << "Unable to open file: " << brightnessPath << std::endl;
-        return getBrightnessFromBrightnessctl();
-    }
+        if (!(brightnessFile >> currentBrightness)) continue;
+        if (!(maxBrightnessFile >> maxBrightness)) continue;
+        if (maxBrightness == 0) continue;
 
-    if (maxBrightnessFile.is_open()) {
-        maxBrightnessFile >> maxBrightness;
-        maxBrightnessFile.close();
-    } else {
-        std::cerr << "Unable to open file: " << maxBrightnessPath << std::endl;
-        return getBrightnessFromBrightnessctl();
-    }
-
-    if (maxBrightness != 0) {
         double value = (static_cast<double>(currentBrightness) / maxBrightness) * 100;
         if (value <= 0.0) {
-            return getBrightnessFromBrightnessctl();
+            return getBrightnessFromBrightnessctl();   // genuinely off, or bogus
         }
         return value;
-    } else {
-        std::cerr << "Error: max brightness value is zero or not found." << std::endl;
-        return getBrightnessFromBrightnessctl();
     }
+
+    return getBrightnessFromBrightnessctl();           // no backlight class, or ec set
 }
 
 void BrightnessModule::run() {

@@ -7,108 +7,89 @@
 void MediaModule::run() {
     std::string output = " ";
     while (true) {
-        std::string player = GetPlayer();
-        std::string artist, title, time;
+        std::vector<Player> players = GetPlayers();
 
-        if (player != "Paused") {
-            artist = GetArtist(player);
-            title = GetTitle(player);
-            time = GetTimeFromStart();
+        const Player* playing = nullptr;
+        for (const Player& p : players) {
+            if (p.status == "Playing") { playing = &p; break; }
+        }
 
-            output = MCol[0] + IPlay + " " + MCol[1] + artist + MCol[2] + " - " + MCol[3] + title + MCol[4] + " (" + MCol[5] + time + MCol[4] + ")";
+        // Nothing playing: leave the previous output in place, as before.
+        if (playing != nullptr) {
+            output = MCol[0] + IPlay + " " + MCol[1] + playing->artist +
+                     MCol[2] + " - " + MCol[3] + playing->title +
+                     MCol[4] + " (" + MCol[5] + FormatPosition(playing->position) +
+                     MCol[4] + ")";
 
             updateOutput(output);
-        } else {
-            // updateOutput("Paused");
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(MediaSleepTime));
     }
 }
 
+// Every player's state in a single call. This used to be five separate
+// `playerctl` invocations per tick — list players, status for each, then
+// position (piped through sed), artist and title for the playing one — which
+// at a 50ms interval was the largest source of forks on the machine.
+std::vector<MediaModule::Player> MediaModule::GetPlayers() {
+    std::string Raw;
+    k::ExecCmd(
+        "playerctl -a metadata --format "
+        "'{{playerName}}\t{{status}}\t{{artist}}\t{{title}}\t{{position}}' 2>/dev/null",
+        Raw);
 
-std::vector<std::string> MediaModule::GetPlayers() {
-    std::string Players;
-    k::ExecCmd(R"(playerctl -l)", Players);
-    std::vector<std::string> PlayersVector = splitString(Players);
-    PlayersVector.pop_back();
-#ifdef MCOUT
-    VPrint(PlayersVector);
-#endif
-    return PlayersVector;
-}
+    std::vector<Player> players;
+    for (const std::string& line : splitString(Raw, '\n')) {
+        if (line.empty()) continue;
 
-// std::string MediaModule::GetPlayer() {
-//     std::vector<std::string> players = splitString(k::ExecCmd("playerctl -l"));
-//     for (const auto& player : players) {
-//         std::string status = k::ExecCmd("playerctl -p " + player + " status");
-//         if (status == "Playing") return player;
-//     }
-//     return "Paused";
-// }
+        // Name, status and position are the outer fields and always safe to
+        // address positionally; anything extra in the middle is folded back
+        // into the title, which is the field most likely to contain a tab.
+        std::vector<std::string> f = splitString(line, '\t');
+        if (f.size() < 5) continue;
 
-std::string MediaModule::GetPlayer() {
-    int i = 0;
-    std::string Player;
-	std::vector<std::string> Players = GetPlayers();
-	for(std::string P: Players) {
-        std::string Output;
-        k::ExecCmd(R"(playerctl -p )" + P + R"( status)", Output);
-        Output = k::StripTrailingNL(Output);
-        if(Output == "Playing") {
-            i++;
-            Player = P;
-		}
-	}
-	switch(i) {
-		case 0:
-			return "Paused";
-		case 1:
-			return Player;
-		case 2:
-			return "Overloaded";
-		default:
-			return "Error";
-	}
-	return "None";
-}
+        Player p;
+        p.name   = f[0];
+        p.status = f[1];
+        p.artist = f[2];
+        try {
+            p.position = std::stol(f.back());
+        } catch (...) {
+            p.position = 0;             // "No players found", or a player with
+        }                               // no position (a stream, say)
 
-std::string MediaModule::GetTimeFromStart() {
-	int Time, Sec, Min;
-    std::string Output;
-    k::ExecCmd(R"(playerctl position | sed 's/..\{6\}$//')", Output);
-    // stoi throws std::invalid_argument if playerctl returns non-numeric output
-    // (e.g. "No players found" when the player disconnects). Catch and return "0:00".
-    try {
-        Time = stoi(Output);
-    } catch (...) {
-        return "0:00";
+        p.title = f[3];
+        for (size_t i = 4; i + 1 < f.size(); ++i) p.title += "\t" + f[i];
+
+        players.push_back(p);
     }
-	Min = (Time % 3600) / 60;
-	Sec = Time % 60;
 
-	// Return value in Min:Sec format - ternary used to make sure signe digit integers have zero before for formatting
-	return std::to_string(Min) + ":" + (Sec < 10 ? ("0" + std::to_string(Sec)) : std::to_string(Sec));
+#ifdef MCOUT
+    for (const Player& p : players)
+        std::cout << p.name << " " << p.status << " " << p.title << std::endl;
+#endif
+
+    return players;
 }
 
-std::string MediaModule::GetArtist(std::string Player) {
-    std::string Output;
-    k::ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ artist }}')", Output);
-    return k::StripTrailingNL(Output);
+// playerctl reports position in microseconds. Mins wrap at the hour, matching
+// the previous behaviour.
+std::string MediaModule::FormatPosition(long microseconds) {
+    if (microseconds < 0) microseconds = 0;
+    long Time = microseconds / 1000000L;
+    long Min  = (Time % 3600L) / 60L;
+    long Sec  = Time % 60L;
+
+    return std::to_string(Min) + ":" +
+           (Sec < 10 ? ("0" + std::to_string(Sec)) : std::to_string(Sec));
 }
 
-std::string MediaModule::GetTitle(std::string Player) {
-    std::string Output;
-    k::ExecCmd(R"(playerctl --player=)" + Player + R"( metadata --format '{{ title }}')", Output);
-    return k::StripTrailingNL(Output);
-}
-
-// Define splitString to split strings by newline
-std::vector<std::string> MediaModule::splitString(const std::string& str) {
+std::vector<std::string> MediaModule::splitString(const std::string& str, char delim) {
     std::vector<std::string> tokens;
     std::string::size_type pos = 0, prev = 0;
 
-    while ((pos = str.find('\n', prev)) != std::string::npos) {
+    while ((pos = str.find(delim, prev)) != std::string::npos) {
         tokens.push_back(str.substr(prev, pos - prev));
         prev = pos + 1;
     }
@@ -121,4 +102,3 @@ std::vector<std::string> MediaModule::splitString(const std::string& str) {
 
 // This source code is licensed under the MIT license found in the
 // LICENSE file in the root directory of this source tree. 
-

@@ -52,6 +52,11 @@ inline int ClaudeGetStatusWait;
 inline int ClaudeFiveHourYellow;
 inline int ClaudeFiveHourRed;
 
+// Network module: how many ticks between public-IP lookups. The public IP
+// is an external HTTPS request, so this is deliberately long; a route
+// change refreshes it immediately regardless.
+inline int NetworkPublicIPWait;
+
 // ArchAudit module: how many ticks between arch-audit polls
 inline int ArchAuditGetStatusWait;
 // ArchAudit module: vulnerable-package count thresholds at which the

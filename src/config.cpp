@@ -13,7 +13,7 @@ int initializeConfig(const std::string& config_file_path) {
     KCONFIG_VAR(NetworkSleepTime, "sleep.network", 500)
     KCONFIG_VAR(MediaSleepTime, "sleep.media", 500)
     KCONFIG_VAR(VolumeSleepTime, "sleep.volume", 500)
-    KCONFIG_VAR(WeatherSleepTime, "sleep.weather", 500)
+    KCONFIG_VAR(WeatherSleepTime, "sleep.weather", 900000)
     KCONFIG_VAR(BatterySleepTime, "sleep.battery", 500)
     KCONFIG_VAR(SignalSleepTime, "sleep.signal", 500)
     KCONFIG_VAR(CPUSleepTime, "sleep.cpu", 500)
@@ -21,16 +21,16 @@ int initializeConfig(const std::string& config_file_path) {
     KCONFIG_VAR(BrightnessSleepTime, "sleep.brightness", 500)
     KCONFIG_VAR(WinConnectSleepTime, "sleep.winconnect", 500)
     KCONFIG_VAR(ChronologSleepTime, "sleep.chronolog", 500)
-    KCONFIG_VAR(MemorySleepTime, "sleep.memory", 100)
+    KCONFIG_VAR(MemorySleepTime, "sleep.memory", 1000)
     KCONFIG_VAR(StorageSleepTime, "sleep.storage", 100000)
-    KCONFIG_VAR(TogglSleepTime, "sleep.toggl", 100)
+    KCONFIG_VAR(TogglSleepTime, "sleep.toggl", 1000)
     KCONFIG_VAR(ClaudeSleepTime, "sleep.claude", 1000)
     KCONFIG_VAR(ArchAuditSleepTime, "sleep.archaudit", 1000)
     KCONFIG_VAR(CcorralSleepTime, "sleep.ccorral", 1000)
 
     KCONFIG_VAR(ChronologCooldown, "chronolog.cooldown", 500)
 
-    KCONFIG_VAR(TogglGetStatusWait, "toggl.poll", 1200)
+    KCONFIG_VAR(TogglGetStatusWait, "toggl.poll", 120)
 
     KCONFIG_VAR(ClaudeGetStatusWait, "claude.poll", 120)
     KCONFIG_VAR(ClaudeFiveHourYellow, "claude.fivehour.yellow", 60)
@@ -41,6 +41,8 @@ int initializeConfig(const std::string& config_file_path) {
     KCONFIG_VAR(ArchAuditRed, "archaudit.red", 5)
 
     KCONFIG_VAR(CcorralAttentionWait, "ccorral.attention-poll", 3)
+
+    KCONFIG_VAR(NetworkPublicIPWait, "network.publicip-poll", 300)
 
     KCONFIG_ARRAY_REQUIRED(ModuleLayout, "layout.layout")
 

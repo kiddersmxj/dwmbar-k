@@ -9,7 +9,9 @@ public:
     void run() override;
 
 private:
-    std::string getConnectionName();
+    // iface is passed in rather than re-resolved: the caller has just done
+    // that work, and resolving costs a shell script full of forks.
+    std::string getConnectionName(const std::string& iface);
     std::string getPublicIP();
     std::string getPrivateIP();
 };

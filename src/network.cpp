@@ -68,35 +68,52 @@ namespace {
 void NetworkModule::run() {
     std::string output = " ";
 
+    // The public IP and the connection name change rarely — on a route change,
+    // essentially. Both used to be fetched every tick, which meant an HTTPS
+    // request to a third-party API once a second (86,400 a day) and two nmcli
+    // pipelines besides. They are cached here and refreshed on a counter, or
+    // immediately when the active interface changes.
+    std::string lastIface;
+    std::string publicIP;
+    std::string displayName;
+    int RunGetPublicIP = NetworkPublicIPWait;   // force a fetch on first tick
+
     while (true) {
         std::string iface;
         std::string privateIP;
         resolve_active_interface(iface, privateIP);
 
         if (!iface.empty()) {
-            std::string publicIP = getPublicIP();
+            if (iface != lastIface) {           // route changed: everything is stale
+                lastIface = iface;
+                displayName = getConnectionName(iface);
+                RunGetPublicIP = NetworkPublicIPWait;
+            }
+
+            if (RunGetPublicIP >= NetworkPublicIPWait) {
+                publicIP = getPublicIP();
+                displayName = getConnectionName(iface);
+                RunGetPublicIP = 0;
+            }
 
             // iface will be turned into SSID in getConnectionName() for Wi-Fi,
             // but here we want the raw interface name in case you prefer it.
-            std::string displayName = getConnectionName();
-
             output = NCol[0] + IInternet + " " + NCol[1] + displayName + " " +
                      NCol[2] + privateIP + NCol[3] + " " + publicIP + BDCol;
 
             updateOutput(output);
         } else {
+            lastIface.clear();                  // re-fetch when a link returns
+            publicIP.clear();
             updateOutput(NoOutputCode);
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(NetworkSleepTime));
+        RunGetPublicIP++;
     }
 }
 
-std::string NetworkModule::getConnectionName() {
-    std::string iface;
-    std::string ip;
-    resolve_active_interface(iface, ip);
-
+std::string NetworkModule::getConnectionName(const std::string& iface) {
     if (iface.empty()) {
         return "";
     }

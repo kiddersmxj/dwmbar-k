@@ -46,6 +46,8 @@ int main() {
     }
 
     // Main loop
+    std::string lastComposed;
+
     while (true) {
         // 1. Collect outputs
         std::vector<std::pair<std::string, std::string>> outputVector;
@@ -92,8 +94,14 @@ int main() {
             }
         }
 
-        // 3. Render to X root window
-        XSR(ParseXSR(OrderedVector));
+        // 3. Render to X root window, but only when the composed bar actually
+        // changed. This used to push every tick regardless — 10 X round-trips a
+        // second for a string that mostly differs once a second, if that.
+        std::string composed = ParseXSR(OrderedVector);
+        if (composed != lastComposed) {
+            XSR(composed);
+            lastComposed = composed;
+        }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(SleepTime));
     }
