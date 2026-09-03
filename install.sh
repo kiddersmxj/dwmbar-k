@@ -9,7 +9,10 @@ mkdir -p build
 # in-repo dwmbar.conf to ~/.dwmbar.conf (the install rule is a no-op when the
 # file already exists).
 rm -f "$HOME/.dwmbar.conf"
-script -q -c "cmake -B build $ARGS && cmake --build build && sudo cmake --install build" | tee build/build.log
+# `script` is only here to give cmake a pty so its output stays coloured through
+# the pipe; /dev/null as the typescript target stops it dropping a `typescript`
+# file in the repo root on every install.
+script -q -c "cmake -B build $ARGS && cmake --build build && sudo cmake --install build" /dev/null | tee build/build.log
 
 # Copyright (c) 2024, Maxamilian Kidd-May
 # All rights reserved.

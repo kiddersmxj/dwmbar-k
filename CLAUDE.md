@@ -11,16 +11,30 @@ because the running bar uses the installed binary at
 `/usr/local/bin/dwmbarsrc/dwmbarsrc`.
 
 ```sh
-./install.sh
+./install.sh          # build + install
+/usr/local/bin/dwmbar # restart the bar so the new binary is actually running
 ```
 
 What it does: removes `~/.dwmbar.conf` (so the in-repo `dwmbar.conf` is
 re-copied on install), then runs `cmake -B build && cmake --build build &&
-sudo cmake --install build`. It needs sudo for the install step. After
-installing, the wrapper restarts the bar (`pkill dwmbar`).
+sudo cmake --install build`. It needs sudo for the install step.
+
+**Installing does not restart the bar.** The running `dwmbarsrc` is orphaned to
+init with nothing supervising it, so it keeps serving the old binary — and the
+old `~/.dwmbar.conf`, which is only read at startup — until it is replaced. The
+restart lives in the wrapper `/usr/local/bin/dwmbar` (`pkill dwmbar;
+dwmbarsrc &`), which `install.sh` deliberately does not call; run it yourself.
+
+To check which binary is actually live, compare the process start time against
+the installed binary's mtime:
+
+```sh
+ps -o lstart= -p "$(pgrep -x dwmbarsrc)"
+ls -l --time-style=full-iso /usr/local/bin/dwmbarsrc/dwmbarsrc
+```
 
 `cmake --build build` on its own is fine for a quick compile-check, but always
-finish with `./install.sh` to make the change take effect.
+finish with `./install.sh` *and* the restart to make the change take effect.
 
 ## Adding a module
 
