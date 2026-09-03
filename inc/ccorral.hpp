@@ -12,6 +12,7 @@ public:
 
 private:
     struct CcorralStatus {
+        int  unread    = 0;
         int  open      = 0;
         int  running   = 0;
         int  attention = 0;

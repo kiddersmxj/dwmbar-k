@@ -23,7 +23,8 @@ CcorralModule::CcorralStatus CcorralModule::GetStatus() {
 
     // Cheap reads (file-backed) — safe to poll every tick. If these fail the
     // CLI is absent/broken, so the whole segment goes invalid.
-    if (!parseCount("ccorral count open 2>/dev/null", s.open))    return s;
+    if (!parseCount("ccorral count unread 2>/dev/null", s.unread))   return s;
+    if (!parseCount("ccorral count open 2>/dev/null", s.open))       return s;
     if (!parseCount("ccorral count running 2>/dev/null", s.running)) return s;
 
     // `ccorral mute-status` prints "true" when muted (exit 1 when not, so the
@@ -56,7 +57,8 @@ void CcorralModule::run() {
         } else {
             std::string out =
                 CcCol[0] + (status.muted ? ICcorralMuted : ICcorralBell) + " " +
-                CcCol[1] + std::to_string(status.attention) + "/" +
+                CcCol[1] + std::to_string(status.unread) + "/" +
+                std::to_string(status.attention) + "/" +
                 std::to_string(status.running)   + "/" +
                 std::to_string(status.open) + BDCol;
 
