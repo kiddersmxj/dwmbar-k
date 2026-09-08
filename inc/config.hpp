@@ -45,12 +45,21 @@ inline int ChronologCooldown;
 // equal to ToggleGetStatusWait x TogglSleepTime
 inline int TogglGetStatusWait;
 
-// Claude module: how many ticks between API polls
+// Claude module: how many ticks between bursar reads. bursar polls Anthropic
+// every five minutes on the whole fleet's behalf, so reading faster than that
+// returns the same number and only costs traffic.
 inline int ClaudeGetStatusWait;
 // Claude module: 5-hour utilisation thresholds (% of quota) at which
 // the icons shift colour to yellow / red
 inline int ClaudeFiveHourYellow;
 inline int ClaudeFiveHourRed;
+// Claude module: bursar's unauthenticated reading endpoint on the tailnet.
+// No credential, no header — a secret is only ever needed to spend or to
+// report spend, never to read.
+inline std::string ClaudeBursarURL;
+// Claude module: age (seconds) beyond which a reading counts as stale.
+// bursar polls every five minutes, so three missed rounds is a fault.
+inline int ClaudeStaleSeconds;
 
 // Network module: how many ticks between public-IP lookups. The public IP
 // is an external HTTPS request, so this is deliberately long; a route
@@ -193,6 +202,7 @@ const std::string IHdd = R"(\xef\x82\xa0)";
 const std::string IToggl = R"(\xef\x80\x97)";
 
 const std::string IReset  = R"(\xef\x8b\xb9)"; // U+F2F9 rotate-right
+const std::string IStale  = R"(\xef\x87\x9a)"; // U+F1DA clock-rotate-left
 
 // Colours
 namespace Colour {
@@ -300,11 +310,17 @@ const std::string TglCol[StorageNumColours] = {
 //        Icon                 Tags             Description
 };
 
-const int ClaudeNumColours = 4;
+const int ClaudeNumColours = 6;
 const std::string ClCol[ClaudeNumColours] = {
-    Colour::Green, Colour::Grey, Colour::Green, Colour::Grey
+    Colour::Green, Colour::Grey, Colour::Green, Colour::Grey,
 //        Gauge          5h%/7d%        IReset            Time
+    Colour::Yellow, Colour::Grey
+//        Stale          Unknown
 };
+// Shown in place of the figures when there is no reading at all — bursar has
+// never polled successfully, or it is unreachable (normal off the tailnet).
+// Deliberately not a zero: 0% looks like good news, unknown is not.
+const std::string ClaudeNoReading = "-/-";
 const int ClaudeNumTiers = 3;
 const std::string ClTier[ClaudeNumTiers] = {
     Colour::Green, Colour::Yellow, Colour::Red

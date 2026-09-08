@@ -32,9 +32,11 @@ int initializeConfig(const std::string& config_file_path) {
 
     KCONFIG_VAR(TogglGetStatusWait, "toggl.poll", 120)
 
-    KCONFIG_VAR(ClaudeGetStatusWait, "claude.poll", 120)
+    KCONFIG_VAR(ClaudeGetStatusWait, "claude.poll", 300)
     KCONFIG_VAR(ClaudeFiveHourYellow, "claude.fivehour.yellow", 60)
     KCONFIG_VAR(ClaudeFiveHourRed, "claude.fivehour.red", 85)
+    KCONFIG_VAR(ClaudeBursarURL, "claude.url", std::string("http://100.68.242.61:8780/needle"))
+    KCONFIG_VAR(ClaudeStaleSeconds, "claude.stale-seconds", 900)
 
     KCONFIG_VAR(ArchAuditGetStatusWait, "archaudit.poll", 1800)
     KCONFIG_VAR(ArchAuditYellow, "archaudit.yellow", 1)

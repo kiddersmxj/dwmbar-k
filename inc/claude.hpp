@@ -11,11 +11,16 @@ public:
     void run() override;
 
 private:
+    // What the bar actually knows. Fresh and Stale both carry real figures;
+    // NoReading carries none, and must never be rendered as a zero.
+    enum class State { NoReading, Stale, Fresh };
+
     struct ClaudeStatus {
+        State state = State::NoReading;
         int fiveHour = -1;
         int sevenDay = -1;
-        std::string resetTime;
-        bool valid = false;
+        std::string resetTime;   // HH:MM local — when the 5-hour window resets
+        std::string polledTime;  // HH:MM local — when bursar last got a figure
     };
 
     ClaudeStatus GetStatus();

@@ -29,7 +29,7 @@ icons and per-module separators render correctly.
 | `memory`      | RAM and swap utilisation                             |
 | `storage`     | Root filesystem utilisation                          |
 | `toggl`       | Current Toggl timer (description, tags, duration)    |
-| `claude`      | Claude.ai OAuth quota: 5h/7d %, reset time, gauge    |
+| `claude`      | Claude.ai quota via bursar: 5h/7d %, reset time      |
 | `archaudit`   | `arch-audit` vulnerable/upgradable count (shield)    |
 
 Every module is independent — none of them are required to be
@@ -76,7 +76,7 @@ For the latest tagged release see
 | `battery`                  | `acpi`                                             |
 | `brightness`               | `brightnessctl` (used as fallback)                 |
 | `bluetooth`                | `bluetoothctl`                                     |
-| `claude`                   | `jq`, `curl`, `date`, `~/.claude/.credentials.json`|
+| `claude`                   | `jq`, `curl`, `date`, reachable bursar (tailnet)   |
 | `toggl`                    | external `/usr/bin/toggl.sh`                       |
 | `archaudit`                | `arch-audit`                                       |
 | All                        | a Font Awesome (or compatible Nerd) font for icons |
@@ -105,7 +105,9 @@ volume    = 500
 # ... one entry per module
 
 [claude]
-poll            = 120  # API re-poll every N ticks
+poll            = 300  # re-read bursar every N ticks (5 min)
+url             = "http://100.68.242.61:8780/needle"
+stale-seconds   = 900  # older than this is shown as stale, not current
 fivehour.yellow = 60
 fivehour.red    = 85
 
