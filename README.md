@@ -29,7 +29,7 @@ icons and per-module separators render correctly.
 | `memory`      | RAM and swap utilisation                             |
 | `storage`     | Root filesystem utilisation                          |
 | `toggl`       | Current Toggl timer (description, tags, duration)    |
-| `claude`      | Claude.ai quota via bursar: 5h/7d %, reset time      |
+| `claude`      | Claude.ai quota via bursar: 5h/7d %, reset, stale    |
 | `archaudit`   | `arch-audit` vulnerable/upgradable count (shield)    |
 
 Every module is independent — none of them are required to be
