@@ -91,7 +91,7 @@ void ClaudeModule::run() {
             // A dash, not a zero: 0% reads as good news, and the truth here is
             // that we do not know.
             updateOutput(ClCol[5] + ClGauge[0] + " " +
-                         ClCol[5] + ClaudeNoReading);
+                         ClCol[5] + ClaudeNoReading + BDCol);
         } else {
             int tierIdx = 0;
             if      (status.fiveHour >= ClaudeFiveHourRed)    tierIdx = 2;
@@ -112,13 +112,18 @@ void ClaudeModule::run() {
             std::string out =
                 tier     + gauge   + " " +
                 ClCol[1] + std::to_string(status.fiveHour) + "%/" +
-                           std::to_string(status.sevenDay) + "% " +
-                tier     + trailIcon;
+                           std::to_string(status.sevenDay) + "%";
 
+            // bursar reports a null five_hour_resets_at while the window sits
+            // idle at 0%, so the reset field can legitimately be absent — and a
+            // reset icon with no time after it says nothing. The stale icon is
+            // the exception: on its own it still means "this figure is old".
             if (!trailTime.empty())
-                out += " " + ClCol[3] + trailTime;
+                out += " " + tier + trailIcon + " " + ClCol[3] + trailTime;
+            else if (stale)
+                out += " " + tier + trailIcon;
 
-            updateOutput(out);
+            updateOutput(out + BDCol);
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(ClaudeSleepTime));
