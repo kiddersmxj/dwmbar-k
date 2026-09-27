@@ -106,7 +106,7 @@ volume    = 500
 
 [claude]
 poll            = 300  # re-read bursar every N ticks (5 min)
-url             = "http://100.68.242.61:8780/needle"
+url             = "https://bursar.anoa-tuatara.ts.net/needle"  # bursar's own address, not its host's
 stale-seconds   = 900  # older than this is shown as stale, not current
 fivehour.yellow = 60
 fivehour.red    = 85
