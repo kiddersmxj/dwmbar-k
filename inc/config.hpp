@@ -49,6 +49,10 @@ inline int TogglGetStatusWait;
 // every five minutes on the whole fleet's behalf, so reading faster than that
 // returns the same number and only costs traffic.
 inline int ClaudeGetStatusWait;
+// Claude module: ticks before the one quick re-read after a failed fetch.
+// The last figure stays up, marked stale, until it answers; a second failure
+// shows no reading and drops back to the normal poll.
+inline int ClaudeRetryWait;
 // Claude module: 5-hour utilisation thresholds (% of quota) at which
 // the icons shift colour to yellow / red
 inline int ClaudeFiveHourYellow;

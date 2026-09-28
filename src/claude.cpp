@@ -80,11 +80,31 @@ echo "$1 ${PE:-0} $3 $4 ${PH:--} ${RH:--}"
 void ClaudeModule::run() {
     ClaudeStatus status;
     int RunGetStatus = ClaudeGetStatusWait;
+    int wait = ClaudeGetStatusWait;
+    bool retrying = false;
 
     while (true) {
-        if (RunGetStatus >= ClaudeGetStatusWait) {
-            status = GetStatus();
+        if (RunGetStatus >= wait) {
+            ClaudeStatus fetched = GetStatus();
             RunGetStatus = 0;
+            wait = ClaudeGetStatusWait;
+
+            if (fetched.state != State::NoReading) {
+                status = fetched;
+                retrying = false;
+            } else if (status.state != State::NoReading && !retrying) {
+                // One failed fetch is usually a blip on the way to bursar, not
+                // bursar losing its figure. Keep the last reading, marked old,
+                // and try again soon rather than blanking it for a whole poll.
+                status.state = State::Stale;
+                retrying = true;
+                wait = ClaudeRetryWait;
+            } else {
+                // Two in a row, or nothing to fall back on: admit we do not
+                // know, and wait out a normal poll before asking again.
+                status = fetched;
+                retrying = false;
+            }
         }
 
         if (status.state == State::NoReading) {
