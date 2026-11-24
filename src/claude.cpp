@@ -17,7 +17,7 @@
 // The last field is which window bursar gates on. Anthropic dropped the
 // five-hour window on 2026-10-29; until this read it, the bar showed the
 // missing figure as 0%, which looked like good news. With only the week, the
-// reset is the week's, as "Tue_16:00" (an underscore so it stays one field).
+// reset field is the week's reset as an epoch, counted down at each redraw.
 ClaudeModule::ClaudeStatus ClaudeModule::GetStatus() {
     ClaudeStatus s;
 
@@ -49,7 +49,7 @@ set -- $(printf %s "$J" | jq -r '
 PE=0; PH=-; RH=-
 # Guard the placeholder: `date -d -` succeeds and invents a time.
 [ "$2" = "-" ] || { PE=$(date -d "$2" +%s 2>/dev/null); PH=$(date -d "$2" +%H:%M 2>/dev/null); }
-if [ "$6" = "7d" ]; then F=%a_%H:%M; else F=%H:%M; fi
+if [ "$6" = "7d" ]; then F=%s; else F=%H:%M; fi
 [ "$5" = "-" ] || RH=$(date -d "$5" +$F 2>/dev/null)
 echo "$1 ${PE:-0} $3 $4 ${PH:--} ${RH:--} $6"
 )";
@@ -64,7 +64,10 @@ echo "$1 ${PE:-0} $3 $4 ${PH:--} ${RH:--} $6"
     if (!(iss >> outcome >> polledEpoch >> fh >> sd >> polledHM >> resetHM >> window))
         return s;
     s.weekly = (window == "7d");
-    std::replace(resetHM.begin(), resetHM.end(), '_', ' ');
+    if (s.weekly && resetHM != "-") {
+        try { s.resetEpoch = std::stoll(resetHM); } catch (...) {}
+        resetHM = "-";
+    }
 
     long long polledAt = 0;
     try {
@@ -88,6 +91,18 @@ echo "$1 ${PE:-0} $3 $4 ${PH:--} ${RH:--} $6"
 
     s.state = fresh ? State::Fresh : State::Stale;
     return s;
+}
+
+// "2d 21h 33m", "4h 7m", "12m"; empty once the reset has passed or is unknown.
+std::string ClaudeModule::Countdown(long long resetEpoch) {
+    const long long left = resetEpoch - static_cast<long long>(std::time(nullptr));
+    if (resetEpoch <= 0 || left <= 0) return "";
+    const long long d = left / 86400, h = (left % 86400) / 3600,
+                    m = (left % 3600) / 60;
+    std::string out;
+    if (d) out += std::to_string(d) + "d ";
+    if (d || h) out += std::to_string(h) + "h ";
+    return out + std::to_string(m) + "m";
 }
 
 void ClaudeModule::run() {
@@ -145,12 +160,17 @@ void ClaudeModule::run() {
             // Trailing field: when current, when the gated window resets;
             // when stale, the time this figure was actually taken.
             const std::string& trailIcon = stale ? IStale : IReset;
+            // The week resets days away, so a clock time says little; it is
+            // counted down instead, recomputed every redraw.
+            const std::string countdown =
+                status.weekly ? Countdown(status.resetEpoch) : "";
             const std::string& trailTime =
-                stale ? status.polledTime : status.resetTime;
+                stale ? status.polledTime
+                      : (status.weekly ? countdown : status.resetTime);
 
             std::string out = tier + gauge + " " + ClCol[1] +
                 (status.weekly
-                     ? "7d " + std::to_string(status.sevenDay) + "%"
+                     ? std::to_string(status.sevenDay) + "%"
                      : std::to_string(status.fiveHour) + "%/" +
                            std::to_string(status.sevenDay) + "%");
 
