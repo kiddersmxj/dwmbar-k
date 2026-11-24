@@ -36,6 +36,8 @@ int initializeConfig(const std::string& config_file_path) {
     KCONFIG_VAR(ClaudeRetryWait, "claude.retry", 30)
     KCONFIG_VAR(ClaudeFiveHourYellow, "claude.fivehour.yellow", 60)
     KCONFIG_VAR(ClaudeFiveHourRed, "claude.fivehour.red", 85)
+    KCONFIG_VAR(ClaudeWeeklyYellow, "claude.weekly.yellow", 70)
+    KCONFIG_VAR(ClaudeWeeklyRed, "claude.weekly.red", 90)
     KCONFIG_VAR(ClaudeBursarURL, "claude.url", std::string("http://100.68.242.61:8780/needle"))
     KCONFIG_VAR(ClaudeStaleSeconds, "claude.stale-seconds", 900)
 

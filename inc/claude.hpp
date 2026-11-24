@@ -19,7 +19,8 @@ private:
         State state = State::NoReading;
         int fiveHour = -1;
         int sevenDay = -1;
-        std::string resetTime;   // HH:MM local — when the 5-hour window resets
+        bool weekly = false;     // bursar gates on the week (no 5h window)
+        std::string resetTime;   // local: HH:MM for 5h, "Tue 16:00" for the week
         std::string polledTime;  // HH:MM local — when bursar last got a figure
     };
 

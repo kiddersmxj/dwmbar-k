@@ -57,6 +57,9 @@ inline int ClaudeRetryWait;
 // the icons shift colour to yellow / red
 inline int ClaudeFiveHourYellow;
 inline int ClaudeFiveHourRed;
+// Claude module: weekly thresholds, used when bursar gates on the week alone.
+inline int ClaudeWeeklyYellow;
+inline int ClaudeWeeklyRed;
 // Claude module: bursar's unauthenticated reading endpoint on the tailnet.
 // No credential, no header — a secret is only ever needed to spend or to
 // report spend, never to read.

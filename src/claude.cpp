@@ -11,8 +11,13 @@
 // never talks to the API itself: several independent pollers share one small
 // rate limit and exhaust it for each other.
 //
-// Emits one line — "<ok|bad> <polled-epoch> <5h%> <7d%> <polled-HH:MM>
-// <reset-HH:MM>" — or nothing at all when there is no reading to have.
+// Emits one line, "<ok|bad> <polled-epoch> <5h%> <7d%> <polled-HH:MM>
+// <reset> <5h|7d>", or nothing at all when there is no reading to have.
+//
+// The last field is which window bursar gates on. Anthropic dropped the
+// five-hour window on 2026-10-29; until this read it, the bar showed the
+// missing figure as 0%, which looked like good news. With only the week, the
+// reset is the week's, as "Tue_16:00" (an underscore so it stays one field).
 ClaudeModule::ClaudeStatus ClaudeModule::GetStatus() {
     ClaudeStatus s;
 
@@ -27,20 +32,26 @@ ClaudeModule::ClaudeStatus ClaudeModule::GetStatus() {
 [ -n "$J" ] || exit 1
 set -- $(printf %s "$J" | jq -r '
   if .latest == null then empty else
-    (if (.last_poll.outcome // "") == "ok" then "ok" else "bad" end)
+    (if (.latest.regime // (if .latest.five_hour == null then "weekly"
+                            else "five_hour" end)) == "weekly"
+     then "7d" else "5h" end) as $w
+    | (if $w == "7d" then (.latest.seven_day_resets_at // "")
+       else (.latest.five_hour_resets_at // "") end) as $r
+    | (if (.last_poll.outcome // "") == "ok" then "ok" else "bad" end)
     + " " + (if (.latest.polled_at // "") == "" then "-"
              else .latest.polled_at end)
     + " " + ((.latest.five_hour // 0) | round | tostring)
     + " " + ((.latest.seven_day // 0) | round | tostring)
-    + " " + (if (.latest.five_hour_resets_at // "") == "" then "-"
-             else .latest.five_hour_resets_at end)
+    + " " + (if $r == "" then "-" else $r end)
+    + " " + $w
   end' 2>/dev/null)
-[ $# -ge 5 ] || exit 1
+[ $# -ge 6 ] || exit 1
 PE=0; PH=-; RH=-
 # Guard the placeholder: `date -d -` succeeds and invents a time.
 [ "$2" = "-" ] || { PE=$(date -d "$2" +%s 2>/dev/null); PH=$(date -d "$2" +%H:%M 2>/dev/null); }
-[ "$5" = "-" ] || RH=$(date -d "$5" +%H:%M 2>/dev/null)
-echo "$1 ${PE:-0} $3 $4 ${PH:--} ${RH:--}"
+if [ "$6" = "7d" ]; then F=%a_%H:%M; else F=%H:%M; fi
+[ "$5" = "-" ] || RH=$(date -d "$5" +$F 2>/dev/null)
+echo "$1 ${PE:-0} $3 $4 ${PH:--} ${RH:--} $6"
 )";
 
     std::string raw;
@@ -49,9 +60,11 @@ echo "$1 ${PE:-0} $3 $4 ${PH:--} ${RH:--}"
     if (raw.empty()) return s;  // unreachable, or bursar has never polled
 
     std::istringstream iss(raw);
-    std::string outcome, polledEpoch, fh, sd, polledHM, resetHM;
-    if (!(iss >> outcome >> polledEpoch >> fh >> sd >> polledHM >> resetHM))
+    std::string outcome, polledEpoch, fh, sd, polledHM, resetHM, window;
+    if (!(iss >> outcome >> polledEpoch >> fh >> sd >> polledHM >> resetHM >> window))
         return s;
+    s.weekly = (window == "7d");
+    std::replace(resetHM.begin(), resetHM.end(), '_', ' ');
 
     long long polledAt = 0;
     try {
@@ -113,9 +126,15 @@ void ClaudeModule::run() {
             updateOutput(ClCol[5] + ClGauge[0] + " " +
                          ClCol[5] + ClaudeNoReading + BDCol);
         } else {
+            // The tier follows the window bursar gates on. With only the week
+            // there is no five-hour figure to colour by, and the week fills
+            // over days, so it has thresholds of its own.
+            const int pct    = status.weekly ? status.sevenDay : status.fiveHour;
+            const int red    = status.weekly ? ClaudeWeeklyRed : ClaudeFiveHourRed;
+            const int yellow = status.weekly ? ClaudeWeeklyYellow : ClaudeFiveHourYellow;
             int tierIdx = 0;
-            if      (status.fiveHour >= ClaudeFiveHourRed)    tierIdx = 2;
-            else if (status.fiveHour >= ClaudeFiveHourYellow) tierIdx = 1;
+            if      (pct >= red)    tierIdx = 2;
+            else if (pct >= yellow) tierIdx = 1;
 
             const bool stale = (status.state == State::Stale);
             // Stale figures never wear the tier colour — that would present an
@@ -123,16 +142,17 @@ void ClaudeModule::run() {
             const std::string& tier  = stale ? ClCol[4] : ClTier[tierIdx];
             const std::string& gauge = ClGauge[tierIdx];
 
-            // Trailing field: when current, the time the 5-hour window resets;
+            // Trailing field: when current, when the gated window resets;
             // when stale, the time this figure was actually taken.
             const std::string& trailIcon = stale ? IStale : IReset;
             const std::string& trailTime =
                 stale ? status.polledTime : status.resetTime;
 
-            std::string out =
-                tier     + gauge   + " " +
-                ClCol[1] + std::to_string(status.fiveHour) + "%/" +
-                           std::to_string(status.sevenDay) + "%";
+            std::string out = tier + gauge + " " + ClCol[1] +
+                (status.weekly
+                     ? "7d " + std::to_string(status.sevenDay) + "%"
+                     : std::to_string(status.fiveHour) + "%/" +
+                           std::to_string(status.sevenDay) + "%");
 
             // bursar reports a null five_hour_resets_at while the window sits
             // idle at 0%, so the reset field can legitimately be absent — and a
